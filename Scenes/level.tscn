@@ -11,18 +11,54 @@
 [node name="Background" parent="." unique_id=1289484301 instance=ExtResource("1_81xng")]
 
 [node name="Ground" parent="." unique_id=837453774 instance=ExtResource("2_81xng")]
+position = Vector2(-13, 594)
+
+[node name="Ground2" parent="." unique_id=1069309759 instance=ExtResource("2_81xng")]
+position = Vector2(495, 435)
+scale = Vector2(2.7999985, 1)
+
+[node name="Ground3" parent="." unique_id=589605189 instance=ExtResource("2_81xng")]
+position = Vector2(292, 267)
+scale = Vector2(2.7999985, 1)
+
+[node name="Ground4" parent="." unique_id=1980780421 instance=ExtResource("2_81xng")]
+position = Vector2(-3, 202)
+scale = Vector2(0.47999883, 1)
+
+[node name="Ground5" parent="." unique_id=1732725388 instance=ExtResource("2_81xng")]
+position = Vector2(467, 79)
+scale = Vector2(3.4399989, 1)
 
 [node name="Player" parent="." unique_id=378940393 instance=ExtResource("3_wqkje")]
 position = Vector2(24, 294)
 
 [node name="Platform" parent="." unique_id=2054615474 instance=ExtResource("3_6phgx")]
-position = Vector2(379, 315)
+position = Vector2(153, 524)
 
 [node name="Platform2" parent="." unique_id=1392887470 instance=ExtResource("3_6phgx")]
-position = Vector2(479, 285)
+position = Vector2(313, 467)
 
 [node name="Platform3" parent="." unique_id=823623348 instance=ExtResource("3_6phgx")]
-position = Vector2(634, 284)
+position = Vector2(1047, 370)
+
+[node name="Platform4" parent="." unique_id=1039124830 instance=ExtResource("3_6phgx")]
+position = Vector2(939, 312)
+scale = Vector2(0.56, 1)
+
+[node name="Platform5" parent="." unique_id=125678767 instance=ExtResource("3_6phgx")]
+position = Vector2(546, 236)
+
+[node name="Platform6" parent="." unique_id=327443614 instance=ExtResource("3_6phgx")]
+position = Vector2(511, 208)
+
+[node name="Platform7" parent="." unique_id=1287699083 instance=ExtResource("3_6phgx")]
+position = Vector2(125, 263)
+
+[node name="Platform8" parent="." unique_id=1920163513 instance=ExtResource("3_6phgx")]
+position = Vector2(157, 133)
+
+[node name="Platform9" parent="." unique_id=96324418 instance=ExtResource("3_6phgx")]
+position = Vector2(314, 89)
 
 [node name="wall" parent="." unique_id=908506835 instance=ExtResource("5_wqkje")]
 position = Vector2(-14, 0)

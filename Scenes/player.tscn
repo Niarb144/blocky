@@ -20,7 +20,7 @@ color = Color(0.14117648, 0.7647059, 0.3254902, 1)
 [node name="Camera2D" type="Camera2D" parent="." unique_id=433449934]
 zoom = Vector2(2, 2)
 limit_left = 0
-limit_top = 0
+limit_top = -100
 limit_right = 1152
 limit_bottom = 660
 limit_smoothed = true
