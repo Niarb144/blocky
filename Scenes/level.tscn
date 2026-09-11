@@ -1,10 +1,13 @@
 [gd_scene format=3 uid="uid://d2yqcbr0awqct"]
 
+[ext_resource type="PackedScene" uid="uid://dt7pujdi2irk4" path="res://Scenes/background.tscn" id="1_81xng"]
 [ext_resource type="PackedScene" uid="uid://b0t4haiu51rei" path="res://Scenes/ground.tscn" id="2_81xng"]
 [ext_resource type="PackedScene" uid="uid://dkor4sx15paw2" path="res://Scenes/platform.tscn" id="3_6phgx"]
 [ext_resource type="PackedScene" uid="uid://co3pmufuv2hic" path="res://Scenes/player.tscn" id="3_wqkje"]
 
 [node name="Level" type="Node2D" unique_id=11141250]
+
+[node name="Background" parent="." unique_id=1289484301 instance=ExtResource("1_81xng")]
 
 [node name="Ground" parent="." unique_id=837453774 instance=ExtResource("2_81xng")]
 
