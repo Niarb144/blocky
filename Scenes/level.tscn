@@ -1,67 +1,83 @@
 [gd_scene format=3 uid="uid://d2yqcbr0awqct"]
 
 [ext_resource type="PackedScene" uid="uid://dt7pujdi2irk4" path="res://Scenes/background.tscn" id="1_81xng"]
+[ext_resource type="Script" uid="uid://dlhb4kydff88b" path="res://Scripts/level.gd" id="1_754fn"]
 [ext_resource type="PackedScene" uid="uid://b0t4haiu51rei" path="res://Scenes/ground.tscn" id="2_81xng"]
 [ext_resource type="PackedScene" uid="uid://dkor4sx15paw2" path="res://Scenes/platform.tscn" id="3_6phgx"]
 [ext_resource type="PackedScene" uid="uid://co3pmufuv2hic" path="res://Scenes/player.tscn" id="3_wqkje"]
 [ext_resource type="PackedScene" uid="uid://n0t1tl40chtx" path="res://Scenes/wall.tscn" id="5_wqkje"]
+[ext_resource type="PackedScene" uid="uid://ct65nio4604bm" path="res://Scenes/key.tscn" id="6_0f350"]
+[ext_resource type="PackedScene" uid="uid://dlso7w47fu3py" path="res://Scenes/exit.tscn" id="7_8c0lf"]
 
 [node name="Level" type="Node2D" unique_id=11141250]
+script = ExtResource("1_754fn")
 
 [node name="Background" parent="." unique_id=1289484301 instance=ExtResource("1_81xng")]
 
-[node name="Ground" parent="." unique_id=837453774 instance=ExtResource("2_81xng")]
-position = Vector2(-13, 594)
-
-[node name="Ground2" parent="." unique_id=1069309759 instance=ExtResource("2_81xng")]
-position = Vector2(495, 435)
-scale = Vector2(2.7999985, 1)
-
-[node name="Ground3" parent="." unique_id=589605189 instance=ExtResource("2_81xng")]
-position = Vector2(292, 267)
-scale = Vector2(2.7999985, 1)
-
-[node name="Ground4" parent="." unique_id=1980780421 instance=ExtResource("2_81xng")]
-position = Vector2(-3, 202)
-scale = Vector2(0.47999883, 1)
-
-[node name="Ground5" parent="." unique_id=1732725388 instance=ExtResource("2_81xng")]
-position = Vector2(467, 79)
-scale = Vector2(3.4399989, 1)
-
 [node name="Player" parent="." unique_id=378940393 instance=ExtResource("3_wqkje")]
-position = Vector2(24, 294)
+position = Vector2(30, 531)
 
-[node name="Platform" parent="." unique_id=2054615474 instance=ExtResource("3_6phgx")]
+[node name="Exit" parent="." unique_id=1250166314 instance=ExtResource("7_8c0lf")]
+position = Vector2(1104, 570)
+
+[node name="Environment" type="Node" parent="." unique_id=1934851109]
+
+[node name="Platform" parent="Environment" unique_id=2054615474 instance=ExtResource("3_6phgx")]
 position = Vector2(153, 524)
 
-[node name="Platform2" parent="." unique_id=1392887470 instance=ExtResource("3_6phgx")]
+[node name="Platform2" parent="Environment" unique_id=1392887470 instance=ExtResource("3_6phgx")]
 position = Vector2(313, 467)
 
-[node name="Platform3" parent="." unique_id=823623348 instance=ExtResource("3_6phgx")]
-position = Vector2(1047, 370)
-
-[node name="Platform4" parent="." unique_id=1039124830 instance=ExtResource("3_6phgx")]
+[node name="Platform4" parent="Environment" unique_id=1039124830 instance=ExtResource("3_6phgx")]
 position = Vector2(939, 312)
 scale = Vector2(0.56, 1)
 
-[node name="Platform5" parent="." unique_id=125678767 instance=ExtResource("3_6phgx")]
+[node name="Platform3" parent="Environment" unique_id=823623348 instance=ExtResource("3_6phgx")]
+position = Vector2(1047, 370)
+
+[node name="Platform5" parent="Environment" unique_id=125678767 instance=ExtResource("3_6phgx")]
 position = Vector2(546, 236)
 
-[node name="Platform6" parent="." unique_id=327443614 instance=ExtResource("3_6phgx")]
+[node name="Platform6" parent="Environment" unique_id=327443614 instance=ExtResource("3_6phgx")]
 position = Vector2(511, 208)
 
-[node name="Platform7" parent="." unique_id=1287699083 instance=ExtResource("3_6phgx")]
+[node name="Platform7" parent="Environment" unique_id=1287699083 instance=ExtResource("3_6phgx")]
 position = Vector2(125, 263)
 
-[node name="Platform8" parent="." unique_id=1920163513 instance=ExtResource("3_6phgx")]
+[node name="Platform8" parent="Environment" unique_id=1920163513 instance=ExtResource("3_6phgx")]
 position = Vector2(157, 133)
 
-[node name="Platform9" parent="." unique_id=96324418 instance=ExtResource("3_6phgx")]
+[node name="Platform9" parent="Environment" unique_id=96324418 instance=ExtResource("3_6phgx")]
 position = Vector2(314, 89)
 
-[node name="wall" parent="." unique_id=908506835 instance=ExtResource("5_wqkje")]
+[node name="Ground" type="Node" parent="." unique_id=226804926]
+
+[node name="Ground" parent="Ground" unique_id=837453774 instance=ExtResource("2_81xng")]
+position = Vector2(-13, 594)
+
+[node name="Ground2" parent="Ground" unique_id=1069309759 instance=ExtResource("2_81xng")]
+position = Vector2(495, 435)
+scale = Vector2(2.7999985, 1)
+
+[node name="Ground3" parent="Ground" unique_id=589605189 instance=ExtResource("2_81xng")]
+position = Vector2(292, 267)
+scale = Vector2(2.7999985, 1)
+
+[node name="Ground4" parent="Ground" unique_id=1980780421 instance=ExtResource("2_81xng")]
+position = Vector2(-2.999999, 202)
+scale = Vector2(0.47999883, 1)
+
+[node name="Ground5" parent="Ground" unique_id=1732725388 instance=ExtResource("2_81xng")]
+position = Vector2(467.00003, 79)
+scale = Vector2(3.4399989, 1)
+
+[node name="Wall" type="Node" parent="." unique_id=366726478]
+
+[node name="wall" parent="Wall" unique_id=908506835 instance=ExtResource("5_wqkje")]
 position = Vector2(-14, 0)
 
-[node name="wall2" parent="." unique_id=1012958784 instance=ExtResource("5_wqkje")]
+[node name="wall2" parent="Wall" unique_id=1012958784 instance=ExtResource("5_wqkje")]
 position = Vector2(1140, -3)
+
+[node name="Key" parent="." unique_id=98689350 instance=ExtResource("6_0f350")]
+position = Vector2(680, 416)
