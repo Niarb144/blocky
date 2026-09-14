@@ -1,0 +1,8 @@
+[gd_scene format=3 uid="uid://dcob4gopoteca"]
+
+[ext_resource type="Texture2D" uid="uid://d1hcb8bo6bvyv" path="res://Assets/Environment/background4a.png" id="1_2q1he"]
+
+[node name="Background4" type="Sprite2D" unique_id=617687321]
+position = Vector2(582.49994, 328.5)
+scale = Vector2(1.4093751, 1.5354167)
+texture = ExtResource("1_2q1he")

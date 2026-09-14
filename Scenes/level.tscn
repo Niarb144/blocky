@@ -4,15 +4,24 @@
 [ext_resource type="Script" uid="uid://dlhb4kydff88b" path="res://Scripts/level.gd" id="1_754fn"]
 [ext_resource type="PackedScene" uid="uid://b0t4haiu51rei" path="res://Scenes/ground.tscn" id="2_81xng"]
 [ext_resource type="PackedScene" uid="uid://dkor4sx15paw2" path="res://Scenes/platform.tscn" id="3_6phgx"]
+[ext_resource type="PackedScene" uid="uid://dlkbs4uyn6tnc" path="res://Scenes/background_2.tscn" id="3_bvt00"]
 [ext_resource type="PackedScene" uid="uid://co3pmufuv2hic" path="res://Scenes/player.tscn" id="3_wqkje"]
+[ext_resource type="PackedScene" uid="uid://brpbaqgmcw8gx" path="res://Scenes/background_3.tscn" id="4_qxfql"]
+[ext_resource type="PackedScene" uid="uid://dcob4gopoteca" path="res://Scenes/background_4.tscn" id="5_ha31o"]
 [ext_resource type="PackedScene" uid="uid://n0t1tl40chtx" path="res://Scenes/wall.tscn" id="5_wqkje"]
 [ext_resource type="PackedScene" uid="uid://ct65nio4604bm" path="res://Scenes/key.tscn" id="6_0f350"]
 [ext_resource type="PackedScene" uid="uid://dlso7w47fu3py" path="res://Scenes/exit.tscn" id="7_8c0lf"]
 
-[node name="Level" type="Node2D" unique_id=11141250]
+[node name="level_1" type="Node2D" unique_id=11141250]
 script = ExtResource("1_754fn")
 
 [node name="Background" parent="." unique_id=1289484301 instance=ExtResource("1_81xng")]
+
+[node name="Background2" parent="." unique_id=1689357956 instance=ExtResource("3_bvt00")]
+
+[node name="Background3" parent="." unique_id=1099681628 instance=ExtResource("4_qxfql")]
+
+[node name="Background4" parent="." unique_id=617687321 instance=ExtResource("5_ha31o")]
 
 [node name="Player" parent="." unique_id=378940393 instance=ExtResource("3_wqkje")]
 position = Vector2(30, 531)

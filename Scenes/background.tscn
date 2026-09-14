@@ -1,5 +1,7 @@
 [gd_scene format=3 uid="uid://dt7pujdi2irk4"]
 
+[ext_resource type="Texture2D" uid="uid://dmvel73sexwes" path="res://Assets/Environment/background1.png" id="1_sn1xx"]
+
 [node name="Background" type="ColorRect" unique_id=1289484301]
 offset_left = -183.0
 offset_top = -329.0
@@ -7,3 +9,8 @@ offset_right = 1171.0
 offset_bottom = 431.0
 scale = Vector2(1.1490228, 1.6800001)
 color = Color(0.24705882, 1, 1, 1)
+
+[node name="Sprite2D" type="Sprite2D" parent="." unique_id=400428660]
+position = Vector2(678.4025, 381.5476)
+scale = Vector2(1.404273, 1.5724207)
+texture = ExtResource("1_sn1xx")

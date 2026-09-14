@@ -1,0 +1,29 @@
+[gd_scene format=3 uid="uid://l8g82b7pjvfy"]
+
+[ext_resource type="PackedScene" uid="uid://dt7pujdi2irk4" path="res://Scenes/background.tscn" id="1_1q6tm"]
+[ext_resource type="PackedScene" uid="uid://co3pmufuv2hic" path="res://Scenes/player.tscn" id="2_v36qu"]
+[ext_resource type="PackedScene" uid="uid://b0t4haiu51rei" path="res://Scenes/ground.tscn" id="3_cggpd"]
+[ext_resource type="PackedScene" uid="uid://dkor4sx15paw2" path="res://Scenes/platform.tscn" id="4_055b2"]
+
+[node name="level_2" type="Node2D" unique_id=417640951]
+
+[node name="Background" parent="." unique_id=1289484301 instance=ExtResource("1_1q6tm")]
+
+[node name="Player" parent="." unique_id=378940393 instance=ExtResource("2_v36qu")]
+position = Vector2(37.000015, 88)
+
+[node name="Ground" type="Node" parent="." unique_id=291785714]
+
+[node name="Ground" parent="Ground" unique_id=837453774 instance=ExtResource("3_cggpd")]
+position = Vector2(-756, 151)
+
+[node name="Ground2" parent="Ground" unique_id=108376174 instance=ExtResource("3_cggpd")]
+position = Vector2(-8.000061, 606)
+
+[node name="Ground3" parent="Ground" unique_id=710498991 instance=ExtResource("3_cggpd")]
+position = Vector2(-756, 340)
+
+[node name="Platform" type="Node" parent="." unique_id=1101752635]
+
+[node name="Platform" parent="Platform" unique_id=2054615474 instance=ExtResource("4_055b2")]
+position = Vector2(556, 212)
