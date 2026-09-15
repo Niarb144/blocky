@@ -1,21 +1,98 @@
 [gd_scene format=3 uid="uid://ct65nio4604bm"]
 
 [ext_resource type="Script" uid="uid://dl8puncrsxqif" path="res://Scripts/key.gd" id="1_ut0wq"]
+[ext_resource type="Texture2D" uid="uid://b8btqlrecytqp" path="res://Assets/Items/Sheet.png" id="2_udxw8"]
 
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_4su2a"]
+[sub_resource type="CircleShape2D" id="CircleShape2D_dkgl6"]
+
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_brn0f"]
+texture = ExtResource("2_udxw8")
+0:0/0 = 0
+1:0/0 = 0
+2:0/0 = 0
+3:0/0 = 0
+4:0/0 = 0
+5:0/0 = 0
+6:0/0 = 0
+7:0/0 = 0
+0:1/0 = 0
+1:1/0 = 0
+2:1/0 = 0
+3:1/0 = 0
+4:1/0 = 0
+5:1/0 = 0
+6:1/0 = 0
+7:1/0 = 0
+0:2/0 = 0
+1:2/0 = 0
+2:2/0 = 0
+3:2/0 = 0
+4:2/0 = 0
+5:2/0 = 0
+6:2/0 = 0
+7:2/0 = 0
+0:3/0 = 0
+1:3/0 = 0
+2:3/0 = 0
+3:3/0 = 0
+4:3/0 = 0
+5:3/0 = 0
+6:3/0 = 0
+7:3/0 = 0
+0:4/0 = 0
+1:4/0 = 0
+2:4/0 = 0
+3:4/0 = 0
+4:4/0 = 0
+5:4/0 = 0
+6:4/0 = 0
+7:4/0 = 0
+0:5/0 = 0
+1:5/0 = 0
+2:5/0 = 0
+3:5/0 = 0
+4:5/0 = 0
+5:5/0 = 0
+6:5/0 = 0
+7:5/0 = 0
+0:6/0 = 0
+1:6/0 = 0
+2:6/0 = 0
+3:6/0 = 0
+4:6/0 = 0
+5:6/0 = 0
+6:6/0 = 0
+7:6/0 = 0
+0:7/0 = 0
+1:7/0 = 0
+2:7/0 = 0
+3:7/0 = 0
+4:7/0 = 0
+5:7/0 = 0
+6:7/0 = 0
+7:7/0 = 0
+0:8/0 = 0
+1:8/0 = 0
+2:8/0 = 0
+3:8/0 = 0
+4:8/0 = 0
+5:8/0 = 0
+6:8/0 = 0
+7:8/0 = 0
+
+[sub_resource type="TileSet" id="TileSet_4su2a"]
+sources/1 = SubResource("TileSetAtlasSource_brn0f")
 
 [node name="Key" type="Area2D" unique_id=98689350]
 collision_layer = 2
 script = ExtResource("1_ut0wq")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=738135099]
-shape = SubResource("RectangleShape2D_4su2a")
+shape = SubResource("CircleShape2D_dkgl6")
 
-[node name="ColorRect" type="ColorRect" parent="." unique_id=1982965127]
-offset_left = -10.0
-offset_top = -10.0
-offset_right = 10.0
-offset_bottom = 10.0
-color = Color(1, 1, 0.16470589, 1)
+[node name="TileMapLayer" type="TileMapLayer" parent="." unique_id=221234243]
+position = Vector2(-24, 8)
+tile_map_data = PackedByteArray(0, 0, 1, 0, 255, 255, 1, 0, 4, 0, 8, 0, 0, 0)
+tile_set = SubResource("TileSet_4su2a")
 
 [connection signal="body_entered" from="." to="." method="_on_body_entered"]

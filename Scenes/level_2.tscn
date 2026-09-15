@@ -3,17 +3,33 @@
 [ext_resource type="PackedScene" uid="uid://dt7pujdi2irk4" path="res://Scenes/background.tscn" id="1_1q6tm"]
 [ext_resource type="Script" uid="uid://chfob48hectc5" path="res://Scripts/level_2.gd" id="1_cggpd"]
 [ext_resource type="PackedScene" uid="uid://co3pmufuv2hic" path="res://Scenes/player.tscn" id="2_v36qu"]
+[ext_resource type="PackedScene" uid="uid://dlkbs4uyn6tnc" path="res://Scenes/background_2.tscn" id="3_ait6c"]
 [ext_resource type="PackedScene" uid="uid://b0t4haiu51rei" path="res://Scenes/ground.tscn" id="3_cggpd"]
 [ext_resource type="PackedScene" uid="uid://dkor4sx15paw2" path="res://Scenes/platform.tscn" id="4_055b2"]
+[ext_resource type="PackedScene" uid="uid://brpbaqgmcw8gx" path="res://Scenes/background_3.tscn" id="4_vcilj"]
+[ext_resource type="PackedScene" uid="uid://dcob4gopoteca" path="res://Scenes/background_4.tscn" id="5_bl0du"]
 [ext_resource type="PackedScene" uid="uid://c44tluv7u3xer" path="res://Scenes/horizontal_platform.tscn" id="5_v36qu"]
 [ext_resource type="PackedScene" uid="uid://ct65nio4604bm" path="res://Scenes/key.tscn" id="7_2mgoq"]
 [ext_resource type="PackedScene" uid="uid://bsorrher1qut0" path="res://Scenes/vertical_platform.tscn" id="7_uhnj4"]
 [ext_resource type="PackedScene" uid="uid://dlso7w47fu3py" path="res://Scenes/exit.tscn" id="8_uhnj4"]
+[ext_resource type="PackedScene" uid="uid://n0t1tl40chtx" path="res://Scenes/wall.tscn" id="13_vcilj"]
 
 [node name="level_2" type="Node2D" unique_id=417640951]
 script = ExtResource("1_cggpd")
 
 [node name="Background" parent="." unique_id=1289484301 instance=ExtResource("1_1q6tm")]
+
+[node name="Background2" parent="." unique_id=1689357956 instance=ExtResource("3_ait6c")]
+position = Vector2(631, 267)
+scale = Vector2(1.6791666, 1.9427081)
+
+[node name="Background3" parent="." unique_id=1099681628 instance=ExtResource("4_vcilj")]
+position = Vector2(654, 279.00003)
+scale = Vector2(1.6104165, 1.8145835)
+
+[node name="Background4" parent="." unique_id=617687321 instance=ExtResource("5_bl0du")]
+position = Vector2(622, 278)
+scale = Vector2(1.6229169, 1.8)
 
 [node name="Player" parent="." unique_id=378940393 instance=ExtResource("2_v36qu")]
 position = Vector2(14, 94)
@@ -46,3 +62,10 @@ position = Vector2(579, 64)
 
 [node name="Exit" parent="." unique_id=1250166314 instance=ExtResource("8_uhnj4")]
 position = Vector2(37, 561)
+
+[node name="wall" parent="." unique_id=908506835 instance=ExtResource("13_vcilj")]
+position = Vector2(-17, -59)
+
+[node name="wall2" parent="." unique_id=108889969 instance=ExtResource("13_vcilj")]
+position = Vector2(1159, 609)
+rotation = -3.1313329
