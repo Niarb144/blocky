@@ -18,10 +18,16 @@ script = ExtResource("1_754fn")
 [node name="Background" parent="." unique_id=1289484301 instance=ExtResource("1_81xng")]
 
 [node name="Background2" parent="." unique_id=1689357956 instance=ExtResource("3_bvt00")]
+position = Vector2(599, 226)
+scale = Vector2(1.7229165, 2.0729165)
 
 [node name="Background3" parent="." unique_id=1099681628 instance=ExtResource("4_qxfql")]
+position = Vector2(618, 264)
+scale = Vector2(1.7583333, 2.0208335)
 
 [node name="Background4" parent="." unique_id=617687321 instance=ExtResource("5_ha31o")]
+position = Vector2(625.00006, 283)
+scale = Vector2(1.7041668, 1.8479167)
 
 [node name="Player" parent="." unique_id=378940393 instance=ExtResource("3_wqkje")]
 position = Vector2(30, 531)
@@ -32,32 +38,32 @@ position = Vector2(1104, 570)
 [node name="Environment" type="Node" parent="." unique_id=1934851109]
 
 [node name="Platform" parent="Environment" unique_id=2054615474 instance=ExtResource("3_6phgx")]
-position = Vector2(153, 524)
+position = Vector2(155, 484)
 
 [node name="Platform2" parent="Environment" unique_id=1392887470 instance=ExtResource("3_6phgx")]
-position = Vector2(313, 467)
+position = Vector2(315, 446)
 
 [node name="Platform4" parent="Environment" unique_id=1039124830 instance=ExtResource("3_6phgx")]
-position = Vector2(939, 312)
+position = Vector2(906, 258)
 scale = Vector2(0.56, 1)
 
 [node name="Platform3" parent="Environment" unique_id=823623348 instance=ExtResource("3_6phgx")]
-position = Vector2(1047, 370)
+position = Vector2(1014, 316)
 
 [node name="Platform5" parent="Environment" unique_id=125678767 instance=ExtResource("3_6phgx")]
-position = Vector2(546, 236)
+position = Vector2(513, 182)
 
 [node name="Platform6" parent="Environment" unique_id=327443614 instance=ExtResource("3_6phgx")]
-position = Vector2(511, 208)
+position = Vector2(478, 154)
 
 [node name="Platform7" parent="Environment" unique_id=1287699083 instance=ExtResource("3_6phgx")]
-position = Vector2(125, 263)
+position = Vector2(92, 209)
 
 [node name="Platform8" parent="Environment" unique_id=1920163513 instance=ExtResource("3_6phgx")]
-position = Vector2(157, 133)
+position = Vector2(124, 79)
 
 [node name="Platform9" parent="Environment" unique_id=96324418 instance=ExtResource("3_6phgx")]
-position = Vector2(314, 89)
+position = Vector2(281, 35)
 
 [node name="Ground" type="Node" parent="." unique_id=226804926]
 
@@ -89,4 +95,4 @@ position = Vector2(-14, 0)
 position = Vector2(1140, -3)
 
 [node name="Key" parent="." unique_id=98689350 instance=ExtResource("6_0f350")]
-position = Vector2(680, 416)
+position = Vector2(1095, 56)

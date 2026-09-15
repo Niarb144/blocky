@@ -1,24 +1,31 @@
 [gd_scene format=3 uid="uid://l8g82b7pjvfy"]
 
 [ext_resource type="PackedScene" uid="uid://dt7pujdi2irk4" path="res://Scenes/background.tscn" id="1_1q6tm"]
+[ext_resource type="Script" uid="uid://chfob48hectc5" path="res://Scripts/level_2.gd" id="1_cggpd"]
 [ext_resource type="PackedScene" uid="uid://co3pmufuv2hic" path="res://Scenes/player.tscn" id="2_v36qu"]
 [ext_resource type="PackedScene" uid="uid://b0t4haiu51rei" path="res://Scenes/ground.tscn" id="3_cggpd"]
 [ext_resource type="PackedScene" uid="uid://dkor4sx15paw2" path="res://Scenes/platform.tscn" id="4_055b2"]
+[ext_resource type="PackedScene" uid="uid://c44tluv7u3xer" path="res://Scenes/horizontal_platform.tscn" id="5_v36qu"]
+[ext_resource type="PackedScene" uid="uid://ct65nio4604bm" path="res://Scenes/key.tscn" id="7_2mgoq"]
+[ext_resource type="PackedScene" uid="uid://bsorrher1qut0" path="res://Scenes/vertical_platform.tscn" id="7_uhnj4"]
+[ext_resource type="PackedScene" uid="uid://dlso7w47fu3py" path="res://Scenes/exit.tscn" id="8_uhnj4"]
 
 [node name="level_2" type="Node2D" unique_id=417640951]
+script = ExtResource("1_cggpd")
 
 [node name="Background" parent="." unique_id=1289484301 instance=ExtResource("1_1q6tm")]
 
 [node name="Player" parent="." unique_id=378940393 instance=ExtResource("2_v36qu")]
-position = Vector2(37.000015, 88)
+position = Vector2(14, 94)
 
 [node name="Ground" type="Node" parent="." unique_id=291785714]
 
 [node name="Ground" parent="Ground" unique_id=837453774 instance=ExtResource("3_cggpd")]
-position = Vector2(-756, 151)
+position = Vector2(-689.00006, 148)
 
 [node name="Ground2" parent="Ground" unique_id=108376174 instance=ExtResource("3_cggpd")]
-position = Vector2(-8.000061, 606)
+position = Vector2(-306, 596)
+scale = Vector2(8.639999, 1)
 
 [node name="Ground3" parent="Ground" unique_id=710498991 instance=ExtResource("3_cggpd")]
 position = Vector2(-756, 340)
@@ -27,3 +34,15 @@ position = Vector2(-756, 340)
 
 [node name="Platform" parent="Platform" unique_id=2054615474 instance=ExtResource("4_055b2")]
 position = Vector2(556, 212)
+
+[node name="HorizontalPlatform" parent="Platform" unique_id=342846988 instance=ExtResource("5_v36qu")]
+position = Vector2(496, 49)
+
+[node name="VerticalPlatform" parent="Platform" unique_id=431834089 instance=ExtResource("7_uhnj4")]
+position = Vector2(518, 444)
+
+[node name="Key" parent="." unique_id=98689350 instance=ExtResource("7_2mgoq")]
+position = Vector2(579, 64)
+
+[node name="Exit" parent="." unique_id=1250166314 instance=ExtResource("8_uhnj4")]
+position = Vector2(37, 561)

@@ -1,12 +1,13 @@
-[gd_scene format=3 uid="uid://dkor4sx15paw2"]
+[gd_scene format=4 uid="uid://bsorrher1qut0"]
 
-[ext_resource type="Texture2D" uid="uid://dotxuc4xgv36s" path="res://Assets/Environment/mainlev_build.png" id="1_1rc8e"]
+[ext_resource type="Texture2D" uid="uid://dotxuc4xgv36s" path="res://Assets/Environment/mainlev_build.png" id="1_0p65s"]
+[ext_resource type="Script" uid="uid://66kjfrxyayiv" path="res://Scripts/vertical_platform.gd" id="1_gu741"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_4su2a"]
-size = Vector2(95, 30)
+size = Vector2(66, 48)
 
-[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_n5262"]
-texture = ExtResource("1_1rc8e")
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_gu741"]
+texture = ExtResource("1_0p65s")
 6:1/0 = 0
 20:1/0 = 0
 21:1/0 = 0
@@ -268,6 +269,10 @@ texture = ExtResource("1_1rc8e")
 33:15/0 = 0
 34:15/0 = 0
 36:15/0 = 0
+38:15/0 = 0
+39:15/0 = 0
+40:15/0 = 0
+41:15/0 = 0
 1:16/0 = 0
 2:16/0 = 0
 3:16/0 = 0
@@ -277,6 +282,9 @@ texture = ExtResource("1_1rc8e")
 26:16/0 = 0
 28:16/0 = 0
 30:16/0 = 0
+39:16/0 = 0
+40:16/0 = 0
+41:16/0 = 0
 9:18/0 = 0
 10:18/0 = 0
 12:18/0 = 0
@@ -905,21 +913,23 @@ texture = ExtResource("1_1rc8e")
 29:62/0 = 0
 1:63/0 = 0
 29:63/0 = 0
-38:15/size_in_atlas = Vector2i(4, 2)
-38:15/0 = 0
 
 [sub_resource type="TileSet" id="TileSet_4su2a"]
-sources/0 = SubResource("TileSetAtlasSource_n5262")
+sources/0 = SubResource("TileSetAtlasSource_gu741")
 
-[node name="Platform" type="StaticBody2D" unique_id=2054615474]
-position = Vector2(-30, -51)
+[node name="VerticalPlatform" type="AnimatableBody2D" unique_id=431834089]
+script = ExtResource("1_gu741")
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1617867057]
-position = Vector2(80, 68)
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1612223590]
+position = Vector2(49, 24)
 shape = SubResource("RectangleShape2D_4su2a")
 
-[node name="TileMap" type="TileMap" parent="." unique_id=1723706274]
-position = Vector2(48, 4)
+[node name="TileMapLayer" type="TileMapLayer" parent="." unique_id=1358087368]
+tile_map_data = PackedByteArray("AAABAP//AAAdACMAAAABAAAAAAAdACQAAAABAAEAAAAjADMAAAACAP//AAAVACcAAAACAAAAAAAVACgAAAACAAEAAAANADkAAAADAP//AAAJACcAAAADAAAAAAAJACgAAAADAAEAAAAOADkAAAAEAP//AAABACMAAAAEAAAAAAA1ADUAAAAEAAEAAAA1ADYAAAAEAAIAAAAdAD4AAAAEAAMAAAAdAD8AAAACAAIAAAANADoAAAACAAMAAAANADsAAAADAAIAAAAOADoAAAADAAMAAAAOADsAAAABAAIAAAABAD4AAAABAAMAAAABAD8AAAAFAAAAAAA2ADUAAAAFAAEAAAA2ADYAAAAAAAEAAAAiADMAAAA=")
 tile_set = SubResource("TileSet_4su2a")
-format = 2
-layer_0/tile_data = PackedInt32Array(196609, 1572864, 23, 262145, 1572864, 24, 196610, 1638400, 23, 262146, 1638400, 24, 196611, 1769472, 23, 262147, 1769472, 24, 196612, 1835008, 23, 262148, 1835008, 24, 262143, 1376256, 23, 327679, 1376256, 24, 196608, 1441792, 23, 262144, 1441792, 24)
+
+[node name="PointA" type="Marker2D" parent="." unique_id=512954213]
+position = Vector2(50, -70)
+
+[node name="PointB" type="Marker2D" parent="." unique_id=1270283183]
+position = Vector2(52, 123)
