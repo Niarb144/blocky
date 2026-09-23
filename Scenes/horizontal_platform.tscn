@@ -930,9 +930,3 @@ tile_set = SubResource("TileSet_4su2a")
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=476364865]
 position = Vector2(133.25, 46.75)
 shape = SubResource("RectangleShape2D_4su2a")
-
-[node name="PointA" type="Marker2D" parent="." unique_id=1425064833]
-position = Vector2(15, 29)
-
-[node name="PointB" type="Marker2D" parent="." unique_id=2109241791]
-position = Vector2(431, 30)

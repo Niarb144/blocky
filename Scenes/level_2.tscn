@@ -37,7 +37,8 @@ position = Vector2(14, 94)
 [node name="Ground" type="Node" parent="." unique_id=291785714]
 
 [node name="Ground" parent="Ground" unique_id=837453774 instance=ExtResource("3_cggpd")]
-position = Vector2(-689.00006, 148)
+position = Vector2(-291, 148)
+scale = Vector2(3.8, 1.52)
 
 [node name="Ground2" parent="Ground" unique_id=108376174 instance=ExtResource("3_cggpd")]
 position = Vector2(-306, 596)
@@ -46,22 +47,32 @@ scale = Vector2(8.639999, 1)
 [node name="Ground3" parent="Ground" unique_id=710498991 instance=ExtResource("3_cggpd")]
 position = Vector2(-756, 340)
 
+[node name="Ground4" parent="Ground" unique_id=1676574098 instance=ExtResource("3_cggpd")]
+position = Vector2(816, 77)
+scale = Vector2(1.5, 0.388)
+
 [node name="Platform" type="Node" parent="." unique_id=1101752635]
 
 [node name="Platform" parent="Platform" unique_id=2054615474 instance=ExtResource("4_055b2")]
-position = Vector2(556, 212)
+position = Vector2(777, 458)
+
+[node name="Platform2" parent="Platform" unique_id=773641629 instance=ExtResource("4_055b2")]
+position = Vector2(404, 342)
 
 [node name="HorizontalPlatform" parent="Platform" unique_id=342846988 instance=ExtResource("5_v36qu")]
-position = Vector2(496, 49)
+position = Vector2(521, 74)
+speed = 70.0
+travel_distance = 100.0
 
 [node name="VerticalPlatform" parent="Platform" unique_id=431834089 instance=ExtResource("7_uhnj4")]
-position = Vector2(518, 444)
+position = Vector2(579, 425)
+travel_distance = 400.0
 
 [node name="Key" parent="." unique_id=98689350 instance=ExtResource("7_2mgoq")]
-position = Vector2(579, 64)
+position = Vector2(992, 60)
 
 [node name="Exit" parent="." unique_id=1250166314 instance=ExtResource("8_uhnj4")]
-position = Vector2(37, 561)
+position = Vector2(37, 310)
 
 [node name="wall" parent="." unique_id=908506835 instance=ExtResource("13_vcilj")]
 position = Vector2(-17, -59)

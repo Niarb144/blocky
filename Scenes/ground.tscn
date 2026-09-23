@@ -3,7 +3,7 @@
 [ext_resource type="Texture2D" uid="uid://dotxuc4xgv36s" path="res://Assets/Environment/mainlev_build.png" id="1_688p1"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_4su2a"]
-size = Vector2(200, 50)
+size = Vector2(208.16328, 50)
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_oltiy"]
 texture = ExtResource("1_688p1")
@@ -921,7 +921,8 @@ position = Vector2(-8.000001, 346)
 scale = Vector2(5.879999, 1.52)
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=705761229]
-position = Vector2(100, 25)
+position = Vector2(104.08165, 25)
+scale = Vector2(1, 1.0000001)
 shape = SubResource("RectangleShape2D_4su2a")
 
 [node name="TileMapLayer" type="TileMapLayer" parent="." unique_id=1481806991]

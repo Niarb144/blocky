@@ -3,7 +3,7 @@
 [ext_resource type="Texture2D" uid="uid://dotxuc4xgv36s" path="res://Assets/Environment/mainlev_build.png" id="1_1rc8e"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_4su2a"]
-size = Vector2(95, 30)
+size = Vector2(157, 30)
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_n5262"]
 texture = ExtResource("1_1rc8e")
@@ -915,11 +915,11 @@ sources/0 = SubResource("TileSetAtlasSource_n5262")
 position = Vector2(-30, -51)
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1617867057]
-position = Vector2(80, 68)
+position = Vector2(80.5, 68)
 shape = SubResource("RectangleShape2D_4su2a")
 
 [node name="TileMap" type="TileMap" parent="." unique_id=1723706274]
 position = Vector2(48, 4)
 tile_set = SubResource("TileSet_4su2a")
 format = 2
-layer_0/tile_data = PackedInt32Array(196609, 1572864, 23, 262145, 1572864, 24, 196610, 1638400, 23, 262146, 1638400, 24, 196611, 1769472, 23, 262147, 1769472, 24, 196612, 1835008, 23, 262148, 1835008, 24, 262143, 1376256, 23, 327679, 1376256, 24, 196608, 1441792, 23, 262144, 1441792, 24)
+layer_0/tile_data = PackedInt32Array(196609, 1572864, 23, 262145, 1572864, 24, 196610, 1638400, 23, 262146, 1638400, 24, 196611, 1769472, 23, 262147, 1769472, 24, 196612, 1835008, 23, 262148, 1835008, 24, 262143, 1376256, 23, 327679, 1376256, 24, 196608, 1441792, 23, 262144, 1441792, 24, 262141, 1638400, 11, 327677, 1638400, 12, 262142, 1703936, 11, 327678, 1703936, 12, 196613, 1048576, 11, 262149, 1048576, 12, 196614, 1114112, 11, 262150, 1114112, 12)
