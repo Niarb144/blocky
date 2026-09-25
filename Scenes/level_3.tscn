@@ -1,0 +1,69 @@
+[gd_scene format=3 uid="uid://cqedh1l12m4xb"]
+
+[ext_resource type="PackedScene" uid="uid://dt7pujdi2irk4" path="res://Scenes/background.tscn" id="1_c81s1"]
+[ext_resource type="Script" uid="uid://diqrtyjmmdr05" path="res://Scenes/level_3.gd" id="1_n4vm5"]
+[ext_resource type="PackedScene" uid="uid://dlkbs4uyn6tnc" path="res://Scenes/background_2.tscn" id="2_n4vm5"]
+[ext_resource type="PackedScene" uid="uid://brpbaqgmcw8gx" path="res://Scenes/background_3.tscn" id="3_fxnjf"]
+[ext_resource type="PackedScene" uid="uid://dcob4gopoteca" path="res://Scenes/background_4.tscn" id="4_xjeco"]
+[ext_resource type="PackedScene" uid="uid://co3pmufuv2hic" path="res://Scenes/player.tscn" id="5_j77fg"]
+[ext_resource type="PackedScene" uid="uid://c7cfp15bor60c" path="res://Scenes/killzone.tscn" id="6_ki8bc"]
+[ext_resource type="PackedScene" uid="uid://ct65nio4604bm" path="res://Scenes/key.tscn" id="7_nbwsh"]
+[ext_resource type="PackedScene" uid="uid://dlso7w47fu3py" path="res://Scenes/exit.tscn" id="8_kgmqw"]
+[ext_resource type="PackedScene" uid="uid://n0t1tl40chtx" path="res://Scenes/wall.tscn" id="9_s80er"]
+[ext_resource type="PackedScene" uid="uid://dkor4sx15paw2" path="res://Scenes/platform.tscn" id="10_8jhox"]
+[ext_resource type="PackedScene" uid="uid://c44tluv7u3xer" path="res://Scenes/horizontal_platform.tscn" id="11_hed5s"]
+[ext_resource type="PackedScene" uid="uid://bsorrher1qut0" path="res://Scenes/vertical_platform.tscn" id="12_yykrm"]
+
+[node name="level_3" type="Node2D" unique_id=227366926]
+script = ExtResource("1_n4vm5")
+
+[node name="Background" parent="." unique_id=1289484301 instance=ExtResource("1_c81s1")]
+
+[node name="Background3" parent="." unique_id=1689357956 instance=ExtResource("2_n4vm5")]
+position = Vector2(470.794, 234.64001)
+scale = Vector2(1.5559686, 2.7825)
+
+[node name="Background4" parent="." unique_id=1099681628 instance=ExtResource("3_fxnjf")]
+position = Vector2(478.83716, 222.0401)
+scale = Vector2(1.5296366, 2.7020001)
+
+[node name="Background5" parent="." unique_id=617687321 instance=ExtResource("4_xjeco")]
+position = Vector2(486.30573, 222.88)
+scale = Vector2(1.6194041, 2.5795002)
+
+[node name="Player" parent="." unique_id=378940393 instance=ExtResource("5_j77fg")]
+position = Vector2(1, 349)
+
+[node name="Killzone" parent="." unique_id=659923190 instance=ExtResource("6_ki8bc")]
+position = Vector2(45, 266)
+
+[node name="Key" parent="." unique_id=98689350 instance=ExtResource("7_nbwsh")]
+position = Vector2(502, 129)
+
+[node name="Exit" parent="." unique_id=1250166314 instance=ExtResource("8_kgmqw")]
+position = Vector2(1109, 148)
+
+[node name="Platforms" type="Node" parent="." unique_id=1580338734]
+
+[node name="Platform" parent="Platforms" unique_id=2054615474 instance=ExtResource("10_8jhox")]
+position = Vector2(-12, 336)
+
+[node name="Platform2" parent="Platforms" unique_id=833885639 instance=ExtResource("10_8jhox")]
+position = Vector2(996, 125)
+
+[node name="HorizontalPlatform" parent="Platforms" unique_id=342846988 instance=ExtResource("11_hed5s")]
+position = Vector2(211, 367)
+travel_distance = 100.0
+
+[node name="HorizontalPlatform2" parent="Platforms" unique_id=747086573 instance=ExtResource("11_hed5s")]
+position = Vector2(658, 196)
+
+[node name="VerticalPlatform" parent="Platforms" unique_id=431834089 instance=ExtResource("12_yykrm")]
+position = Vector2(434, 217)
+
+[node name="wall" parent="." unique_id=908506835 instance=ExtResource("9_s80er")]
+position = Vector2(-38, -115)
+
+[node name="wall2" parent="." unique_id=975561712 instance=ExtResource("9_s80er")]
+position = Vector2(1176.0001, 544)
+rotation = 3.1377895
