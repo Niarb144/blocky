@@ -1,18 +1,131 @@
 [gd_scene format=3 uid="uid://co3pmufuv2hic"]
 
 [ext_resource type="Script" uid="uid://bbtl2r2c2r8vv" path="res://Scripts/player.gd" id="1_v0iea"]
+[ext_resource type="Texture2D" uid="uid://bao61vje4neh7" path="res://Assets/Player/Soldier.png" id="2_cvnsp"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_4su2a"]
-size = Vector2(28, 40)
+size = Vector2(28, 38)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_6t5aa"]
+atlas = ExtResource("2_cvnsp")
+region = Rect2(0, 0, 100, 100)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_vgqql"]
+atlas = ExtResource("2_cvnsp")
+region = Rect2(100, 0, 100, 100)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_fkybt"]
+atlas = ExtResource("2_cvnsp")
+region = Rect2(200, 0, 100, 100)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_x3wgy"]
+atlas = ExtResource("2_cvnsp")
+region = Rect2(300, 0, 100, 100)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_3smsa"]
+atlas = ExtResource("2_cvnsp")
+region = Rect2(400, 0, 100, 100)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_8erm5"]
+atlas = ExtResource("2_cvnsp")
+region = Rect2(500, 0, 100, 100)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_cvnsp"]
+atlas = ExtResource("2_cvnsp")
+region = Rect2(0, 100, 100, 100)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_f1ek2"]
+atlas = ExtResource("2_cvnsp")
+region = Rect2(100, 100, 100, 100)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_tx1dd"]
+atlas = ExtResource("2_cvnsp")
+region = Rect2(200, 100, 100, 100)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_gymyn"]
+atlas = ExtResource("2_cvnsp")
+region = Rect2(300, 100, 100, 100)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_pu2lt"]
+atlas = ExtResource("2_cvnsp")
+region = Rect2(400, 100, 100, 100)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_ukyrk"]
+atlas = ExtResource("2_cvnsp")
+region = Rect2(500, 100, 100, 100)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_7dp3o"]
+atlas = ExtResource("2_cvnsp")
+region = Rect2(600, 100, 100, 100)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_h4iuc"]
+atlas = ExtResource("2_cvnsp")
+region = Rect2(700, 100, 100, 100)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_4su2a"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_6t5aa")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_vgqql")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_fkybt")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_x3wgy")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_3smsa")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_8erm5")
+}],
+"loop": 1,
+"name": &"idle",
+"speed": 8.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_cvnsp")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_f1ek2")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_tx1dd")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_gymyn")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_pu2lt")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_ukyrk")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_7dp3o")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_h4iuc")
+}],
+"loop": 1,
+"name": &"run",
+"speed": 12.0
+}]
 
 [node name="Player" type="CharacterBody2D" unique_id=378940393 groups=["player"]]
 script = ExtResource("1_v0iea")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1454764094]
-position = Vector2(14, 20)
+position = Vector2(14, 21)
 shape = SubResource("RectangleShape2D_4su2a")
 
 [node name="ColorRect" type="ColorRect" parent="." unique_id=591094076]
+visible = false
 offset_right = 28.0
 offset_bottom = 40.0
 color = Color(0.14117648, 0.7647059, 0.3254902, 1)
@@ -27,3 +140,12 @@ limit_smoothed = true
 position_smoothing_enabled = true
 position_smoothing_speed = 7.0
 drag_horizontal_enabled = true
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=351780550]
+texture_filter = 1
+position = Vector2(14, 25)
+scale = Vector2(2, 2)
+sprite_frames = SubResource("SpriteFrames_4su2a")
+animation = &"run"
+autoplay = "idle"
+frame_progress = 0.2798901
