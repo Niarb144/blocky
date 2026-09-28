@@ -4,7 +4,7 @@
 [ext_resource type="Texture2D" uid="uid://bao61vje4neh7" path="res://Assets/Player/Soldier.png" id="2_cvnsp"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_4su2a"]
-size = Vector2(28, 38)
+size = Vector2(24, 35)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_6t5aa"]
 atlas = ExtResource("2_cvnsp")
@@ -121,7 +121,7 @@ animations = [{
 script = ExtResource("1_v0iea")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1454764094]
-position = Vector2(14, 21)
+position = Vector2(14, 21.5)
 shape = SubResource("RectangleShape2D_4su2a")
 
 [node name="ColorRect" type="ColorRect" parent="." unique_id=591094076]

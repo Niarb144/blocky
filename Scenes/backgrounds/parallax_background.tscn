@@ -1,0 +1,49 @@
+[gd_scene format=3 uid="uid://d1xiv6pgau1fl"]
+
+[ext_resource type="Texture2D" uid="uid://dmvel73sexwes" path="res://Assets/Environment/background1.png" id="1_7smcq"]
+[ext_resource type="Texture2D" uid="uid://b1ju71v8pkqvb" path="res://Assets/Environment/background2.png" id="2_dc2iq"]
+[ext_resource type="Texture2D" uid="uid://6o6q0ythexnr" path="res://Assets/Environment/background3.png" id="3_nm63i"]
+[ext_resource type="Texture2D" uid="uid://dsy215efs6nqx" path="res://Assets/Environment/background4b.png" id="4_py5j2"]
+[ext_resource type="Texture2D" uid="uid://d1hcb8bo6bvyv" path="res://Assets/Environment/background4a.png" id="5_k2rt0"]
+
+[node name="ParallaxBackground" type="Node2D" unique_id=1498009889]
+
+[node name="Far" type="Parallax2D" parent="." unique_id=1871049728]
+scroll_scale = Vector2(0.1, 0.1)
+
+[node name="FarBackground" type="Sprite2D" parent="Far" unique_id=61477440]
+position = Vector2(588, 336)
+scale = Vector2(2.216146, 2.0427082)
+texture = ExtResource("1_7smcq")
+
+[node name="Near-Far" type="Parallax2D" parent="." unique_id=1250221726]
+scroll_scale = Vector2(0.25, 0.25)
+
+[node name="Sprite2D" type="Sprite2D" parent="Near-Far" unique_id=118791561]
+position = Vector2(585, 359)
+scale = Vector2(2.3312502, 2.4958334)
+texture = ExtResource("2_dc2iq")
+
+[node name="Mid" type="Parallax2D" parent="." unique_id=654796693]
+scroll_scale = Vector2(0.5, 0.5)
+
+[node name="Sprite2D" type="Sprite2D" parent="Mid" unique_id=701785205]
+position = Vector2(583, 433)
+scale = Vector2(2.3833334, 2.7479167)
+texture = ExtResource("3_nm63i")
+
+[node name="Foreground" type="Parallax2D" parent="." unique_id=28407478]
+scroll_scale = Vector2(0.5, 0.5)
+
+[node name="Sprite2D" type="Sprite2D" parent="Foreground" unique_id=1512473851]
+position = Vector2(582.875, 386.49997)
+scale = Vector2(2.5309894, 2.2979167)
+texture = ExtResource("4_py5j2")
+
+[node name="Near-Mid" type="Parallax2D" parent="." unique_id=489772314]
+scroll_scale = Vector2(0.75, 0.75)
+
+[node name="Sprite2D" type="Sprite2D" parent="Near-Mid" unique_id=1991520069]
+position = Vector2(583.00006, 415.5)
+scale = Vector2(2.6270838, 2.2979167)
+texture = ExtResource("5_k2rt0")

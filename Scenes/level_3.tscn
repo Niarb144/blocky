@@ -1,10 +1,7 @@
 [gd_scene format=3 uid="uid://cqedh1l12m4xb"]
 
-[ext_resource type="PackedScene" uid="uid://dt7pujdi2irk4" path="res://Scenes/background.tscn" id="1_c81s1"]
 [ext_resource type="Script" uid="uid://diqrtyjmmdr05" path="res://Scenes/level_3.gd" id="1_n4vm5"]
-[ext_resource type="PackedScene" uid="uid://dlkbs4uyn6tnc" path="res://Scenes/background_2.tscn" id="2_n4vm5"]
-[ext_resource type="PackedScene" uid="uid://brpbaqgmcw8gx" path="res://Scenes/background_3.tscn" id="3_fxnjf"]
-[ext_resource type="PackedScene" uid="uid://dcob4gopoteca" path="res://Scenes/background_4.tscn" id="4_xjeco"]
+[ext_resource type="PackedScene" uid="uid://d1xiv6pgau1fl" path="res://Scenes/backgrounds/parallax_background.tscn" id="2_fxnjf"]
 [ext_resource type="PackedScene" uid="uid://co3pmufuv2hic" path="res://Scenes/player.tscn" id="5_j77fg"]
 [ext_resource type="PackedScene" uid="uid://c7cfp15bor60c" path="res://Scenes/killzone.tscn" id="6_ki8bc"]
 [ext_resource type="PackedScene" uid="uid://ct65nio4604bm" path="res://Scenes/key.tscn" id="7_nbwsh"]
@@ -17,19 +14,7 @@
 [node name="level_3" type="Node2D" unique_id=227366926]
 script = ExtResource("1_n4vm5")
 
-[node name="Background" parent="." unique_id=1289484301 instance=ExtResource("1_c81s1")]
-
-[node name="Background3" parent="." unique_id=1689357956 instance=ExtResource("2_n4vm5")]
-position = Vector2(470.794, 234.64001)
-scale = Vector2(1.5559686, 2.7825)
-
-[node name="Background4" parent="." unique_id=1099681628 instance=ExtResource("3_fxnjf")]
-position = Vector2(478.83716, 222.0401)
-scale = Vector2(1.5296366, 2.7020001)
-
-[node name="Background5" parent="." unique_id=617687321 instance=ExtResource("4_xjeco")]
-position = Vector2(486.30573, 222.88)
-scale = Vector2(1.6194041, 2.5795002)
+[node name="ParallaxBackground" parent="." unique_id=1498009889 instance=ExtResource("2_fxnjf")]
 
 [node name="Player" parent="." unique_id=378940393 instance=ExtResource("5_j77fg")]
 position = Vector2(1, 349)
