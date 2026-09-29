@@ -21,6 +21,7 @@ func complete_level() -> void:
 		return
 
 	level_completing = true
+	AudioManager.play_exit()
 	print("LEVEL COMPLETE!")
 	call_deferred("_load_next_level")
 

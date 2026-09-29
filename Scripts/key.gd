@@ -31,6 +31,7 @@ func _on_body_entered(body: Node2D) -> void:
 
 
 func collect() -> void:
+	AudioManager.play_key_pickup()
 	print("KEY COLLECTED!")
 	collected.emit()
 	queue_free()
