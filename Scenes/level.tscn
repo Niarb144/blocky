@@ -3,6 +3,7 @@
 [ext_resource type="Script" uid="uid://dlhb4kydff88b" path="res://Scripts/level.gd" id="1_754fn"]
 [ext_resource type="PackedScene" uid="uid://b0t4haiu51rei" path="res://Scenes/ground.tscn" id="2_81xng"]
 [ext_resource type="PackedScene" uid="uid://d1xiv6pgau1fl" path="res://Scenes/backgrounds/parallax_background.tscn" id="2_754fn"]
+[ext_resource type="PackedScene" uid="uid://cjcbl6nu1x2jq" path="res://Scenes/backgrounds/world_darkness.tscn" id="2_bvt00"]
 [ext_resource type="PackedScene" uid="uid://dkor4sx15paw2" path="res://Scenes/platform.tscn" id="3_6phgx"]
 [ext_resource type="PackedScene" uid="uid://co3pmufuv2hic" path="res://Scenes/player.tscn" id="3_wqkje"]
 [ext_resource type="PackedScene" uid="uid://n0t1tl40chtx" path="res://Scenes/wall.tscn" id="5_wqkje"]
@@ -11,6 +12,8 @@
 
 [node name="level_1" type="Node2D" unique_id=11141250]
 script = ExtResource("1_754fn")
+
+[node name="WorldDarkness" parent="." unique_id=443499712 instance=ExtResource("2_bvt00")]
 
 [node name="ParallaxBackground" parent="." unique_id=1498009889 instance=ExtResource("2_754fn")]
 

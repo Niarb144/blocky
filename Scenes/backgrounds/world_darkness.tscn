@@ -1,0 +1,4 @@
+[gd_scene format=3 uid="uid://cjcbl6nu1x2jq"]
+
+[node name="WorldDarkness" type="CanvasModulate" unique_id=443499712]
+color = Color(0.20392157, 0.20392157, 0.24705882, 0.7882353)

@@ -118,6 +118,18 @@ animations = [{
 "speed": 12.0
 }]
 
+[sub_resource type="Gradient" id="Gradient_dkgl6"]
+offsets = PackedFloat32Array(0, 0.61875, 1)
+colors = PackedColorArray(1, 1, 1, 1, 1, 1, 1, 0.53333336, 1, 1, 1, 0)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_4su2a"]
+gradient = SubResource("Gradient_dkgl6")
+width = 200
+height = 200
+fill = 1
+fill_from = Vector2(0.5234375, 0.52734375)
+fill_to = Vector2(0.546875, 0.9453125)
+
 [node name="Player" type="CharacterBody2D" unique_id=378940393 groups=["player"]]
 script = ExtResource("1_v0iea")
 
@@ -147,3 +159,8 @@ frame_progress = 0.2798901
 
 [node name="FootstepPlayer" type="AudioStreamPlayer2D" parent="." unique_id=1931192078]
 stream = ExtResource("3_6t5aa")
+
+[node name="PlayerLight" type="PointLight2D" parent="." unique_id=1470410393]
+position = Vector2(15, 27)
+energy = 1.5
+texture = SubResource("GradientTexture2D_4su2a")
