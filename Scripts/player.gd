@@ -14,7 +14,7 @@ var is_dead: bool = false
 
 # Footstep audio
 var footstep_timer: float = 0.0
-const FOOTSTEP_INTERVAL := 0.35
+const FOOTSTEP_INTERVAL := 0.25
 
 
 func _physics_process(delta: float) -> void:

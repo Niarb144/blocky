@@ -1,0 +1,8 @@
+[gd_scene format=3 uid="uid://y7tpma1mc4dk"]
+
+[ext_resource type="AudioStream" uid="uid://v10gq2vv0mlw" path="res://Assets/Sound/Environment/ambient_wind.wav" id="1_eit4a"]
+
+[node name="CaveAmbience" type="AudioStreamPlayer" unique_id=681062341]
+stream = ExtResource("1_eit4a")
+volume_db = -12.207
+autoplay = true

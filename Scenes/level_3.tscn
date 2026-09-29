@@ -1,6 +1,6 @@
 [gd_scene format=3 uid="uid://cqedh1l12m4xb"]
 
-[ext_resource type="Script" uid="uid://diqrtyjmmdr05" path="res://Scenes/level_3.gd" id="1_n4vm5"]
+[ext_resource type="Script" uid="uid://diqrtyjmmdr05" path="res://Scripts/level_3.gd" id="1_n4vm5"]
 [ext_resource type="PackedScene" uid="uid://d1xiv6pgau1fl" path="res://Scenes/backgrounds/parallax_background.tscn" id="2_fxnjf"]
 [ext_resource type="PackedScene" uid="uid://co3pmufuv2hic" path="res://Scenes/player.tscn" id="5_j77fg"]
 [ext_resource type="PackedScene" uid="uid://c7cfp15bor60c" path="res://Scenes/killzone.tscn" id="6_ki8bc"]

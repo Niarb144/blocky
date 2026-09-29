@@ -7,6 +7,7 @@ var level_completing: bool = false
 
 
 func _ready() -> void:
+	AudioManager.play_game_audio()
 	key.collected.connect(_on_key_collected)
 
 

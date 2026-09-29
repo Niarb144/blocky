@@ -1,0 +1,8 @@
+[gd_scene format=3 uid="uid://bvtjkvy5h0eaw"]
+
+[ext_resource type="AudioStream" uid="uid://bbct53ecn271x" path="res://Assets/Sound/Music/perspectives-kevin-macleod-main-version-11-58-10847.mp3" id="1_ufxh4"]
+
+[node name="GameBackgroundMusic" type="AudioStreamPlayer" unique_id=1947711945]
+stream = ExtResource("1_ufxh4")
+volume_db = -10.455
+autoplay = true
