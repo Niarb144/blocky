@@ -2,9 +2,10 @@
 
 [ext_resource type="Script" uid="uid://bbtl2r2c2r8vv" path="res://Scripts/player.gd" id="1_v0iea"]
 [ext_resource type="Texture2D" uid="uid://bao61vje4neh7" path="res://Assets/Player/Soldier.png" id="2_cvnsp"]
+[ext_resource type="AudioStream" uid="uid://beuuk778oipq7" path="res://Assets/Sound/Footsteps/foley_footstep_concrete_4.wav" id="3_6t5aa"]
 
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_4su2a"]
-size = Vector2(24, 35)
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_dc2iq"]
+height = 37.0
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_6t5aa"]
 atlas = ExtResource("2_cvnsp")
@@ -122,13 +123,7 @@ script = ExtResource("1_v0iea")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1454764094]
 position = Vector2(14, 21.5)
-shape = SubResource("RectangleShape2D_4su2a")
-
-[node name="ColorRect" type="ColorRect" parent="." unique_id=591094076]
-visible = false
-offset_right = 28.0
-offset_bottom = 40.0
-color = Color(0.14117648, 0.7647059, 0.3254902, 1)
+shape = SubResource("CapsuleShape2D_dc2iq")
 
 [node name="Camera2D" type="Camera2D" parent="." unique_id=433449934]
 zoom = Vector2(2, 2)
@@ -149,3 +144,6 @@ sprite_frames = SubResource("SpriteFrames_4su2a")
 animation = &"run"
 autoplay = "idle"
 frame_progress = 0.2798901
+
+[node name="FootstepPlayer" type="AudioStreamPlayer2D" parent="." unique_id=1931192078]
+stream = ExtResource("3_6t5aa")

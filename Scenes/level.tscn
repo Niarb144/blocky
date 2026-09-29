@@ -8,6 +8,7 @@
 [ext_resource type="PackedScene" uid="uid://n0t1tl40chtx" path="res://Scenes/wall.tscn" id="5_wqkje"]
 [ext_resource type="PackedScene" uid="uid://ct65nio4604bm" path="res://Scenes/key.tscn" id="6_0f350"]
 [ext_resource type="PackedScene" uid="uid://dlso7w47fu3py" path="res://Scenes/exit.tscn" id="7_8c0lf"]
+[ext_resource type="PackedScene" uid="uid://bct4ydcbwke81" path="res://Scenes/backgrounds/parallax_foreground.tscn" id="9_bvt00"]
 
 [node name="level_1" type="Node2D" unique_id=11141250]
 script = ExtResource("1_754fn")
@@ -85,3 +86,6 @@ position = Vector2(1140, -3)
 
 [node name="Key" parent="." unique_id=98689350 instance=ExtResource("6_0f350")]
 position = Vector2(1095, 56)
+
+[node name="ParallaxForeground" parent="." unique_id=660503427 instance=ExtResource("9_bvt00")]
+visible = false

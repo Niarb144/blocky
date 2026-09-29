@@ -1,15 +1,20 @@
 extends CharacterBody2D
 
 @onready var animated_sprite: AnimatedSprite2D = $AnimatedSprite2D
+@onready var footstep_player: AudioStreamPlayer2D = $FootstepPlayer
 
 const SPEED := 250.0
 const JUMP_VELOCITY := -400.0
 const GRAVITY := 1200.0
 
-# player health variables
+# Player health variables
 var max_health: int = 100
 var health: int = max_health
 var is_dead: bool = false
+
+# Footstep audio
+var footstep_timer: float = 0.0
+const FOOTSTEP_INTERVAL := 0.35
 
 
 func _physics_process(delta: float) -> void:
@@ -33,7 +38,11 @@ func _physics_process(delta: float) -> void:
 	# Animation
 	update_animation(direction)
 
+	# Footsteps
+	update_footsteps(direction, delta)
+
 	move_and_slide()
+
 
 func update_animation(direction: float) -> void:
 	if is_dead:
@@ -44,12 +53,32 @@ func update_animation(direction: float) -> void:
 	else:
 		animated_sprite.play("idle")
 
+
+func update_footsteps(direction: float, delta: float) -> void:
+	if is_dead:
+		footstep_player.stop()
+		footstep_timer = 0.0
+		return
+
+	# Only play footsteps when moving on the ground
+	if is_on_floor() and direction != 0:
+		footstep_timer -= delta
+
+		if footstep_timer <= 0.0:
+			footstep_player.play()
+			footstep_timer = FOOTSTEP_INTERVAL
+	else:
+		# Reset the timer when airborne or standing still
+		footstep_timer = 0.0
+
+
 func die() -> void:
 	if is_dead:
 		return
 
 	is_dead = true
 	get_tree().call_deferred("reload_current_scene")
+
 
 func take_damage(amount: int) -> void:
 	if is_dead:
