@@ -3,6 +3,7 @@
 [ext_resource type="Script" uid="uid://bbtl2r2c2r8vv" path="res://Scripts/player.gd" id="1_v0iea"]
 [ext_resource type="Texture2D" uid="uid://bao61vje4neh7" path="res://Assets/Player/Soldier.png" id="2_cvnsp"]
 [ext_resource type="AudioStream" uid="uid://beuuk778oipq7" path="res://Assets/Sound/Footsteps/foley_footstep_concrete_4.wav" id="3_6t5aa"]
+[ext_resource type="AudioStream" uid="uid://3bxrlwngaoug" path="res://Assets/Sound/Environment/air_burst.wav" id="4_vgqql"]
 
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_dc2iq"]
 height = 37.0
@@ -164,3 +165,6 @@ stream = ExtResource("3_6t5aa")
 position = Vector2(15, 27)
 energy = 1.5
 texture = SubResource("GradientTexture2D_4su2a")
+
+[node name="DashPlayer" type="AudioStreamPlayer2D" parent="." unique_id=2054186579]
+stream = ExtResource("4_vgqql")

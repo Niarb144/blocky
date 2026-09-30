@@ -1,0 +1,18 @@
+[gd_scene format=3 uid="uid://byh5meli1p6te"]
+
+[ext_resource type="PackedScene" uid="uid://n0t1tl40chtx" path="res://Scenes/wall.tscn" id="1_2y6ec"]
+[ext_resource type="PackedScene" uid="uid://b0t4haiu51rei" path="res://Scenes/ground.tscn" id="2_wxiin"]
+[ext_resource type="PackedScene" uid="uid://co3pmufuv2hic" path="res://Scenes/player.tscn" id="3_jv3c8"]
+
+[node name="WallTestLevel" type="Node" unique_id=1763689507]
+
+[node name="wall" parent="." unique_id=908506835 instance=ExtResource("1_2y6ec")]
+
+[node name="wall2" parent="." unique_id=1665489462 instance=ExtResource("1_2y6ec")]
+position = Vector2(196, 6)
+
+[node name="Ground" parent="." unique_id=837453774 instance=ExtResource("2_wxiin")]
+position = Vector2(-8, 453)
+
+[node name="Player" parent="." unique_id=378940393 instance=ExtResource("3_jv3c8")]
+position = Vector2(142, 403)
