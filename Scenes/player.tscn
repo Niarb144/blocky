@@ -250,6 +250,7 @@ fill_to = Vector2(0.546875, 0.9453125)
 size = Vector2(29, 31)
 
 [node name="Player" type="CharacterBody2D" unique_id=378940393 groups=["player"]]
+collision_layer = 2
 script = ExtResource("1_v0iea")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1454764094]
@@ -274,7 +275,7 @@ scale = Vector2(2, 2)
 sprite_frames = SubResource("SpriteFrames_4su2a")
 animation = &"shoot"
 autoplay = "idle"
-frame = 4
+frame = 7
 
 [node name="FootstepPlayer" type="AudioStreamPlayer2D" parent="." unique_id=1931192078]
 stream = ExtResource("3_6t5aa")
@@ -288,6 +289,8 @@ texture = SubResource("GradientTexture2D_4su2a")
 stream = ExtResource("4_vgqql")
 
 [node name="MeleeHitBox" type="Area2D" parent="." unique_id=366959082]
+collision_layer = 32
+collision_mask = 20
 monitoring = false
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="MeleeHitBox" unique_id=1897870633]
@@ -295,4 +298,4 @@ position = Vector2(40.5, 23.5)
 shape = SubResource("RectangleShape2D_4su2a")
 
 [node name="ShootPoint" type="Marker2D" parent="." unique_id=757651287]
-position = Vector2(38, 26)
+position = Vector2(38, 25)

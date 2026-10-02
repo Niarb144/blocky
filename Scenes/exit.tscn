@@ -918,6 +918,7 @@ texture = ExtResource("2_ljsmn")
 sources/0 = SubResource("TileSetAtlasSource_650lm")
 
 [node name="Exit" type="Area2D" unique_id=1250166314]
+collision_mask = 3
 script = ExtResource("1_35a55")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=849760250]

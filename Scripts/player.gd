@@ -46,6 +46,7 @@ var is_invincible: bool = false
 const MAX_AMMO := 6
 const MELEE_COOLDOWN := 0.35
 const MELEE_DAMAGE := 25
+const SHOOT_RELEASE_FRAME := 7
 
 var ammo := MAX_AMMO
 var is_attacking := false
@@ -131,13 +132,22 @@ func ranged_attack() -> void:
 	if ammo <= 0:
 		return
 
-	ammo -= 1
 	is_attacking = true
 
 	animated_sprite.play("shoot")
 
+	# Wait until we reach the release frame
+	while animated_sprite.animation == "shoot":
+		await animated_sprite.frame_changed
+
+		if animated_sprite.frame >= SHOOT_RELEASE_FRAME:
+			break
+
+	# Fire the projectile at the correct animation frame
+	ammo -= 1
 	spawn_projectile()
 
+	# Wait for the rest of the animation
 	await animated_sprite.animation_finished
 
 	is_attacking = false

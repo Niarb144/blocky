@@ -86,6 +86,7 @@ sources/1 = SubResource("TileSetAtlasSource_brn0f")
 [node name="Key" type="Area2D" unique_id=98689350]
 scale = Vector2(1.5, 1.5)
 collision_layer = 2
+collision_mask = 3
 script = ExtResource("1_ut0wq")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=738135099]
