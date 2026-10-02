@@ -42,10 +42,123 @@ var health: int = max_health
 var is_dead: bool = false
 var is_invincible: bool = false
 
+# Combat
+const MAX_AMMO := 6
+const MELEE_COOLDOWN := 0.35
+const MELEE_DAMAGE := 25
+
+var ammo := MAX_AMMO
+var is_attacking := false
+var attack_cooldown := 0.0
+
+var hit_targets: Array[Node] = []
+
+@onready var melee_hitbox: Area2D = $MeleeHitBox
+@onready var shoot_point: Marker2D = $ShootPoint
+
 # Footstep audio
 var footstep_timer: float = 0.0
 const FOOTSTEP_INTERVAL := 0.25
 
+func _process(delta: float) -> void:
+	if attack_cooldown > 0.0:
+		attack_cooldown -= delta
+
+	# Don't attack while dashing
+	if is_dashing:
+		return
+
+	if Input.is_action_just_pressed("attack_melee"):
+		melee_attack()
+
+	if Input.is_action_just_pressed("attack_ranged"):
+		ranged_attack()
+
+func melee_attack() -> void:
+	if is_attacking:
+		return
+
+	if attack_cooldown > 0.0:
+		return
+
+	is_attacking = true
+	attack_cooldown = MELEE_COOLDOWN
+
+	hit_targets.clear()
+
+	update_melee_hitbox_position()
+
+	animated_sprite.play("slash")
+
+	melee_hitbox.monitoring = true
+
+	await get_tree().physics_frame
+
+	check_melee_hits()
+
+	await animated_sprite.animation_finished
+
+	melee_hitbox.monitoring = false
+	is_attacking = false
+	
+func update_melee_hitbox_position() -> void:
+	if animated_sprite.flip_h:
+		melee_hitbox.position.x = -abs(melee_hitbox.position.x)
+	else:
+		melee_hitbox.position.x = abs(melee_hitbox.position.x)
+
+func check_melee_hits() -> void:
+	for body in melee_hitbox.get_overlapping_bodies():
+		if body in hit_targets:
+			continue
+
+		if body.has_method("take_damage"):
+			body.take_damage(MELEE_DAMAGE)
+			hit_targets.append(body)
+
+	for area in melee_hitbox.get_overlapping_areas():
+		if area in hit_targets:
+			continue
+
+		if area.has_method("take_damage"):
+			area.take_damage(MELEE_DAMAGE)
+			hit_targets.append(area)
+	
+func ranged_attack() -> void:
+	if is_attacking:
+		return
+
+	if ammo <= 0:
+		return
+
+	ammo -= 1
+	is_attacking = true
+
+	animated_sprite.play("shoot")
+
+	spawn_projectile()
+
+	await animated_sprite.animation_finished
+
+	is_attacking = false
+	
+func spawn_projectile() -> void:
+	var projectile_scene = preload("res://Scenes/projectile.tscn")
+	var projectile = projectile_scene.instantiate()
+
+	projectile.global_position = shoot_point.global_position
+
+	var projectile_direction := Vector2.RIGHT
+
+	if animated_sprite.flip_h:
+		projectile_direction = Vector2.LEFT
+
+	projectile.direction = projectile_direction
+
+	get_tree().current_scene.add_child(projectile)
+	
+func add_ammo(amount: int) -> void:
+	ammo = min(ammo + amount, MAX_AMMO)
 
 func _physics_process(delta: float) -> void:
 
@@ -162,8 +275,8 @@ func _physics_process(delta: float) -> void:
 	# --------------------------------------------------------
 	# ANIMATION
 	# --------------------------------------------------------
-
-	update_animation(direction)
+	if not is_attacking:
+		update_animation(direction)
 
 
 	# --------------------------------------------------------
