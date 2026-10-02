@@ -44,7 +44,7 @@ var is_invincible: bool = false
 
 # Combat
 const MAX_AMMO := 6
-const MELEE_COOLDOWN := 0.35
+const MELEE_COOLDOWN := 0.30
 const MELEE_DAMAGE := 25
 const SHOOT_RELEASE_FRAME := 7
 
@@ -54,12 +54,14 @@ var attack_cooldown := 0.0
 
 var hit_targets: Array[Node] = []
 
-@onready var melee_hitbox: Area2D = $MeleeHitBox
-@onready var shoot_point: Marker2D = $ShootPoint
+@onready var combat_pivot: Node2D = $CombatPivot
+@onready var melee_hitbox: Area2D = $CombatPivot/MeleeHitBox
+@onready var shoot_point: Marker2D = $CombatPivot/ShootPoint
 
 # Footstep audio
 var footstep_timer: float = 0.0
 const FOOTSTEP_INTERVAL := 0.25
+
 
 func _process(delta: float) -> void:
 	if attack_cooldown > 0.0:
@@ -87,8 +89,6 @@ func melee_attack() -> void:
 
 	hit_targets.clear()
 
-	update_melee_hitbox_position()
-
 	animated_sprite.play("slash")
 
 	melee_hitbox.monitoring = true
@@ -101,29 +101,23 @@ func melee_attack() -> void:
 
 	melee_hitbox.monitoring = false
 	is_attacking = false
-	
-func update_melee_hitbox_position() -> void:
-	if animated_sprite.flip_h:
-		melee_hitbox.position.x = -abs(melee_hitbox.position.x)
-	else:
-		melee_hitbox.position.x = abs(melee_hitbox.position.x)
 
 func check_melee_hits() -> void:
-	for body in melee_hitbox.get_overlapping_bodies():
+	var bodies := melee_hitbox.get_overlapping_bodies()
+
+	print("Melee bodies detected: ", bodies.size())
+
+	for body in bodies:
+		print("Detected: ", body.name)
+
 		if body in hit_targets:
 			continue
 
 		if body.has_method("take_damage"):
+			print("Damaging: ", body.name)
+
 			body.take_damage(MELEE_DAMAGE)
 			hit_targets.append(body)
-
-	for area in melee_hitbox.get_overlapping_areas():
-		if area in hit_targets:
-			continue
-
-		if area.has_method("take_damage"):
-			area.take_damage(MELEE_DAMAGE)
-			hit_targets.append(area)
 	
 func ranged_attack() -> void:
 	if is_attacking:
@@ -156,19 +150,35 @@ func spawn_projectile() -> void:
 	var projectile_scene = preload("res://Scenes/projectile.tscn")
 	var projectile = projectile_scene.instantiate()
 
-	projectile.global_position = shoot_point.global_position
-
 	var projectile_direction := Vector2.RIGHT
 
 	if animated_sprite.flip_h:
 		projectile_direction = Vector2.LEFT
 
-	projectile.direction = projectile_direction
-
 	get_tree().current_scene.add_child(projectile)
+
+	projectile.global_position = shoot_point.global_position
+	projectile.setup(projectile_direction)
 	
-func add_ammo(amount: int) -> void:
-	ammo = min(ammo + amount, MAX_AMMO)
+func add_ammo(amount: int) -> int:
+	var space_available: int = MAX_AMMO - ammo
+
+	if space_available <= 0:
+		return 0
+
+	var amount_added: int = mini(amount, space_available)
+
+	ammo += amount_added
+
+	print("Ammo: ", ammo, "/", MAX_AMMO)
+
+	return amount_added
+	
+func update_combat_facing() -> void:
+	if animated_sprite.flip_h:
+		combat_pivot.scale.x = -1.0
+	else:
+		combat_pivot.scale.x = 1.0
 
 func _physics_process(delta: float) -> void:
 
@@ -271,7 +281,10 @@ func _physics_process(delta: float) -> void:
 	elif direction != 0:
 
 		velocity.x = direction * SPEED
-		animated_sprite.flip_h = direction < 0
+		var facing_left := direction < 0
+
+		animated_sprite.flip_h = facing_left
+		update_combat_facing()
 
 	else:
 

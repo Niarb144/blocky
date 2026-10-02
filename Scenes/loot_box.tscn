@@ -1,6 +1,7 @@
 [gd_scene format=3 uid="uid://cii0llieji8t8"]
 
 [ext_resource type="Texture2D" uid="uid://b8btqlrecytqp" path="res://Assets/Items/Sheet.png" id="1_0ipmj"]
+[ext_resource type="Script" uid="uid://c3irgxmxjmeih" path="res://Scripts/loot_box.gd" id="1_bej16"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_bej16"]
 texture = ExtResource("1_0ipmj")
@@ -81,12 +82,11 @@ texture = ExtResource("1_0ipmj")
 sources/0 = SubResource("TileSetAtlasSource_bej16")
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_4su2a"]
-size = Vector2(16, 16)
-
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_qwa8o"]
-size = Vector2(16, 16)
+size = Vector2(16, 15)
 
 [node name="LootBox" type="StaticBody2D" unique_id=2075987227]
+collision_layer = 16
+script = ExtResource("1_bej16")
 
 [node name="TileMapLayer" type="TileMapLayer" parent="." unique_id=1804917347]
 tile_map_data = PackedByteArray(0, 0, 2, 0, 1, 0, 0, 0, 7, 0, 4, 0, 0, 0)
@@ -96,8 +96,5 @@ tile_set = SubResource("TileSet_4su2a")
 position = Vector2(40, 24)
 shape = SubResource("RectangleShape2D_4su2a")
 
-[node name="Hitbox" type="Area2D" parent="." unique_id=2071572305]
-
-[node name="CollisionShape2D" type="CollisionShape2D" parent="Hitbox" unique_id=898341068]
-position = Vector2(40, 24)
-shape = SubResource("RectangleShape2D_qwa8o")
+[node name="DropPoint" type="Marker2D" parent="." unique_id=1104000587]
+position = Vector2(40, 15)

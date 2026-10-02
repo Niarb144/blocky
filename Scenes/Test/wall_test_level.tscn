@@ -3,6 +3,7 @@
 [ext_resource type="PackedScene" uid="uid://n0t1tl40chtx" path="res://Scenes/wall.tscn" id="1_2y6ec"]
 [ext_resource type="PackedScene" uid="uid://b0t4haiu51rei" path="res://Scenes/ground.tscn" id="2_wxiin"]
 [ext_resource type="PackedScene" uid="uid://co3pmufuv2hic" path="res://Scenes/player.tscn" id="3_jv3c8"]
+[ext_resource type="PackedScene" uid="uid://cii0llieji8t8" path="res://Scenes/loot_box.tscn" id="4_wxiin"]
 
 [node name="WallTestLevel" type="Node" unique_id=1763689507]
 
@@ -16,3 +17,6 @@ position = Vector2(-8, 453)
 
 [node name="Player" parent="." unique_id=378940393 instance=ExtResource("3_jv3c8")]
 position = Vector2(142, 403)
+
+[node name="LootBox" parent="." unique_id=2075987227 instance=ExtResource("4_wxiin")]
+position = Vector2(42, 411)

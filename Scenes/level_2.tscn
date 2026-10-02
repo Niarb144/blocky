@@ -9,6 +9,7 @@
 [ext_resource type="PackedScene" uid="uid://ct65nio4604bm" path="res://Scenes/key.tscn" id="7_2mgoq"]
 [ext_resource type="PackedScene" uid="uid://bsorrher1qut0" path="res://Scenes/vertical_platform.tscn" id="7_uhnj4"]
 [ext_resource type="PackedScene" uid="uid://dlso7w47fu3py" path="res://Scenes/exit.tscn" id="8_uhnj4"]
+[ext_resource type="PackedScene" uid="uid://cii0llieji8t8" path="res://Scenes/loot_box.tscn" id="11_t7v2y"]
 [ext_resource type="PackedScene" uid="uid://n0t1tl40chtx" path="res://Scenes/wall.tscn" id="13_vcilj"]
 
 [node name="level_2" type="Node2D" unique_id=417640951]
@@ -72,3 +73,6 @@ position = Vector2(-17, -59)
 [node name="wall2" parent="." unique_id=108889969 instance=ExtResource("13_vcilj")]
 position = Vector2(1159, 609)
 rotation = -3.1313329
+
+[node name="LootBox" parent="." unique_id=2075987227 instance=ExtResource("11_t7v2y")]
+position = Vector2(56, 457)

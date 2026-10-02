@@ -273,9 +273,8 @@ texture_filter = 1
 position = Vector2(14, 25)
 scale = Vector2(2, 2)
 sprite_frames = SubResource("SpriteFrames_4su2a")
-animation = &"shoot"
+animation = &"idle"
 autoplay = "idle"
-frame = 7
 
 [node name="FootstepPlayer" type="AudioStreamPlayer2D" parent="." unique_id=1931192078]
 stream = ExtResource("3_6t5aa")
@@ -288,14 +287,17 @@ texture = SubResource("GradientTexture2D_4su2a")
 [node name="DashPlayer" type="AudioStreamPlayer2D" parent="." unique_id=2054186579]
 stream = ExtResource("4_vgqql")
 
-[node name="MeleeHitBox" type="Area2D" parent="." unique_id=366959082]
+[node name="CombatPivot" type="Node2D" parent="." unique_id=1588884746]
+position = Vector2(14, 23)
+
+[node name="MeleeHitBox" type="Area2D" parent="CombatPivot" unique_id=366959082]
+position = Vector2(-14, -23)
 collision_layer = 32
 collision_mask = 20
-monitoring = false
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="MeleeHitBox" unique_id=1897870633]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="CombatPivot/MeleeHitBox" unique_id=1897870633]
 position = Vector2(40.5, 23.5)
 shape = SubResource("RectangleShape2D_4su2a")
 
-[node name="ShootPoint" type="Marker2D" parent="." unique_id=757651287]
-position = Vector2(38, 25)
+[node name="ShootPoint" type="Marker2D" parent="CombatPivot" unique_id=757651287]
+position = Vector2(24, 2)

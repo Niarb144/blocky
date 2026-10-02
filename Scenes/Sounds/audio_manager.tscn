@@ -5,6 +5,8 @@
 [ext_resource type="PackedScene" uid="uid://bvtjkvy5h0eaw" path="res://Scenes/Sounds/game_background_music.tscn" id="2_l520s"]
 [ext_resource type="AudioStream" uid="uid://hdtf4gxxjhy2" path="res://Assets/Sound/Items/keys_jingling.wav" id="4_b1opd"]
 [ext_resource type="AudioStream" uid="uid://c1sm0efsmlt1f" path="res://Assets/Sound/Environment/creaky_door_short.wav" id="5_eaqd1"]
+[ext_resource type="AudioStream" uid="uid://cu1uv801i41gn" path="res://Assets/Sound/Weapons/sword_drop.wav" id="6_eaqd1"]
+[ext_resource type="AudioStream" uid="uid://cimvyxywu80p2" path="res://Assets/Sound/Weapons/weapon_drop.wav" id="7_o370n"]
 
 [node name="AudioManager" type="Node" unique_id=769436843]
 script = ExtResource("1_l520s")
@@ -18,3 +20,9 @@ stream = ExtResource("4_b1opd")
 
 [node name="ExitSound" type="AudioStreamPlayer" parent="." unique_id=1183382926]
 stream = ExtResource("5_eaqd1")
+
+[node name="LootboxBreak" type="AudioStreamPlayer" parent="." unique_id=1503792242]
+stream = ExtResource("6_eaqd1")
+
+[node name="WeaponDrop" type="AudioStreamPlayer" parent="." unique_id=917080892]
+stream = ExtResource("7_o370n")

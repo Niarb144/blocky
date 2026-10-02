@@ -4,6 +4,8 @@ extends Node
 @onready var ambience: AudioStreamPlayer = $CaveAmbience
 @onready var key_pickup_sound: AudioStreamPlayer = $KeyPickupSound
 @onready var exit_sound: AudioStreamPlayer = $ExitSound
+@onready var loot_box_break: AudioStreamPlayer = $LootboxBreak
+@onready var weapon_drop: AudioStreamPlayer = $WeaponDrop
 
 
 func play_game_audio() -> void:
@@ -22,6 +24,11 @@ func stop_game_audio() -> void:
 func play_key_pickup() -> void:
 	key_pickup_sound.play()
 
+func play_loot_box_break() -> void:
+	loot_box_break.play()
+
+func play_weapon_drop() -> void:
+	weapon_drop.play()
 
 func play_exit() -> void:
 	exit_sound.play()
