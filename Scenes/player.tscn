@@ -9,10 +9,6 @@
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_dc2iq"]
 height = 37.0
 
-[sub_resource type="AtlasTexture" id="AtlasTexture_xuaoq"]
-atlas = ExtResource("2_cvnsp")
-region = Rect2(0, 0, 100, 100)
-
 [sub_resource type="AtlasTexture" id="AtlasTexture_wohnl"]
 atlas = ExtResource("2_cvnsp")
 region = Rect2(100, 600, 100, 100)
@@ -80,10 +76,6 @@ region = Rect2(400, 0, 100, 100)
 [sub_resource type="AtlasTexture" id="AtlasTexture_8erm5"]
 atlas = ExtResource("2_cvnsp")
 region = Rect2(500, 0, 100, 100)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_7ldla"]
-atlas = ExtResource("2_cvnsp")
-region = Rect2(0, 0, 100, 100)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_r7t2e"]
 atlas = ExtResource("2_cvnsp")
@@ -189,9 +181,6 @@ region = Rect2(500, 200, 100, 100)
 animations = [{
 "frames": [{
 "duration": 1.0,
-"texture": SubResource("AtlasTexture_xuaoq")
-}, {
-"duration": 1.0,
 "texture": SubResource("AtlasTexture_wohnl")
 }, {
 "duration": 1.0,
@@ -202,7 +191,7 @@ animations = [{
 }],
 "loop": 0,
 "name": &"dash",
-"speed": 6.0
+"speed": 20.0
 }, {
 "frames": [{
 "duration": 1.0,
@@ -263,9 +252,6 @@ animations = [{
 }, {
 "frames": [{
 "duration": 1.0,
-"texture": SubResource("AtlasTexture_7ldla")
-}, {
-"duration": 1.0,
 "texture": SubResource("AtlasTexture_r7t2e")
 }, {
 "duration": 1.0,
@@ -273,7 +259,7 @@ animations = [{
 }],
 "loop": 0,
 "name": &"jump",
-"speed": 6.0
+"speed": 5.0
 }, {
 "frames": [{
 "duration": 1.0,
@@ -399,10 +385,8 @@ texture_filter = 1
 position = Vector2(14, 25)
 scale = Vector2(2, 2)
 sprite_frames = SubResource("SpriteFrames_4su2a")
-animation = &"jump"
+animation = &"dash"
 autoplay = "idle"
-frame = 2
-frame_progress = 1.0
 
 [node name="FootstepPlayer" type="AudioStreamPlayer2D" parent="." unique_id=1931192078]
 stream = ExtResource("3_6t5aa")

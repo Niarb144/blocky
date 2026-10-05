@@ -37,10 +37,18 @@ var wall_normal: Vector2 = Vector2.ZERO
 var is_wall_grabbing: bool = false
 
 # Player health
-@export var max_health: int = 100
+var max_health: int:
+	get:
+		return GameState.MAX_HEALTH
 
-var health: int = 100
+var health: int:
+	get:
+		return GameState.health
+	set(value):
+		GameState.health = value
 var is_dead: bool = false
+var is_hurt: bool = false
+var projectile_released: bool = false
 
 # Existing dash protection
 var is_invincible: bool = false
@@ -81,8 +89,13 @@ const FOOTSTEP_INTERVAL := 0.25
 
 func _ready() -> void:
 	add_to_group("player")
+	animated_sprite.animation_finished.connect(_on_animation_finished)
+	animated_sprite.frame_changed.connect(_on_animation_frame_changed)
 
-	health = max_health
+	# These animations must emit animation_finished.
+	for animation_name in ["slash", "shoot", "hurt", "death"]:
+		animated_sprite.sprite_frames.set_animation_loop(animation_name, false)
+
 	update_health_ui()
 
 	melee_hitbox.monitoring = true
@@ -103,7 +116,7 @@ func _process(delta: float) -> void:
 		attack_cooldown -= delta
 
 	# Don't attack while dashing
-	if is_dashing:
+	if is_dashing or is_hurt:
 		return
 
 	if Input.is_action_just_pressed("attack_melee"):
@@ -113,7 +126,7 @@ func _process(delta: float) -> void:
 		ranged_attack()
 
 func melee_attack() -> void:
-	if is_dead or is_attacking:
+	if is_dead or is_hurt or is_dashing or is_attacking:
 		return
 
 	if attack_cooldown > 0.0:
@@ -126,10 +139,6 @@ func melee_attack() -> void:
 	hit_targets.clear()
 	animated_sprite.play("slash")
 
-	await animated_sprite.animation_finished
-
-	is_melee_attacking = false
-	is_attacking = false
 
 func check_melee_hits() -> void:
 	var bodies := melee_hitbox.get_overlapping_bodies()
@@ -149,32 +158,45 @@ func check_melee_hits() -> void:
 			hit_targets.append(body)
 	
 func ranged_attack() -> void:
-	if is_attacking:
-		return
-
-	if ammo <= 0:
+	if is_dead or is_hurt or is_dashing or is_attacking or ammo <= 0:
 		return
 
 	is_attacking = true
-
+	projectile_released = false
 	animated_sprite.play("shoot")
 
-	# Wait until we reach the release frame
-	while animated_sprite.animation == "shoot":
-		await animated_sprite.frame_changed
 
-		if animated_sprite.frame >= SHOOT_RELEASE_FRAME:
-			break
-
-	# Fire the projectile at the correct animation frame
-	ammo -= 1
-	spawn_projectile()
-
-	# Wait for the rest of the animation
-	await animated_sprite.animation_finished
-
+func cancel_attack() -> void:
 	is_attacking = false
-	
+	is_melee_attacking = false
+	projectile_released = false
+	hit_targets.clear()
+
+
+func _on_animation_frame_changed() -> void:
+	if is_dead or is_hurt or is_dashing:
+		return
+
+	if is_attacking and animated_sprite.animation == "shoot":
+		if not projectile_released and animated_sprite.frame >= SHOOT_RELEASE_FRAME:
+			projectile_released = true
+			ammo -= 1
+			spawn_projectile()
+
+
+func _on_animation_finished() -> void:
+	match animated_sprite.animation:
+		"death":
+			if is_dead:
+				get_tree().call_deferred("reload_current_scene")
+		"hurt":
+			is_hurt = false
+			update_animation(Input.get_axis("move_left", "move_right"))
+		"slash", "shoot":
+			cancel_attack()
+			update_animation(Input.get_axis("move_left", "move_right"))
+
+
 func spawn_projectile() -> void:
 	var projectile_scene = preload("res://Scenes/projectile.tscn")
 	var projectile = projectile_scene.instantiate()
@@ -229,6 +251,15 @@ func _physics_process(delta: float) -> void:
 	update_dash_timers(delta)
 
 
+	# Briefly suspend input while hurt; gravity still applies.
+	if is_hurt:
+		velocity.x = 0.0
+		if not is_on_floor():
+			velocity.y += GRAVITY * delta
+		move_and_slide()
+		return
+
+
 	# --------------------------------------------------------
 	# WALL DETECTION
 	# --------------------------------------------------------
@@ -250,6 +281,7 @@ func _physics_process(delta: float) -> void:
 
 	if is_dashing:
 		handle_dash()
+		update_animation(0.0)
 		move_and_slide()
 		return
 
@@ -338,8 +370,7 @@ func _physics_process(delta: float) -> void:
 	# --------------------------------------------------------
 	# ANIMATION
 	# --------------------------------------------------------
-	if not is_attacking:
-		update_animation(direction)
+	update_animation(direction)
 
 
 	# --------------------------------------------------------
@@ -375,12 +406,27 @@ func update_dash_timers(delta: float) -> void:
 
 func start_dash() -> void:
 
-	if dash_cooldown_timer > 0.0:
+	if is_dead or is_hurt or dash_cooldown_timer > 0.0:
 		return
 
+	cancel_attack()
+	footstep_player.stop()
+	# Calculate the animation's normal duration.
+	var frames: SpriteFrames = animated_sprite.sprite_frames
+	var frame_count: int = frames.get_frame_count("dash")
+	var animation_fps: float = frames.get_animation_speed("dash")
+	var animation_duration: float = 0.0
+
+	for frame_index in range(frame_count):
+		animation_duration += frames.get_frame_duration("dash", frame_index) / animation_fps
+
+	# Fit the complete animation into the dash duration.
+	animated_sprite.play("dash", animation_duration / DASH_DURATION)
+	animated_sprite.set_frame_and_progress(0, 0.0)
 
 	is_dashing = true
 	is_invincible = true
+	
 	
 	dash_player.play()
 
@@ -422,6 +468,8 @@ func start_dash() -> void:
 		dash_direction = -1.0 if animated_sprite.flip_h else 1.0
 
 
+	animated_sprite.flip_h = dash_direction < 0.0
+	update_combat_facing()
 	velocity.x = dash_direction * DASH_SPEED
 	velocity.y = 0.0
 
@@ -489,17 +537,28 @@ func _draw() -> void:
 		)
 
 func update_animation(direction: float) -> void:
-	if is_dead:
+	# Priority: death > hurt > dash > attack > jump > run / idle.
+	if is_dead or is_hurt:
 		return
 
-	if direction != 0:
+	if is_dashing:
+		return
+
+	if is_attacking:
+		return
+
+	# Negative vertical velocity also covers the jump's first frame,
+	# before move_and_slide updates the floor state.
+	if not is_on_floor() or velocity.y < 0.0:
+		animated_sprite.play("jump")
+	elif direction != 0:
 		animated_sprite.play("run")
 	else:
 		animated_sprite.play("idle")
 
 
 func update_footsteps(direction: float, delta: float) -> void:
-	if is_dead:
+	if is_dead or is_hurt or is_dashing:
 		footstep_player.stop()
 		footstep_timer = 0.0
 		return
@@ -532,6 +591,15 @@ func take_damage(amount: int, bypass_protection: bool = false) -> void:
 		return
 
 	hurt_invulnerability_timer = hurt_invulnerability_duration
+	cancel_attack()
+	is_dashing = false
+	is_invincible = false
+	dash_timer = 0.0
+	is_hurt = true
+	velocity.x = 0.0
+	footstep_player.stop()
+	dash_player.stop()
+	animated_sprite.play("hurt")
 
 
 func die() -> void:
@@ -539,8 +607,16 @@ func die() -> void:
 		return
 
 	is_dead = true
+	is_hurt = false
+	is_dashing = false
+	is_invincible = false
+	cancel_attack()
 	velocity = Vector2.ZERO
 	footstep_player.stop()
 	dash_player.stop()
 
-	get_tree().call_deferred("reload_current_scene")
+	animated_sprite.play("death")
+	await animated_sprite.animation_finished
+
+	# Restore health for the respawn.
+	GameState.health = GameState.MAX_HEALTH
