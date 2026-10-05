@@ -1,0 +1,18 @@
+[gd_scene format=3 uid="uid://d3sgv5uogu1in"]
+
+[ext_resource type="Script" uid="uid://b0ndd22q07jsb" path="res://Scripts/hud.gd" id="1_e0onf"]
+
+[node name="HUD" type="CanvasLayer" unique_id=1908263251]
+script = ExtResource("1_e0onf")
+
+[node name="MarginContainer" type="MarginContainer" parent="." unique_id=101202489]
+offset_left = 48.0
+offset_top = 41.0
+offset_right = 88.0
+offset_bottom = 81.0
+mouse_filter = 2
+
+[node name="AmmoLabel" type="Label" parent="MarginContainer" unique_id=1988418954]
+layout_mode = 2
+theme_override_font_sizes/font_size = 24
+text = "6/6"

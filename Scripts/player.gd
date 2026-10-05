@@ -43,14 +43,21 @@ var is_dead: bool = false
 var is_invincible: bool = false
 
 # Combat
-const MAX_AMMO := 6
+const MAX_AMMO: int = GameState.MAX_AMMO
 const MELEE_COOLDOWN := 0.30
 const MELEE_DAMAGE := 25
 const SHOOT_RELEASE_FRAME := 7
 
-var ammo := MAX_AMMO
+var ammo: int:
+	get:
+		return GameState.ammo
+	set(value):
+		GameState.ammo = value
+
 var is_attacking := false
 var attack_cooldown := 0.0
+
+var is_melee_attacking: bool = false
 
 var hit_targets: Array[Node] = []
 
@@ -62,6 +69,9 @@ var hit_targets: Array[Node] = []
 var footstep_timer: float = 0.0
 const FOOTSTEP_INTERVAL := 0.25
 
+func _ready() -> void:
+	melee_hitbox.monitoring = true
+	update_combat_facing()
 
 func _process(delta: float) -> void:
 	if attack_cooldown > 0.0:
@@ -78,28 +88,22 @@ func _process(delta: float) -> void:
 		ranged_attack()
 
 func melee_attack() -> void:
-	if is_attacking:
+	if is_dead or is_attacking:
 		return
 
 	if attack_cooldown > 0.0:
 		return
 
 	is_attacking = true
+	is_melee_attacking = true
 	attack_cooldown = MELEE_COOLDOWN
 
 	hit_targets.clear()
-
 	animated_sprite.play("slash")
-
-	melee_hitbox.monitoring = true
-
-	await get_tree().physics_frame
-
-	check_melee_hits()
 
 	await animated_sprite.animation_finished
 
-	melee_hitbox.monitoring = false
+	is_melee_attacking = false
 	is_attacking = false
 
 func check_melee_hits() -> void:
@@ -181,6 +185,9 @@ func update_combat_facing() -> void:
 		combat_pivot.scale.x = 1.0
 
 func _physics_process(delta: float) -> void:
+	if is_melee_attacking and not is_dead:
+		check_melee_hits()
+
 
 	# --------------------------------------------------------
 	# DASH TIMERS
