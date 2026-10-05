@@ -10,7 +10,7 @@
 [ext_resource type="PackedScene" uid="uid://ct65nio4604bm" path="res://Scenes/key.tscn" id="6_0f350"]
 [ext_resource type="PackedScene" uid="uid://dlso7w47fu3py" path="res://Scenes/exit.tscn" id="7_8c0lf"]
 [ext_resource type="PackedScene" uid="uid://cii0llieji8t8" path="res://Scenes/loot_box.tscn" id="10_oqgf2"]
-[ext_resource type="PackedScene" uid="uid://d3sgv5uogu1in" path="res://Scenes/hud.tscn" id="11_qxfql"]
+[ext_resource type="PackedScene" uid="uid://e1cvky88fq2e" path="res://Scenes/Enemies/blood_monster.tscn" id="12_ha31o"]
 
 [node name="level_1" type="Node2D" unique_id=11141250]
 script = ExtResource("1_754fn")
@@ -95,4 +95,5 @@ position = Vector2(1095, 56)
 [node name="LootBox" parent="." unique_id=2075987227 instance=ExtResource("10_oqgf2")]
 position = Vector2(708, 548)
 
-[node name="HUD" parent="." unique_id=1908263251 instance=ExtResource("11_qxfql")]
+[node name="BloodMonster" parent="." unique_id=519510292 instance=ExtResource("12_ha31o")]
+position = Vector2(503, 580)

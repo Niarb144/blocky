@@ -9,7 +9,6 @@
 [ext_resource type="PackedScene" uid="uid://n0t1tl40chtx" path="res://Scenes/wall.tscn" id="9_s80er"]
 [ext_resource type="PackedScene" uid="uid://dkor4sx15paw2" path="res://Scenes/platform.tscn" id="10_8jhox"]
 [ext_resource type="PackedScene" uid="uid://c44tluv7u3xer" path="res://Scenes/horizontal_platform.tscn" id="11_hed5s"]
-[ext_resource type="PackedScene" uid="uid://d3sgv5uogu1in" path="res://Scenes/hud.tscn" id="11_jtv8s"]
 [ext_resource type="PackedScene" uid="uid://bsorrher1qut0" path="res://Scenes/vertical_platform.tscn" id="12_yykrm"]
 
 [node name="level_3" type="Node2D" unique_id=227366926]
@@ -53,5 +52,3 @@ position = Vector2(-38, -115)
 [node name="wall2" parent="." unique_id=975561712 instance=ExtResource("9_s80er")]
 position = Vector2(1176.0001, 544)
 rotation = 3.1377895
-
-[node name="HUD" parent="." unique_id=1908263251 instance=ExtResource("11_jtv8s")]

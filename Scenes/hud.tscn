@@ -29,6 +29,7 @@ offset_bottom = 99.0
 
 [node name="HealthLabel" type="Label" parent="HealthDisplay" unique_id=855564267]
 layout_mode = 2
+text = "HP"
 
 [node name="HealthBar" type="ProgressBar" parent="HealthDisplay" unique_id=162661753]
 custom_minimum_size = Vector2(0, 30)
