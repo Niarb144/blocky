@@ -36,11 +36,21 @@ var wall_normal: Vector2 = Vector2.ZERO
 
 var is_wall_grabbing: bool = false
 
-# Player health variables
-var max_health: int = 100
-var health: int = max_health
+# Player health
+@export var max_health: int = 100
+
+var health: int = 100
 var is_dead: bool = false
+
+# Existing dash protection
 var is_invincible: bool = false
+
+# Protection after taking damage
+@export var hurt_invulnerability_duration: float = 0.8
+var hurt_invulnerability_timer: float = 0.0
+
+@onready var health_label: Label = $HUD/HealthDisplay/HealthLabel
+@onready var health_bar: ProgressBar = $HUD/HealthDisplay/HealthBar
 
 # Combat
 const MAX_AMMO: int = GameState.MAX_AMMO
@@ -70,10 +80,25 @@ var footstep_timer: float = 0.0
 const FOOTSTEP_INTERVAL := 0.25
 
 func _ready() -> void:
+	add_to_group("player")
+
+	health = max_health
+	update_health_ui()
+
 	melee_hitbox.monitoring = true
 	update_combat_facing()
+	
+func update_health_ui() -> void:
+	health_label.text = "Health: %d/%d" % [health, max_health]
+
+	health_bar.min_value = 0
+	health_bar.max_value = max_health
+	health_bar.value = health
 
 func _process(delta: float) -> void:
+	if is_dead:
+		return
+		
 	if attack_cooldown > 0.0:
 		attack_cooldown -= delta
 
@@ -185,6 +210,14 @@ func update_combat_facing() -> void:
 		combat_pivot.scale.x = 1.0
 
 func _physics_process(delta: float) -> void:
+	if is_dead:
+		return
+
+	hurt_invulnerability_timer = maxf(
+		hurt_invulnerability_timer - delta,
+		0.0
+	)
+
 	if is_melee_attacking and not is_dead:
 		check_melee_hits()
 
@@ -483,19 +516,31 @@ func update_footsteps(direction: float, delta: float) -> void:
 		footstep_timer = 0.0
 
 
+func take_damage(amount: int, bypass_protection: bool = false) -> void:
+	if is_dead or amount <= 0:
+		return
+
+	if not bypass_protection:
+		if is_invincible or hurt_invulnerability_timer > 0.0:
+			return
+
+	health = clampi(health - amount, 0, max_health)
+	update_health_ui()
+
+	if health <= 0:
+		die()
+		return
+
+	hurt_invulnerability_timer = hurt_invulnerability_duration
+
+
 func die() -> void:
 	if is_dead:
 		return
 
 	is_dead = true
+	velocity = Vector2.ZERO
+	footstep_player.stop()
+	dash_player.stop()
+
 	get_tree().call_deferred("reload_current_scene")
-
-
-func take_damage(amount: int) -> void:
-	if is_dead or is_invincible:
-		return
-
-	health -= amount
-
-	if health <= 0:
-		die()

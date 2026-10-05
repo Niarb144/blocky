@@ -6,13 +6,31 @@
 script = ExtResource("1_e0onf")
 
 [node name="MarginContainer" type="MarginContainer" parent="." unique_id=101202489]
-offset_left = 48.0
-offset_top = 41.0
-offset_right = 88.0
-offset_bottom = 81.0
+anchors_preset = 2
+anchor_top = 1.0
+anchor_bottom = 1.0
+offset_left = 35.0
+offset_top = -69.0
+offset_right = 75.0
+offset_bottom = -29.0
+grow_vertical = 0
 mouse_filter = 2
 
 [node name="AmmoLabel" type="Label" parent="MarginContainer" unique_id=1988418954]
 layout_mode = 2
 theme_override_font_sizes/font_size = 24
 text = "6/6"
+
+[node name="HealthDisplay" type="VBoxContainer" parent="." unique_id=1304664558]
+offset_left = 48.0
+offset_top = -1.0
+offset_right = 198.0
+offset_bottom = 99.0
+
+[node name="HealthLabel" type="Label" parent="HealthDisplay" unique_id=855564267]
+layout_mode = 2
+
+[node name="HealthBar" type="ProgressBar" parent="HealthDisplay" unique_id=162661753]
+custom_minimum_size = Vector2(0, 30)
+layout_mode = 2
+show_percentage = false
