@@ -26,4 +26,4 @@ func complete_level() -> void:
 
 
 func _load_next_level() -> void:
-	get_tree().change_scene_to_file("res://Scenes/level.tscn")
+	SceneTransition.transition_to("res://Scenes/level_4.tscn")

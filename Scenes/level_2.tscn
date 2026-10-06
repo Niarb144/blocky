@@ -89,3 +89,4 @@ position = Vector2(193, 316)
 
 [node name="BloodMonster4" parent="." unique_id=884785815 instance=ExtResource("12_ait6c")]
 position = Vector2(64, 571)
+attack_damage = 20

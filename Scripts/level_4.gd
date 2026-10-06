@@ -7,7 +7,6 @@ var level_completing: bool = false
 
 
 func _ready() -> void:
-	AudioManager.play_game_audio()
 	key.collected.connect(_on_key_collected)
 
 
@@ -27,4 +26,4 @@ func complete_level() -> void:
 
 
 func _load_next_level() -> void:
-	SceneTransition.transition_to("res://Scenes/level_2.tscn")
+	SceneTransition.transition_to("res://Scenes/level.tscn")
