@@ -2,6 +2,12 @@ extends CharacterBody2D
 
 enum State { PATROL, CHASE, ATTACK, HURT, DEAD }
 
+#Health Drop
+const HEALTH_PICKUP = preload("res://Scenes/health_pickup.tscn")
+
+@export_range(0.0, 1.0, 0.05) var health_drop_chance: float = 0.35
+@export var health_drop_offset: Vector2 = Vector2(0, -10)
+
 @export var max_health: int = 75
 @export var attack_damage: int = 15
 
@@ -209,15 +215,48 @@ func take_damage(amount: int) -> void:
 	sprite.stop()
 	sprite.play("hurt")
 
+func try_drop_health() -> void:
+	if randf() > health_drop_chance:
+		return
+
+	var health_amount: int = roll_health_amount()
+
+	spawn_health_pickup(health_amount)
+
+
+func roll_health_amount() -> int:
+	var roll: float = randf()
+
+	if roll < 0.50:
+		return 25
+	elif roll < 0.80:
+		return 50
+	elif roll < 0.95:
+		return 75
+	else:
+		return 100
+
+
+func spawn_health_pickup(amount: int) -> void:
+	var pickup = HEALTH_PICKUP.instantiate()
+
+	pickup.health_amount = amount
+
+	get_tree().current_scene.add_child(pickup)
+
+	pickup.global_position = global_position + health_drop_offset
+
+	print("Blood monster dropped ", amount, " health.")
 
 func die() -> void:
 	state = State.DEAD
 	velocity = Vector2.ZERO
 
-	# Safe even when damage comes from a physics callback.
 	set_deferred("collision_layer", 0)
 	set_deferred("collision_mask", 0)
 	attack_hitbox.set_deferred("monitoring", false)
+
+	try_drop_health()
 
 	sprite.stop()
 	sprite.play("death")

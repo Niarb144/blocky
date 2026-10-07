@@ -574,6 +574,32 @@ func update_footsteps(direction: float, delta: float) -> void:
 		# Reset the timer when airborne or standing still
 		footstep_timer = 0.0
 
+func heal(amount: int) -> int:
+	if is_dead or amount <= 0:
+		return 0
+
+	# Do not consume health pickups while already at full health.
+	if health >= max_health:
+		return 0
+
+	var health_before: int = health
+
+	health = clampi(health + amount, 0, max_health)
+
+	var amount_healed: int = health - health_before
+
+	update_health_ui()
+
+	print(
+		"Player healed ",
+		amount_healed,
+		" HP. Health: ",
+		health,
+		"/",
+		max_health
+	)
+
+	return amount_healed
 
 func take_damage(amount: int, bypass_protection: bool = false) -> void:
 	if is_dead or amount <= 0:

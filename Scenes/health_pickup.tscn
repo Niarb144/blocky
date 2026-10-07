@@ -1,0 +1,23 @@
+[gd_scene format=3 uid="uid://cbb55xlf2mpfq"]
+
+[ext_resource type="Script" uid="uid://qe6nn7mbhw3v" path="res://Scripts/health_pickup.gd" id="1_gvws8"]
+[ext_resource type="Texture2D" uid="uid://criheuag2r5ps" path="res://Assets/Items/Item__67.png" id="2_7wbxn"]
+[ext_resource type="Texture2D" uid="uid://4lc6sa6uui4i" path="res://Assets/Items/Item__66.png" id="3_imvwe"]
+[ext_resource type="Texture2D" uid="uid://blm48f78vwppd" path="res://Assets/Items/Item__65.png" id="4_vlsyx"]
+[ext_resource type="Texture2D" uid="uid://d1md7igxatxkl" path="res://Assets/Items/Item__64.png" id="5_vd6w6"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_4su2a"]
+radius = 12.649111
+
+[node name="HealthPickup" type="Area2D" unique_id=691838603]
+collision_mask = 2
+script = ExtResource("1_gvws8")
+health_25_texture = ExtResource("2_7wbxn")
+health_50_texture = ExtResource("3_imvwe")
+health_75_texture = ExtResource("4_vlsyx")
+health_100_texture = ExtResource("5_vd6w6")
+
+[node name="Sprite2D" type="Sprite2D" parent="." unique_id=2080310161]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1734665562]
+shape = SubResource("CircleShape2D_4su2a")
