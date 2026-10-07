@@ -66,6 +66,14 @@ const MELEE_COOLDOWN := 0.30
 const MELEE_DAMAGE := 25
 const SHOOT_RELEASE_FRAME := 7
 
+# Melee combo
+const MAX_COMBO: int = 2
+const COMBO_QUEUE_START: float = 0.60
+
+var combo_step: int = 0
+var combo_queued: bool = false
+var can_queue_combo: bool = false
+
 var ammo: int:
 	get:
 		return GameState.ammo
@@ -93,7 +101,7 @@ func _ready() -> void:
 	animated_sprite.frame_changed.connect(_on_animation_frame_changed)
 
 	# These animations must emit animation_finished.
-	for animation_name in ["slash", "shoot", "hurt", "death"]:
+	for animation_name in ["attack_1", "attack_2", "shoot", "hurt", "death"]:
 		animated_sprite.sprite_frames.set_animation_loop(animation_name, false)
 
 	update_health_ui()
@@ -126,19 +134,50 @@ func _process(delta: float) -> void:
 		ranged_attack()
 
 func melee_attack() -> void:
-	if is_dead or is_hurt or is_dashing or is_attacking:
+	if is_dead or is_hurt or is_dashing:
+		return
+
+	# Already performing a melee attack.
+	# Queue the next attack instead of restarting the animation.
+	if is_melee_attacking:
+		if can_queue_combo and combo_step < MAX_COMBO:
+			combo_queued = true
+		return
+
+	# Don't interrupt ranged attacks.
+	if is_attacking:
 		return
 
 	if attack_cooldown > 0.0:
 		return
 
+	start_melee_combo()
+
+func start_melee_combo() -> void:
 	is_attacking = true
 	is_melee_attacking = true
+
+	combo_step = 1
+	combo_queued = false
+	can_queue_combo = false
+
 	attack_cooldown = MELEE_COOLDOWN
 
-	hit_targets.clear()
-	animated_sprite.play("slash")
+	play_melee_combo_attack()
+	
+func play_melee_combo_attack() -> void:
+	combo_queued = false
+	can_queue_combo = false
 
+	# Each swing should be able to damage targets again.
+	hit_targets.clear()
+
+	match combo_step:
+		1:
+			animated_sprite.play("attack_1")
+
+		2:
+			animated_sprite.play("attack_2")
 
 func check_melee_hits() -> void:
 	var bodies := melee_hitbox.get_overlapping_bodies()
@@ -170,6 +209,11 @@ func cancel_attack() -> void:
 	is_attacking = false
 	is_melee_attacking = false
 	projectile_released = false
+
+	combo_step = 0
+	combo_queued = false
+	can_queue_combo = false
+
 	hit_targets.clear()
 
 
@@ -177,11 +221,38 @@ func _on_animation_frame_changed() -> void:
 	if is_dead or is_hurt or is_dashing:
 		return
 
+
+	# --------------------------------------------------------
+	# RANGED ATTACK
+	# --------------------------------------------------------
+
 	if is_attacking and animated_sprite.animation == "shoot":
 		if not projectile_released and animated_sprite.frame >= SHOOT_RELEASE_FRAME:
 			projectile_released = true
 			ammo -= 1
 			spawn_projectile()
+
+		return
+
+
+	# --------------------------------------------------------
+	# MELEE COMBO WINDOW
+	# --------------------------------------------------------
+
+	if is_melee_attacking:
+		var animation_name := animated_sprite.animation
+
+		if animation_name == "attack_1":
+			var frame_count: int = animated_sprite.sprite_frames.get_frame_count(
+				animation_name
+			)
+
+			var queue_start_frame: int = int(
+				frame_count * COMBO_QUEUE_START
+			)
+
+			if animated_sprite.frame >= queue_start_frame:
+				can_queue_combo = true
 
 
 func _on_animation_finished() -> void:
@@ -189,13 +260,39 @@ func _on_animation_finished() -> void:
 		"death":
 			if is_dead:
 				get_tree().call_deferred("reload_current_scene")
+
+
 		"hurt":
 			is_hurt = false
-			update_animation(Input.get_axis("move_left", "move_right"))
-		"slash", "shoot":
-			cancel_attack()
-			update_animation(Input.get_axis("move_left", "move_right"))
+			update_animation(
+				Input.get_axis("move_left", "move_right")
+			)
 
+
+		"attack_1", "attack_2":
+			handle_melee_animation_finished()
+
+
+		"shoot":
+			cancel_attack()
+			update_animation(
+				Input.get_axis("move_left", "move_right")
+			)
+
+func handle_melee_animation_finished() -> void:
+	if not is_melee_attacking:
+		return
+
+	if combo_queued and combo_step < MAX_COMBO:
+		combo_step += 1
+		play_melee_combo_attack()
+		return
+
+	cancel_attack()
+
+	update_animation(
+		Input.get_axis("move_left", "move_right")
+	)
 
 func spawn_projectile() -> void:
 	var projectile_scene = preload("res://Scenes/projectile.tscn")

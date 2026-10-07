@@ -7,15 +7,26 @@ extends Area2D
 @export var health_75_texture: Texture2D
 @export var health_100_texture: Texture2D
 
+@export var float_height: float = 4.0
+@export var float_speed: float = 2.0
+
+var float_time: float = 0.0
+var start_y: float = 0.0
 @onready var sprite: Sprite2D = $Sprite2D
 
 var collected: bool = false
 
 
 func _ready() -> void:
+	start_y = sprite.position.y
+	
 	body_entered.connect(_on_body_entered)
 	update_sprite()
 
+func _process(delta: float) -> void:
+	float_time += delta
+
+	sprite.position.y = start_y + sin(float_time * float_speed) * float_height
 
 func update_sprite() -> void:
 	match health_amount:

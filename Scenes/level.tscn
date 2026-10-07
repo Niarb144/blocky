@@ -11,6 +11,7 @@
 [ext_resource type="PackedScene" uid="uid://dlso7w47fu3py" path="res://Scenes/exit.tscn" id="7_8c0lf"]
 [ext_resource type="PackedScene" uid="uid://cii0llieji8t8" path="res://Scenes/loot_box.tscn" id="10_oqgf2"]
 [ext_resource type="PackedScene" uid="uid://e1cvky88fq2e" path="res://Scenes/Enemies/blood_monster.tscn" id="12_ha31o"]
+[ext_resource type="PackedScene" uid="uid://cbb55xlf2mpfq" path="res://Scenes/health_pickup.tscn" id="12_pa6b8"]
 
 [node name="level_1" type="Node2D" unique_id=11141250]
 script = ExtResource("1_754fn")
@@ -109,3 +110,10 @@ position = Vector2(875, 56)
 
 [node name="BloodMonster5" parent="." unique_id=1334108039 instance=ExtResource("12_ha31o")]
 position = Vector2(622, 58)
+
+[node name="HealthPickup" parent="." unique_id=691838603 instance=ExtResource("12_pa6b8")]
+position = Vector2(320, 422)
+health_amount = 75
+
+[node name="HealthPickup2" parent="." unique_id=1806999299 instance=ExtResource("12_pa6b8")]
+position = Vector2(963, 60)
