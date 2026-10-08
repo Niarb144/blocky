@@ -63,17 +63,26 @@ var hurt_invulnerability_timer: float = 0.0
 # Combat
 const MAX_AMMO: int = GameState.MAX_AMMO
 const MELEE_COOLDOWN := 0.30
-const MELEE_DAMAGE := 25
+#const MELEE_DAMAGE := 25
 const SHOOT_RELEASE_FRAME := 7
 
 # Melee combo
-const MAX_COMBO: int = 2
+const MAX_COMBO: int = 3
 const COMBO_QUEUE_START: float = 0.60
+
+const ATTACK_1_DAMAGE: int = 25
+const ATTACK_2_DAMAGE: int = 40
+
+const ATTACK_1_IMPACT_FRAME: int = 3
+const ATTACK_2_IMPACT_FRAME: int = 4
 
 var combo_step: int = 0
 var combo_queued: bool = false
 var can_queue_combo: bool = false
 
+var melee_hit_registered: bool = false
+
+#Ranged 
 var ammo: int:
 	get:
 		return GameState.ammo
@@ -168,32 +177,32 @@ func start_melee_combo() -> void:
 func play_melee_combo_attack() -> void:
 	combo_queued = false
 	can_queue_combo = false
+	melee_hit_registered = false
 
-	# Each swing should be able to damage targets again.
 	hit_targets.clear()
 
 	match combo_step:
 		1:
+			animated_sprite.speed_scale = 1.0
 			animated_sprite.play("attack_1")
 
 		2:
+			animated_sprite.speed_scale = 1.2
+			animated_sprite.play("attack_1")
+
+		3:
+			animated_sprite.speed_scale = 1.0
 			animated_sprite.play("attack_2")
 
-func check_melee_hits() -> void:
+func check_melee_hits(damage: int) -> void:
 	var bodies := melee_hitbox.get_overlapping_bodies()
 
-	print("Melee bodies detected: ", bodies.size())
-
 	for body in bodies:
-		print("Detected: ", body.name)
-
 		if body in hit_targets:
 			continue
 
 		if body.has_method("take_damage"):
-			print("Damaging: ", body.name)
-
-			body.take_damage(MELEE_DAMAGE)
+			body.take_damage(damage)
 			hit_targets.append(body)
 	
 func ranged_attack() -> void:
@@ -213,7 +222,10 @@ func cancel_attack() -> void:
 	combo_step = 0
 	combo_queued = false
 	can_queue_combo = false
+	melee_hit_registered = false
 
+	animated_sprite.speed_scale = 1.0
+	
 	hit_targets.clear()
 
 
@@ -236,23 +248,46 @@ func _on_animation_frame_changed() -> void:
 
 
 	# --------------------------------------------------------
-	# MELEE COMBO WINDOW
+	# MELEE ATTACK
 	# --------------------------------------------------------
 
-	if is_melee_attacking:
+	if not is_melee_attacking:
+		return
+
+	# --------------------------------------------------------
+	# IMPACT FRAME
+	# --------------------------------------------------------
+
+	if not melee_hit_registered:
+		match combo_step:
+			1, 2:
+				if animated_sprite.frame >= ATTACK_1_IMPACT_FRAME:
+					melee_hit_registered = true
+					check_melee_hits(ATTACK_1_DAMAGE)
+
+			3:
+				if animated_sprite.frame >= ATTACK_2_IMPACT_FRAME:
+					melee_hit_registered = true
+					check_melee_hits(ATTACK_2_DAMAGE)
+
+
+	# --------------------------------------------------------
+	# COMBO QUEUE WINDOW
+	# --------------------------------------------------------
+
+	if combo_step < MAX_COMBO:
 		var animation_name := animated_sprite.animation
 
-		if animation_name == "attack_1":
-			var frame_count: int = animated_sprite.sprite_frames.get_frame_count(
-				animation_name
-			)
+		var frame_count: int = animated_sprite.sprite_frames.get_frame_count(
+			animation_name
+		)
 
-			var queue_start_frame: int = int(
-				frame_count * COMBO_QUEUE_START
-			)
+		var queue_start_frame: int = int(
+			frame_count * COMBO_QUEUE_START
+		)
 
-			if animated_sprite.frame >= queue_start_frame:
-				can_queue_combo = true
+		if animated_sprite.frame >= queue_start_frame:
+			can_queue_combo = true
 
 
 func _on_animation_finished() -> void:
@@ -336,10 +371,6 @@ func _physics_process(delta: float) -> void:
 		hurt_invulnerability_timer - delta,
 		0.0
 	)
-
-	if is_melee_attacking and not is_dead:
-		check_melee_hits()
-
 
 	# --------------------------------------------------------
 	# DASH TIMERS
