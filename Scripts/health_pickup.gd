@@ -65,6 +65,7 @@ func _on_body_entered(body: Node) -> void:
 		return
 
 	collected = true
+	AudioManager.play_health_pickup()
 
 	print(
 		"Collected +",

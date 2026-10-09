@@ -185,14 +185,17 @@ func play_melee_combo_attack() -> void:
 		1:
 			animated_sprite.speed_scale = 1.0
 			animated_sprite.play("attack_1")
+			AudioManager.play_attack_slash()
 
 		2:
 			animated_sprite.speed_scale = 1.2
 			animated_sprite.play("attack_1")
+			AudioManager.play_attack_slash()
 
 		3:
 			animated_sprite.speed_scale = 1.0
 			animated_sprite.play("attack_2")
+			AudioManager.play_attack_heavy()
 
 func check_melee_hits(damage: int) -> void:
 	var bodies := melee_hitbox.get_overlapping_bodies()

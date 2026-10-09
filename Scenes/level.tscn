@@ -98,6 +98,8 @@ position = Vector2(708, 548)
 
 [node name="BloodMonster" parent="." unique_id=519510292 instance=ExtResource("12_ha31o")]
 position = Vector2(503, 580)
+attack_cooldown = 0.4
+hurt_duration = 0.15
 
 [node name="BloodMonster2" parent="." unique_id=1551111832 instance=ExtResource("12_ha31o")]
 position = Vector2(626, 418)

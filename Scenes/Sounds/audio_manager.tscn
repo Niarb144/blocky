@@ -7,6 +7,8 @@
 [ext_resource type="AudioStream" uid="uid://c1sm0efsmlt1f" path="res://Assets/Sound/Environment/creaky_door_short.wav" id="5_eaqd1"]
 [ext_resource type="AudioStream" uid="uid://cu1uv801i41gn" path="res://Assets/Sound/Weapons/sword_drop.wav" id="6_eaqd1"]
 [ext_resource type="AudioStream" uid="uid://cimvyxywu80p2" path="res://Assets/Sound/Weapons/weapon_drop.wav" id="7_o370n"]
+[ext_resource type="AudioStream" uid="uid://0uuqdafa0ony" path="res://Assets/Sound/Items/card_fan.wav" id="8_f68rn"]
+[ext_resource type="AudioStream" uid="uid://dhugj8bp23x4t" path="res://Assets/Sound/Items/swipe.wav" id="10_8rv4l"]
 
 [node name="AudioManager" type="Node" unique_id=769436843]
 script = ExtResource("1_l520s")
@@ -26,3 +28,14 @@ stream = ExtResource("6_eaqd1")
 
 [node name="WeaponDrop" type="AudioStreamPlayer" parent="." unique_id=917080892]
 stream = ExtResource("7_o370n")
+
+[node name="HealthPickup" type="AudioStreamPlayer" parent="." unique_id=1627057549]
+stream = ExtResource("8_f68rn")
+
+[node name="AttackSlash" type="AudioStreamPlayer" parent="." unique_id=433028880]
+stream = ExtResource("10_8rv4l")
+volume_db = 0.645
+pitch_scale = 2.0
+
+[node name="AttackHeavy" type="AudioStreamPlayer" parent="." unique_id=901017600]
+stream = ExtResource("10_8rv4l")
