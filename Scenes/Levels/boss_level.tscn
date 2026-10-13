@@ -1,0 +1,41 @@
+[gd_scene format=3 uid="uid://u3ggqiej4hia"]
+
+[ext_resource type="PackedScene" uid="uid://d1xiv6pgau1fl" path="res://Scenes/backgrounds/parallax_background.tscn" id="1_ag44t"]
+[ext_resource type="PackedScene" uid="uid://dm3ame74n0v0p" path="res://Scenes/Environment/floor.tscn" id="2_abuvu"]
+[ext_resource type="PackedScene" uid="uid://dkor4sx15paw2" path="res://Scenes/platform.tscn" id="3_2u27r"]
+[ext_resource type="PackedScene" uid="uid://n0t1tl40chtx" path="res://Scenes/wall.tscn" id="4_daq8m"]
+[ext_resource type="PackedScene" uid="uid://cii0llieji8t8" path="res://Scenes/loot_box.tscn" id="5_4wh5o"]
+[ext_resource type="PackedScene" uid="uid://v8l7tqjp8m44" path="res://Scenes/Enemies/Bosses/shadow_demon.tscn" id="6_tgqw5"]
+[ext_resource type="PackedScene" uid="uid://cymqpxymbk8vq" path="res://Scenes/Camera/level_camera.tscn" id="7_qb14d"]
+[ext_resource type="PackedScene" uid="uid://co3pmufuv2hic" path="res://Scenes/player.tscn" id="8_funn6"]
+
+[node name="BossLevel" type="Node2D" unique_id=1148509087]
+
+[node name="ParallaxBackground" parent="." unique_id=1498009889 instance=ExtResource("1_ag44t")]
+
+[node name="Floor" parent="." unique_id=814889798 instance=ExtResource("2_abuvu")]
+position = Vector2(-43, 46)
+
+[node name="Platform" parent="." unique_id=2054615474 instance=ExtResource("3_2u27r")]
+position = Vector2(-168, 228.00002)
+scale = Vector2(10, 7)
+
+[node name="Wall" type="Node" parent="." unique_id=1397145208]
+
+[node name="wall" parent="Wall" unique_id=908506835 instance=ExtResource("4_daq8m")]
+position = Vector2(-142, -3)
+
+[node name="wall2" parent="Wall" unique_id=1723819550 instance=ExtResource("4_daq8m")]
+position = Vector2(1402.0001, 665)
+rotation = -3.1373127
+
+[node name="LootBox" parent="Wall" unique_id=2075987227 instance=ExtResource("5_4wh5o")]
+position = Vector2(-33, 542)
+
+[node name="ShadowDemon" parent="Wall" unique_id=858162757 instance=ExtResource("6_tgqw5")]
+position = Vector2(480, 524)
+
+[node name="LevelCamera" parent="." unique_id=1078575189 instance=ExtResource("7_qb14d")]
+
+[node name="Player" parent="." unique_id=378940393 instance=ExtResource("8_funn6")]
+position = Vector2(1300, 558.00006)

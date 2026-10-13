@@ -2,7 +2,69 @@
 
 [ext_resource type="Script" uid="uid://bwhvld8mdmhtx" path="res://Scripts/shadow_demon.gd" id="1_2r10o"]
 [ext_resource type="Texture2D" uid="uid://du5vge03uje0n" path="res://Assets/Player/WarriorMan-Sheet.png" id="1_lx0ci"]
+[ext_resource type="Texture2D" uid="uid://bebp3duna5ufp" path="res://Assets/Player/WarriorManAttack1.png" id="2_1hf7v"]
 [ext_resource type="Texture2D" uid="uid://bmqfakloj7xe7" path="res://Assets/Player/WarriorManRun.png" id="2_njqdp"]
+[ext_resource type="Texture2D" uid="uid://dwsm5gyc18xim" path="res://Assets/Player/WarriorManAttack3.png" id="3_vniv5"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_lya63"]
+atlas = ExtResource("2_1hf7v")
+region = Rect2(0, 0, 64, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_ip3tq"]
+atlas = ExtResource("2_1hf7v")
+region = Rect2(64, 0, 64, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_156lp"]
+atlas = ExtResource("2_1hf7v")
+region = Rect2(128, 0, 64, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_fnx67"]
+atlas = ExtResource("2_1hf7v")
+region = Rect2(192, 0, 64, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_ai5kr"]
+atlas = ExtResource("2_1hf7v")
+region = Rect2(256, 0, 64, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_21l4e"]
+atlas = ExtResource("2_1hf7v")
+region = Rect2(320, 0, 64, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_vlwtt"]
+atlas = ExtResource("2_1hf7v")
+region = Rect2(384, 0, 64, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_lqq2b"]
+atlas = ExtResource("3_vniv5")
+region = Rect2(0, 0, 64, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_53g3x"]
+atlas = ExtResource("3_vniv5")
+region = Rect2(64, 0, 64, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_w267o"]
+atlas = ExtResource("3_vniv5")
+region = Rect2(128, 0, 64, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_o4pu5"]
+atlas = ExtResource("3_vniv5")
+region = Rect2(192, 0, 64, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_bnjmm"]
+atlas = ExtResource("3_vniv5")
+region = Rect2(256, 0, 64, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_vfdun"]
+atlas = ExtResource("3_vniv5")
+region = Rect2(320, 0, 64, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_mehj5"]
+atlas = ExtResource("3_vniv5")
+region = Rect2(384, 0, 64, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_1cbaa"]
+atlas = ExtResource("3_vniv5")
+region = Rect2(448, 0, 64, 64)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_njqdp"]
 atlas = ExtResource("1_lx0ci")
@@ -72,6 +134,61 @@ region = Rect2(448, 0, 64, 64)
 animations = [{
 "frames": [{
 "duration": 1.0,
+"texture": SubResource("AtlasTexture_lya63")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_ip3tq")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_156lp")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_fnx67")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_ai5kr")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_21l4e")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_vlwtt")
+}],
+"loop": 0,
+"name": &"attack_1",
+"speed": 12.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_lqq2b")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_53g3x")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_w267o")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_o4pu5")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_bnjmm")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_vfdun")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_mehj5")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_1cbaa")
+}],
+"loop": 0,
+"name": &"attack_2",
+"speed": 8.0
+}, {
+"frames": [{
+"duration": 1.0,
 "texture": SubResource("AtlasTexture_njqdp")
 }, {
 "duration": 1.0,
@@ -133,7 +250,7 @@ animations = [{
 size = Vector2(42, 92.5)
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_4su2a"]
-radius = 200.0
+radius = 600.0
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_4su2a"]
 size = Vector2(71, 86)
@@ -141,15 +258,17 @@ size = Vector2(71, 86)
 [node name="ShadowDemon" type="CharacterBody2D" unique_id=858162757]
 collision_layer = 4
 script = ExtResource("1_2r10o")
+move_speed = 120.0
 
 [node name="Visuals" type="Node2D" parent="." unique_id=1614497537]
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="Visuals" unique_id=714561420]
 scale = Vector2(3.5, 3.5)
 sprite_frames = SubResource("SpriteFrames_4su2a")
-animation = &"run"
+animation = &"attack_2"
 autoplay = "idle"
-frame_progress = 0.3536692
+frame = 7
+frame_progress = 1.0
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=743625953]
 position = Vector2(13, 10.25)
@@ -169,7 +288,6 @@ collision_layer = 0
 collision_mask = 2
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="MeleeHitBox" unique_id=1998629946]
-position = Vector2(-40.5, 23)
 shape = SubResource("RectangleShape2D_4su2a")
 
 [node name="ProjectileSpawn" type="Marker2D" parent="." unique_id=2102832477]
@@ -183,4 +301,5 @@ position = Vector2(46, 7)
 target_position = Vector2(76, 0)
 
 [node name="AttackCooldown" type="Timer" parent="." unique_id=2089635676]
+wait_time = 1.2
 one_shot = true
