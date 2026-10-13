@@ -26,7 +26,7 @@ var camera_state: CameraState = CameraState.FOLLOW
 @export var wall_clearance: float = 20.0
 
 @export_group("Wall Detection")
-@export_flags_2d_physics var wall_collision_mask: int = 8
+@export_flags_2d_physics var wall_collision_mask: int = 1
 
 @export_group("Visual Effects")
 @export var fade_duration: float = 0.25
@@ -204,6 +204,7 @@ func get_input_direction() -> Vector2:
 # WALL DETECTION
 # -----------------------------------
 
+
 func get_vision_target(direction: Vector2) -> Vector2:
 	var origin: Vector2 = player.global_position
 
@@ -211,6 +212,22 @@ func get_vision_target(direction: Vector2) -> Vector2:
 		origin + direction * vision_distance
 	)
 
+	# Get visible screen dimensions in world units
+	var viewport_size: Vector2 = (
+		get_viewport_rect().size / zoom
+	)
+
+	var half_screen: Vector2 = viewport_size / 2.0
+
+	# Distance from camera center to screen edge
+	var camera_extent: float = 0.0
+
+	if direction.x != 0.0:
+		camera_extent = half_screen.x
+	else:
+		camera_extent = half_screen.y
+
+	# Detect walls, floors, or ceilings
 	var query := PhysicsRayQueryParameters2D.create(
 		origin,
 		destination,
@@ -226,16 +243,22 @@ func get_vision_target(direction: Vector2) -> Vector2:
 	if not result.is_empty():
 		var hit_position: Vector2 = result["position"]
 
-		var available_distance: float = maxf(
+		var hit_distance: float = (
+			origin.distance_to(hit_position)
+		)
+
+		# Stop before the visible camera edge hits geometry
+		var allowed_distance: float = maxf(
 			0.0,
-			origin.distance_to(hit_position) - wall_clearance
+			hit_distance - camera_extent - wall_clearance
 		)
 
 		destination = (
-			origin + direction * available_distance
+			origin + direction * allowed_distance
 		)
 
 	return destination
+
 
 
 # -----------------------------------

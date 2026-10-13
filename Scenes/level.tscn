@@ -9,6 +9,7 @@
 [ext_resource type="PackedScene" uid="uid://n0t1tl40chtx" path="res://Scenes/wall.tscn" id="5_wqkje"]
 [ext_resource type="PackedScene" uid="uid://ct65nio4604bm" path="res://Scenes/key.tscn" id="6_0f350"]
 [ext_resource type="PackedScene" uid="uid://dlso7w47fu3py" path="res://Scenes/exit.tscn" id="7_8c0lf"]
+[ext_resource type="PackedScene" uid="uid://dm3ame74n0v0p" path="res://Scenes/Environment/floor.tscn" id="8_crh0w"]
 [ext_resource type="PackedScene" uid="uid://cii0llieji8t8" path="res://Scenes/loot_box.tscn" id="10_oqgf2"]
 [ext_resource type="PackedScene" uid="uid://e1cvky88fq2e" path="res://Scenes/Enemies/blood_monster.tscn" id="12_ha31o"]
 [ext_resource type="Script" uid="uid://ch0m2vps6m15w" path="res://Scripts/camera_vision.gd" id="13_crh0w"]
@@ -83,6 +84,9 @@ scale = Vector2(0.47999883, 1)
 position = Vector2(467.00003, 79)
 scale = Vector2(3.4399989, 1)
 
+[node name="Floor" parent="." unique_id=814889798 instance=ExtResource("8_crh0w")]
+position = Vector2(-83, 73)
+
 [node name="Wall" type="Node" parent="." unique_id=366726478]
 
 [node name="wall" parent="Wall" unique_id=908506835 instance=ExtResource("5_wqkje")]
@@ -124,7 +128,8 @@ position = Vector2(1, 0)
 zoom = Vector2(2, 2)
 script = ExtResource("13_crh0w")
 vision_distance = 400.0
-vision_speed = 300.0
+vision_speed = 800.0
+return_speed = 700.0
 
 [node name="VisionOverlay" type="CanvasLayer" parent="." unique_id=1082201888]
 
