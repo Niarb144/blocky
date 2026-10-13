@@ -33,7 +33,7 @@ var camera_state: CameraState = CameraState.FOLLOW
 @export_range(0.0, 1.0) var filter_opacity: float = 0.42
 
 @onready var player: CharacterBody2D = $"../Player"
-@onready var overlay: ColorRect = $"../VisionOverlay/ColorRect"
+@onready var overlay: ColorRect = $VisionOverlay/ColorRect
 
 var active_tween: Tween
 
