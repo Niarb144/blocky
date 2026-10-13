@@ -1,14 +1,23 @@
+
 extends Node2D
 
 var has_key: bool = false
 var level_completing: bool = false
 
 @onready var key = $Key
+@onready var player: CharacterBody2D = $Player
+@onready var level_camera: LevelCameraController = $LevelCamera
 
 
 func _ready() -> void:
 	AudioManager.play_game_audio()
+
 	key.collected.connect(_on_key_collected)
+
+	# The camera manages the entire introduction
+	await level_camera.play_level_preview(
+		key.global_position
+	)
 
 
 func _on_key_collected() -> void:
@@ -21,10 +30,15 @@ func complete_level() -> void:
 		return
 
 	level_completing = true
+
 	AudioManager.play_exit()
+
 	print("LEVEL COMPLETE!")
+
 	call_deferred("_load_next_level")
 
 
 func _load_next_level() -> void:
-	SceneTransition.transition_to("res://Scenes/level_2.tscn")
+	get_tree().change_scene_to_file(
+        "res://Scenes/level_2.tscn"
+	)

@@ -242,7 +242,7 @@ func spawn_health_pickup(amount: int) -> void:
 
 	pickup.health_amount = amount
 
-	get_tree().current_scene.add_child(pickup)
+	get_tree().current_scene.add_child.call_deferred(pickup)
 
 	pickup.global_position = global_position + health_drop_offset
 

@@ -4,6 +4,8 @@ extends CharacterBody2D
 @onready var footstep_player: AudioStreamPlayer2D = $FootstepPlayer
 @onready var dash_player: AudioStreamPlayer2D = $DashPlayer
 
+var controls_enabled: bool = true
+
 #movement
 const SPEED := 250.0
 const JUMP_VELOCITY := -400.0
@@ -374,6 +376,11 @@ func _physics_process(delta: float) -> void:
 		hurt_invulnerability_timer - delta,
 		0.0
 	)
+	
+	if not controls_enabled:
+		velocity.x = 0.0
+		move_and_slide()
+		return
 
 	# --------------------------------------------------------
 	# DASH TIMERS
