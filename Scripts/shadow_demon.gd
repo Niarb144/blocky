@@ -66,14 +66,59 @@ enum State {
 
 @export_group("Ranged Attack")
 @export var ranged_damage: int = 15
-@export var ranged_min_distance: float = 80.0
-@export var ranged_max_distance: float = 200.0
+@export var ranged_min_distance: float = 100.0
+@export var ranged_max_distance: float = 350.0
 @export var ranged_cooldown: float = 2.5
 
 # Frame where the projectile is released.
 @export var projectile_fire_frame: int = 9
 
 var projectile_fired: bool = false
+
+
+@export_group("Dash Strike")
+@export var dash_damage: int = 25
+@export var dash_speed: float = 430.0
+@export var dash_duration: float = 0.66
+@export var dash_windup: float = 0.35
+@export var dash_recovery: float = 0.65
+@export var dash_cooldown: float = 3.5
+
+@export var dash_min_range: float = 100.0
+@export var dash_max_range: float = 260.0
+
+@export_group("Dash Hitbox")
+@export var dash_hitbox_offset: Vector2 = Vector2(38.0, 35.0)
+@export var dash_hitbox_size: Vector2 = Vector2(75.0, 55.0)
+
+
+enum DashPhase {
+	NONE,
+	WINDUP,
+	DASHING,
+	RECOVERY
+}
+
+var dash_phase: DashPhase = DashPhase.NONE
+
+var dash_timer: float = 0.0
+var dash_direction: int = 1
+var dash_damage_active: bool = false
+
+
+@export_group("Spinning Slash")
+@export var spin_damage: int = 30
+@export var spin_range: float = 75.0
+@export var spin_cooldown: float = 2.2
+
+@export var spin_start_frame: int = 2
+@export var spin_end_frame: int = 5
+
+@export_group("Spin Hitbox")
+@export var spin_hitbox_offset: Vector2 = Vector2(0.0, 25.0)
+@export var spin_hitbox_size: Vector2 = Vector2(160.0, 85.0)
+
+
 
 var health: int
 var current_state: State = State.IDLE
@@ -88,7 +133,9 @@ enum AttackType {
 	NONE,
 	BASIC_SLASH,
 	HEAVY_SLASH,
-	ENERGY_BLADE
+	ENERGY_BLADE,
+	DASH_STRIKE,
+	SPINNING_SLASH
 }
 
 
@@ -119,6 +166,14 @@ func _ready() -> void:
 
 	ground_check.enabled = true
 	wall_check.enabled = true
+	
+	
+	var melee_collision: CollisionShape2D = (
+		melee_hitbox.get_node("CollisionShape2D")
+	)
+
+	melee_collision.shape = melee_collision.shape.duplicate()
+
 
 	update_facing_direction(1)
 
@@ -140,9 +195,12 @@ func _physics_process(delta: float) -> void:
 
 		State.CHASE:
 			handle_chase()
-
+		
 		State.ATTACK:
-			handle_attack()
+			if current_attack == AttackType.DASH_STRIKE:
+				handle_dash_strike(delta)
+			else:
+				handle_attack()
 
 		State.HURT:
 			velocity.x = 0.0
@@ -160,58 +218,73 @@ func handle_idle() -> void:
 
 
 func handle_chase() -> void:
+	# 1. Check whether the player still exists.
 	if not is_instance_valid(player):
 		player = null
 		change_state(State.IDLE)
 		return
 
+	# 2. Calculate the distance to the player.
 	var distance_x: float = (
 		player.global_position.x - global_position.x
 	)
 
 	var distance: float = absf(distance_x)
 
-	# Always face the player before attacking.
+	# 3. Always face the player before attacking.
 	if distance_x > 0.0:
 		update_facing_direction(1)
 	elif distance_x < 0.0:
 		update_facing_direction(-1)
 
-	# Attack when within melee range.
-	
-# Choose an attack when close enough.
-	
+	# 4. Check whether an attack can be performed.
 	if attack_cooldown.is_stopped():
-		if distance <= heavy_range or (
+		
+		var in_melee_range: bool = (
+			distance <= spin_range
+		)
+
+		var in_ranged_range: bool = (
 			distance >= ranged_min_distance
 			and distance <= ranged_max_distance
-		):
+		)
+
+		var in_dash_range: bool = (
+			distance >= dash_min_range
+			and distance <= dash_max_range
+		)
+
+		# Attempt to select an appropriate attack.
+		if in_melee_range or in_ranged_range or in_dash_range:
 			choose_attack(distance)
 
+			# If an attack started, stop chasing.
 			if current_state == State.ATTACK:
 				return
 
-
-
-	# Stay close to the player while waiting.
+	# 5. Stop when close enough to the player.
 	if distance <= stopping_distance:
 		velocity.x = 0.0
 		play_animation("idle")
 		return
 
+	# 6. Update obstacle detection.
 	ground_check.force_raycast_update()
 	wall_check.force_raycast_update()
 
+	# 7. Stop if there is a wall ahead.
 	if wall_check.is_colliding():
 		velocity.x = 0.0
 		play_animation("idle")
 		return
 
+	# 8. Stop before walking off a platform.
 	if is_on_floor() and not ground_check.is_colliding():
 		velocity.x = 0.0
 		play_animation("idle")
 		return
 
+	# 9. Move toward the player.
 	velocity.x = facing_direction * move_speed
 	play_animation("run")
 
@@ -221,7 +294,6 @@ func handle_attack() -> void:
 	velocity.x = 0.0
 
 
-
 func choose_attack(distance: float) -> void:
 	if current_state != State.CHASE:
 		return
@@ -229,7 +301,54 @@ func choose_attack(distance: float) -> void:
 	if not attack_cooldown.is_stopped():
 		return
 
-	# Ranged attack when the player is farther away.
+	# 1. Close-range combat.
+	if distance <= spin_range:
+
+		# Basic Slash -> Heavy Slash -> Spinning Slash
+		match last_attack:
+
+			AttackType.BASIC_SLASH:
+				if distance <= heavy_range:
+					start_heavy_attack()
+				else:
+					start_spin_attack()
+
+			AttackType.HEAVY_SLASH:
+				start_spin_attack()
+
+			AttackType.SPINNING_SLASH:
+				if distance <= melee_range:
+					start_basic_attack()
+				else:
+					start_heavy_attack()
+
+			_:
+				if distance <= melee_range:
+					start_basic_attack()
+				elif distance <= heavy_range:
+					start_heavy_attack()
+				else:
+					start_spin_attack()
+
+		return
+
+	# 2. Medium-to-long-range combat.
+	if distance >= dash_min_range and distance <= dash_max_range:
+
+		# Prioritize dash beyond projectile range.
+		if distance > ranged_max_distance:
+			start_dash_strike()
+			return
+
+		# Alternate between ranged and dash attacks.
+		if last_attack == AttackType.ENERGY_BLADE:
+			start_dash_strike()
+		else:
+			start_ranged_attack()
+
+		return
+
+	# 3. Ranged attack outside dash range.
 	if (
 		distance >= ranged_min_distance
 		and distance <= ranged_max_distance
@@ -237,19 +356,7 @@ func choose_attack(distance: float) -> void:
 		start_ranged_attack()
 		return
 
-	# Alternate between melee attacks.
-	if distance <= heavy_range:
-		if last_attack == AttackType.BASIC_SLASH:
-			start_heavy_attack()
 
-		elif last_attack == AttackType.HEAVY_SLASH:
-			start_basic_attack()
-
-		else:
-			if distance <= melee_range:
-				start_basic_attack()
-			else:
-				start_heavy_attack()
 
 
 func start_basic_attack() -> void:
@@ -433,6 +540,225 @@ func fire_energy_blade() -> void:
 	print("Shadow Demon fired Energy Blade!")
 
 
+func start_dash_strike() -> void:
+	if current_state != State.CHASE:
+		return
+
+	if not attack_cooldown.is_stopped():
+		return
+
+	if not animated_sprite.sprite_frames.has_animation("attack_4"):
+		push_warning("Missing animation: attack_4")
+		return
+
+	if not is_instance_valid(player):
+		return
+
+	# Lock direction toward the player.
+	var distance_x: float = (
+		player.global_position.x - global_position.x
+	)
+
+	dash_direction = 1 if distance_x >= 0.0 else -1
+
+	update_facing_direction(dash_direction)
+
+	change_state(State.ATTACK)
+
+	current_attack = AttackType.DASH_STRIKE
+	last_attack = AttackType.DASH_STRIKE
+
+	current_attack_damage = dash_damage
+
+	velocity.x = 0.0
+
+	melee_active = false
+	dash_damage_active = false
+
+	hit_targets.clear()
+
+	# Enter the preparation stage.
+	dash_phase = DashPhase.WINDUP
+	dash_timer = dash_windup
+
+	# Reuse the existing melee hitbox.
+	melee_hitbox.position = Vector2(
+		dash_hitbox_offset.x * dash_direction,
+		dash_hitbox_offset.y
+	)
+
+	var collision: CollisionShape2D = (
+		melee_hitbox.get_node("CollisionShape2D")
+	)
+
+	var rectangle: RectangleShape2D = (
+		collision.shape as RectangleShape2D
+	)
+
+	if rectangle != null:
+		rectangle.size = dash_hitbox_size
+
+	# Cooldown prevents repeated dash strikes.
+	attack_cooldown.start(dash_cooldown)
+
+	# We'll start the actual attack animation
+	# after the wind-up finishes.
+	play_animation("idle")
+
+	print("Shadow Demon preparing Dash Strike!")
+
+
+func handle_dash_strike(delta: float) -> void:
+	dash_timer -= delta
+
+	match dash_phase:
+
+		DashPhase.WINDUP:
+			velocity.x = 0.0
+
+			if dash_timer <= 0.0:
+				begin_dash()
+
+		DashPhase.DASHING:
+			perform_dash_movement()
+
+			if dash_timer <= 0.0:
+				begin_dash_recovery()
+
+		DashPhase.RECOVERY:
+			velocity.x = 0.0
+
+			if dash_timer <= 0.0:
+				finish_dash_strike()
+
+
+func begin_dash() -> void:
+	dash_phase = DashPhase.DASHING
+	dash_timer = dash_duration
+
+	velocity.x = dash_direction * dash_speed
+
+	# Allow damage during the actual charge.
+	dash_damage_active = true
+	melee_active = true
+
+	animated_sprite.play("attack_4")
+	animated_sprite.set_frame_and_progress(0, 0.0)
+
+	print("Shadow Demon DASH!")
+
+
+func perform_dash_movement() -> void:
+	# Check obstacles in the locked dash direction.
+	ground_check.position.x = (
+		ground_check_distance * dash_direction
+	)
+
+	wall_check.target_position.x = (
+		wall_check_distance * dash_direction
+	)
+
+	ground_check.force_raycast_update()
+	wall_check.force_raycast_update()
+
+	# Stop if a wall is directly ahead.
+	if wall_check.is_colliding():
+		begin_dash_recovery()
+		return
+
+	# Don't charge off platform edges.
+	if is_on_floor() and not ground_check.is_colliding():
+		begin_dash_recovery()
+		return
+
+	velocity.x = dash_direction * dash_speed
+
+
+func begin_dash_recovery() -> void:
+	if dash_phase != DashPhase.DASHING:
+		return
+
+	dash_phase = DashPhase.RECOVERY
+	dash_timer = dash_recovery
+
+	velocity.x = 0.0
+
+	melee_active = false
+	dash_damage_active = false
+
+	# The charge is complete.
+	# Return to idle visually while recovering.
+	animated_sprite.play("idle")
+
+	print("Shadow Demon recovering...")
+
+
+func finish_dash_strike() -> void:
+	dash_phase = DashPhase.NONE
+	dash_timer = 0.0
+
+	melee_active = false
+	dash_damage_active = false
+
+	hit_targets.clear()
+
+	current_attack = AttackType.NONE
+	current_attack_damage = 0
+
+	velocity.x = 0.0
+
+	# Restore the basic melee hitbox position.
+	melee_hitbox.position = Vector2(
+		melee_hitbox_offset * facing_direction,
+		basic_hitbox_y
+	)
+
+	if is_instance_valid(player):
+		change_state(State.CHASE)
+	else:
+		change_state(State.IDLE)
+
+
+func start_spin_attack() -> void:
+	if current_state != State.CHASE:
+		return
+
+	if not attack_cooldown.is_stopped():
+		return
+
+	if not animated_sprite.sprite_frames.has_animation("attack_5"):
+		push_warning("Missing animation: attack_5")
+		return
+
+	# Reuse the existing melee attack system.
+	start_attack(
+		AttackType.SPINNING_SLASH,
+		"attack_5",
+		spin_damage,
+		spin_range,
+		0.0,
+		spin_start_frame,
+		spin_end_frame,
+		spin_cooldown
+	)
+
+	# Center the hitbox so it covers both sides.
+	melee_hitbox.position = spin_hitbox_offset
+
+	# Give the spinning attack a wider collision area.
+	var collision: CollisionShape2D = (
+		melee_hitbox.get_node("CollisionShape2D")
+	)
+
+	var rectangle: RectangleShape2D = (
+		collision.shape as RectangleShape2D
+	)
+
+	if rectangle != null:
+		rectangle.size = spin_hitbox_size
+
+	print("Shadow Demon: Spinning Slash!")
+
 
 func _on_animation_frame_changed() -> void:
 	if current_state != State.ATTACK:
@@ -440,7 +766,7 @@ func _on_animation_frame_changed() -> void:
 
 	match current_attack:
 
-		AttackType.BASIC_SLASH, AttackType.HEAVY_SLASH:
+		AttackType.BASIC_SLASH, AttackType.HEAVY_SLASH, AttackType.SPINNING_SLASH:
 			var current_frame: int = animated_sprite.frame
 
 			melee_active = (
@@ -456,12 +782,24 @@ func _on_animation_frame_changed() -> void:
 				and not projectile_fired
 			):
 				fire_energy_blade()
+				
+		
+		AttackType.DASH_STRIKE:
+			# Damage is controlled by the dash phase,
+			# not by the sprite animation frames.
+			melee_active = dash_damage_active
+
 
 
 
 func _on_animation_finished() -> void:
 	if current_state == State.DEAD:
 		return
+
+	# Dash Strike uses its own movement and recovery timers.
+	if current_attack == AttackType.DASH_STRIKE:
+		return
+
 
 	if current_state != State.ATTACK:
 		return
