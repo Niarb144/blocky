@@ -198,6 +198,34 @@ region = Rect2(240, 384, 80, 64)
 atlas = ExtResource("1_lx0ci")
 region = Rect2(320, 384, 80, 64)
 
+[sub_resource type="AtlasTexture" id="AtlasTexture_psdih"]
+atlas = ExtResource("1_lx0ci")
+region = Rect2(0, 1472, 80, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_tg6qb"]
+atlas = ExtResource("1_lx0ci")
+region = Rect2(80, 1472, 80, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_qgvto"]
+atlas = ExtResource("1_lx0ci")
+region = Rect2(160, 1472, 80, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_e6wfa"]
+atlas = ExtResource("1_lx0ci")
+region = Rect2(240, 1472, 80, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_smgkk"]
+atlas = ExtResource("1_lx0ci")
+region = Rect2(320, 1472, 80, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_ko2k7"]
+atlas = ExtResource("1_lx0ci")
+region = Rect2(400, 1472, 80, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_5s8a7"]
+atlas = ExtResource("1_lx0ci")
+region = Rect2(480, 1472, 80, 64)
+
 [sub_resource type="AtlasTexture" id="AtlasTexture_njqdp"]
 atlas = ExtResource("1_lx0ci")
 region = Rect2(0, 0, 80, 64)
@@ -435,6 +463,32 @@ animations = [{
 }, {
 "frames": [{
 "duration": 1.0,
+"texture": SubResource("AtlasTexture_psdih")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_tg6qb")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_qgvto")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_e6wfa")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_smgkk")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_ko2k7")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_5s8a7")
+}],
+"loop": 0,
+"name": &"death",
+"speed": 8.0
+}, {
+"frames": [{
+"duration": 1.0,
 "texture": SubResource("AtlasTexture_njqdp")
 }, {
 "duration": 1.0,
@@ -505,16 +559,15 @@ size = Vector2(71, 86)
 collision_layer = 4
 script = ExtResource("1_2r10o")
 move_speed = 120.0
+max_health = 150
 
 [node name="Visuals" type="Node2D" parent="." unique_id=1614497537]
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="Visuals" unique_id=714561420]
 scale = Vector2(3.5, 3.5)
 sprite_frames = SubResource("SpriteFrames_4su2a")
-animation = &"attack_5"
+animation = &"death"
 autoplay = "idle"
-frame = 9
-frame_progress = 1.0
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=743625953]
 position = Vector2(13, 10.25)

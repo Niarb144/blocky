@@ -14,6 +14,12 @@ enum State {
 	DEAD
 }
 
+enum BossPhase {
+	PHASE_1,
+	PHASE_2,
+	PHASE_3
+}
+
 @export_group("Movement")
 @export var move_speed: float = 90.0
 @export var gravity: float = 1200.0
@@ -25,6 +31,36 @@ enum State {
 @export_group("Detection")
 @export var ground_check_distance: float = 20.0
 @export var wall_check_distance: float = 30.0
+
+
+@export_group("Boss Phases")
+@export_range(0.0, 1.0) var phase_2_threshold: float = 0.60
+@export_range(0.0, 1.0) var phase_3_threshold: float = 0.30
+
+@export_group("Phase Movement")
+@export var phase_1_speed_multiplier: float = 1.0
+@export var phase_2_speed_multiplier: float = 1.2
+@export var phase_3_speed_multiplier: float = 1.7
+
+@export_group("Phase Dash Speed")
+@export var phase_1_dash_multiplier: float = 1.0
+@export var phase_2_dash_multiplier: float = 1.1
+@export var phase_3_dash_multiplier: float = 1.4
+
+@export_group("Phase Damage")
+@export var phase_1_damage_multiplier: float = 1.0
+@export var phase_2_damage_multiplier: float = 1.0
+@export var phase_3_damage_multiplier: float = 0.7
+
+@export_group("Phase Attack Frequency")
+@export var phase_1_cooldown_multiplier: float = 1.0
+@export var phase_2_cooldown_multiplier: float = 0.9
+@export var phase_3_cooldown_multiplier: float = 0.7
+
+
+var current_phase: BossPhase = BossPhase.PHASE_1
+
+signal phase_changed(new_phase: BossPhase)
 
 @export_group("Melee Attack")
 @export var melee_damage: int = 20
@@ -212,6 +248,105 @@ func _physics_process(delta: float) -> void:
 	move_and_slide()
 
 
+func check_boss_phase() -> void:
+	if current_state == State.DEAD:
+		return
+
+	var health_percentage: float = (
+		float(health) / float(max_health)
+	)
+
+	var new_phase: BossPhase = BossPhase.PHASE_1
+
+	if health_percentage <= phase_3_threshold:
+		new_phase = BossPhase.PHASE_3
+
+	elif health_percentage <= phase_2_threshold:
+		new_phase = BossPhase.PHASE_2
+
+	if new_phase != current_phase:
+		change_boss_phase(new_phase)
+
+
+func change_boss_phase(new_phase: BossPhase) -> void:
+	if current_phase == new_phase:
+		return
+
+	current_phase = new_phase
+	
+	
+	match current_phase:
+		BossPhase.PHASE_1:
+			visuals.modulate = Color.WHITE
+
+		BossPhase.PHASE_2:
+			visuals.modulate = Color(1.0, 0.8, 0.85)
+
+		BossPhase.PHASE_3:
+			visuals.modulate = Color(1.0, 0.55, 0.65)
+
+
+	match current_phase:
+		BossPhase.PHASE_1:
+			print("SHADOW DEMON: Phase 1")
+
+		BossPhase.PHASE_2:
+			print("SHADOW DEMON: Phase 2 - Shadow Unleashed!")
+
+		BossPhase.PHASE_3:
+			print("SHADOW DEMON: Phase 3 - Hell's Fury!")
+
+	phase_changed.emit(current_phase)
+
+
+func get_speed_multiplier() -> float:
+	match current_phase:
+		BossPhase.PHASE_1:
+			return phase_1_speed_multiplier
+		BossPhase.PHASE_2:
+			return phase_2_speed_multiplier
+		BossPhase.PHASE_3:
+			return phase_3_speed_multiplier
+
+	return 1.0
+
+
+func get_dash_multiplier() -> float:
+	match current_phase:
+		BossPhase.PHASE_1:
+			return phase_1_dash_multiplier
+		BossPhase.PHASE_2:
+			return phase_2_dash_multiplier
+		BossPhase.PHASE_3:
+			return phase_3_dash_multiplier
+
+	return 1.0
+
+
+func get_damage_multiplier() -> float:
+	match current_phase:
+		BossPhase.PHASE_1:
+			return phase_1_damage_multiplier
+		BossPhase.PHASE_2:
+			return phase_2_damage_multiplier
+		BossPhase.PHASE_3:
+			return phase_3_damage_multiplier
+
+	return 1.0
+
+
+func get_cooldown_multiplier() -> float:
+	match current_phase:
+		BossPhase.PHASE_1:
+			return phase_1_cooldown_multiplier
+		BossPhase.PHASE_2:
+			return phase_2_cooldown_multiplier
+		BossPhase.PHASE_3:
+			return phase_3_cooldown_multiplier
+
+	return 1.0
+
+
 func handle_idle() -> void:
 	velocity.x = 0.0
 	play_animation("idle")
@@ -238,10 +373,12 @@ func handle_chase() -> void:
 		update_facing_direction(-1)
 
 	# 4. Check whether an attack can be performed.
+	
+# Check whether an attack is available.
 	if attack_cooldown.is_stopped():
-		
+
 		var in_melee_range: bool = (
-			distance <= spin_range
+			distance <= heavy_range
 		)
 
 		var in_ranged_range: bool = (
@@ -249,18 +386,24 @@ func handle_chase() -> void:
 			and distance <= ranged_max_distance
 		)
 
-		var in_dash_range: bool = (
-			distance >= dash_min_range
-			and distance <= dash_max_range
-		)
+		var in_dash_range: bool = false
 
-		# Attempt to select an appropriate attack.
+		# Phase 2 and 3 unlock the wider spin range
+		# and the Dash Strike.
+		if current_phase != BossPhase.PHASE_1:
+			in_melee_range = distance <= spin_range
+
+			in_dash_range = (
+				distance >= dash_min_range
+				and distance <= dash_max_range
+			)
+
 		if in_melee_range or in_ranged_range or in_dash_range:
 			choose_attack(distance)
 
-			# If an attack started, stop chasing.
 			if current_state == State.ATTACK:
 				return
+
 
 	# 5. Stop when close enough to the player.
 	if distance <= stopping_distance:
@@ -285,13 +428,36 @@ func handle_chase() -> void:
 		return
 
 	# 9. Move toward the player.
-	velocity.x = facing_direction * move_speed
+	
+	var current_move_speed: float = (
+		move_speed * get_speed_multiplier()
+	)
+
+	velocity.x = facing_direction * current_move_speed
+
 	play_animation("run")
 
 
 func handle_attack() -> void:
 	# Prevent the boss from sliding while attacking.
 	velocity.x = 0.0
+
+
+func apply_phase_cooldown() -> void:
+	if current_state != State.ATTACK:
+		return
+
+	if attack_cooldown.is_stopped():
+		return
+
+	var remaining_cooldown: float = attack_cooldown.time_left
+
+	attack_cooldown.start(
+		maxf(
+			0.01,
+			remaining_cooldown * get_cooldown_multiplier()
+		)
+	)
 
 
 func choose_attack(distance: float) -> void:
@@ -301,12 +467,45 @@ func choose_attack(distance: float) -> void:
 	if not attack_cooldown.is_stopped():
 		return
 
-	# 1. Close-range combat.
+	match current_phase:
+		BossPhase.PHASE_1:
+			choose_phase_1_attack(distance)
+
+		BossPhase.PHASE_2:
+			choose_phase_2_attack(distance)
+
+		BossPhase.PHASE_3:
+			choose_phase_3_attack(distance)
+
+	# Adjust the cooldown only if an attack started.
+	if current_state == State.ATTACK:
+		apply_phase_cooldown()
+
+func choose_phase_1_attack(distance: float) -> void:
+	# Close range: alternate between basic and heavy.
+	if distance <= heavy_range:
+		if (
+			last_attack == AttackType.BASIC_SLASH
+			or distance > melee_range
+		):
+			start_heavy_attack()
+		else:
+			start_basic_attack()
+
+		return
+
+	# Medium range: ranged projectile.
+	if (
+		distance >= ranged_min_distance
+		and distance <= ranged_max_distance
+	):
+		start_ranged_attack()
+
+
+func choose_phase_2_attack(distance: float) -> void:
+	# Close-range combat.
 	if distance <= spin_range:
-
-		# Basic Slash -> Heavy Slash -> Spinning Slash
 		match last_attack:
-
 			AttackType.BASIC_SLASH:
 				if distance <= heavy_range:
 					start_heavy_attack()
@@ -319,8 +518,10 @@ func choose_attack(distance: float) -> void:
 			AttackType.SPINNING_SLASH:
 				if distance <= melee_range:
 					start_basic_attack()
-				else:
+				elif distance <= heavy_range:
 					start_heavy_attack()
+				else:
+					start_spin_attack()
 
 			_:
 				if distance <= melee_range:
@@ -332,32 +533,73 @@ func choose_attack(distance: float) -> void:
 
 		return
 
-	# 2. Medium-to-long-range combat.
-	if distance >= dash_min_range and distance <= dash_max_range:
-
-		# Prioritize dash beyond projectile range.
+	# Medium-to-long-range combat.
+	if (
+		distance >= dash_min_range
+		and distance <= dash_max_range
+	):
 		if distance > ranged_max_distance:
 			start_dash_strike()
-			return
-
-		# Alternate between ranged and dash attacks.
-		if last_attack == AttackType.ENERGY_BLADE:
+		elif last_attack == AttackType.ENERGY_BLADE:
 			start_dash_strike()
 		else:
 			start_ranged_attack()
 
 		return
 
-	# 3. Ranged attack outside dash range.
+	# Ranged combat outside dash range.
 	if (
 		distance >= ranged_min_distance
 		and distance <= ranged_max_distance
 	):
 		start_ranged_attack()
+
+
+func choose_phase_3_attack(distance: float) -> void:
+	var roll: float = randf()
+
+	# Close-range combat.
+	if distance <= spin_range:
+		if distance > heavy_range:
+			start_spin_attack()
+
+		elif distance > melee_range:
+			if roll < 0.6:
+				start_spin_attack()
+			else:
+				start_heavy_attack()
+
+		else:
+			# Favor faster basic attacks.
+			if roll < 0.45:
+				start_basic_attack()
+			elif roll < 0.70:
+				start_heavy_attack()
+			else:
+				start_spin_attack()
+
 		return
 
+	# Medium-to-long-range combat.
+	if (
+		distance >= dash_min_range
+		and distance <= dash_max_range
+	):
+		if distance > ranged_max_distance:
+			start_dash_strike()
+		elif roll < 0.65:
+			start_dash_strike()
+		else:
+			start_ranged_attack()
 
+		return
 
+	# Ranged combat outside dash range.
+	if (
+		distance >= ranged_min_distance
+		and distance <= ranged_max_distance
+	):
+		start_ranged_attack()
 
 func start_basic_attack() -> void:
 	start_attack(
@@ -475,7 +717,16 @@ func check_melee_hits() -> void:
 
 		hit_targets.append(body)
 
-		body.take_damage(current_attack_damage)
+		
+		var final_damage: int = maxi(
+			1,
+			roundi(
+				current_attack_damage * get_damage_multiplier()
+			)
+		)
+
+		body.take_damage(final_damage)
+
 
 		print(
 			"Shadow Demon dealt ",
@@ -530,7 +781,16 @@ func fire_energy_blade() -> void:
 
 	var blade = SHADOW_ENERGY_BLADE.instantiate()
 
-	blade.setup(facing_direction, ranged_damage)
+	
+	var final_ranged_damage: int = maxi(
+		1,
+		roundi(
+			ranged_damage * get_damage_multiplier()
+		)
+	)
+
+	blade.setup(facing_direction, final_ranged_damage)
+
 
 	# Add to the level, not to the boss.
 	get_tree().current_scene.add_child(blade)
@@ -636,7 +896,13 @@ func begin_dash() -> void:
 	dash_phase = DashPhase.DASHING
 	dash_timer = dash_duration
 
-	velocity.x = dash_direction * dash_speed
+	
+	velocity.x = (
+		dash_direction
+		* dash_speed
+		* get_dash_multiplier()
+	)
+
 
 	# Allow damage during the actual charge.
 	dash_damage_active = true
@@ -892,16 +1158,26 @@ func play_animation(animation_name: String) -> void:
 		animated_sprite.play(animation_name)
 
 
+
 func take_damage(amount: int) -> void:
 	if current_state == State.DEAD:
 		return
 
 	health = maxi(health - amount, 0)
 
-	print("Shadow Demon Health: ", health, "/", max_health)
+	print(
+		"Shadow Demon Health: ",
+		health,
+		"/",
+		max_health
+	)
 
 	if health <= 0:
 		die()
+		return
+
+	# Check for a phase change after taking damage.
+	check_boss_phase()
 
 
 func die() -> void:
@@ -913,9 +1189,9 @@ func die() -> void:
 	current_attack = AttackType.NONE
 	current_attack_damage = 0
 	hit_targets.clear()
-
+	
 	attack_cooldown.stop()
-
+	
 	print("SHADOW DEMON DEFEATED!")
 
 	if animated_sprite.sprite_frames.has_animation("death"):
