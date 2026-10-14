@@ -1,5 +1,10 @@
-
 extends CharacterBody2D
+
+
+const SHADOW_ENERGY_BLADE = preload(
+	"res://Scenes/Projectiles/shadow_energy_blade.tscn"
+)
+
 
 enum State {
 	IDLE,
@@ -45,7 +50,6 @@ enum State {
 @export var heavy_hitbox_y: float = 30.0
 
 
-
 # Frames where the sword can deal damage.
 @export var melee_start_frame: int = 2
 @export var melee_end_frame: int = 3
@@ -59,6 +63,18 @@ enum State {
 @onready var wall_check: RayCast2D = $WallCheck
 @onready var attack_cooldown: Timer = $AttackCooldown
 
+
+@export_group("Ranged Attack")
+@export var ranged_damage: int = 15
+@export var ranged_min_distance: float = 80.0
+@export var ranged_max_distance: float = 200.0
+@export var ranged_cooldown: float = 2.5
+
+# Frame where the projectile is released.
+@export var projectile_fire_frame: int = 9
+
+var projectile_fired: bool = false
+
 var health: int
 var current_state: State = State.IDLE
 
@@ -68,12 +84,13 @@ var facing_direction: int = 1
 var melee_active: bool = false
 var hit_targets: Array[Node2D] = []
 
-
 enum AttackType {
 	NONE,
 	BASIC_SLASH,
-	HEAVY_SLASH
+	HEAVY_SLASH,
+	ENERGY_BLADE
 }
+
 
 var current_attack: AttackType = AttackType.NONE
 var last_attack: AttackType = AttackType.NONE
@@ -163,9 +180,17 @@ func handle_chase() -> void:
 	# Attack when within melee range.
 	
 # Choose an attack when close enough.
-	if distance <= heavy_range and attack_cooldown.is_stopped():
-		choose_attack(distance)
-		return
+	
+	if attack_cooldown.is_stopped():
+		if distance <= heavy_range or (
+			distance >= ranged_min_distance
+			and distance <= ranged_max_distance
+		):
+			choose_attack(distance)
+
+			if current_state == State.ATTACK:
+				return
+
 
 
 	# Stay close to the player while waiting.
@@ -196,6 +221,7 @@ func handle_attack() -> void:
 	velocity.x = 0.0
 
 
+
 func choose_attack(distance: float) -> void:
 	if current_state != State.CHASE:
 		return
@@ -203,18 +229,27 @@ func choose_attack(distance: float) -> void:
 	if not attack_cooldown.is_stopped():
 		return
 
-	# Alternate between basic and heavy attacks.
-	if last_attack == AttackType.BASIC_SLASH:
-		if distance <= heavy_range:
-			start_heavy_attack()
-		else:
-			start_basic_attack()
-	else:
-		if distance <= melee_range:
-			start_basic_attack()
-		elif distance <= heavy_range:
+	# Ranged attack when the player is farther away.
+	if (
+		distance >= ranged_min_distance
+		and distance <= ranged_max_distance
+	):
+		start_ranged_attack()
+		return
+
+	# Alternate between melee attacks.
+	if distance <= heavy_range:
+		if last_attack == AttackType.BASIC_SLASH:
 			start_heavy_attack()
 
+		elif last_attack == AttackType.HEAVY_SLASH:
+			start_basic_attack()
+
+		else:
+			if distance <= melee_range:
+				start_basic_attack()
+			else:
+				start_heavy_attack()
 
 
 func start_basic_attack() -> void:
@@ -343,19 +378,84 @@ func check_melee_hits() -> void:
 		)
 
 
+func start_ranged_attack() -> void:
+	if current_state != State.CHASE:
+		return
+
+	if not attack_cooldown.is_stopped():
+		return
+
+	if not animated_sprite.sprite_frames.has_animation("attack_3"):
+		push_warning("Shadow Demon: attack_3 animation missing.")
+		return
+
+	change_state(State.ATTACK)
+
+	velocity.x = 0.0
+
+	current_attack = AttackType.ENERGY_BLADE
+	last_attack = AttackType.ENERGY_BLADE
+
+	melee_active = false
+	hit_targets.clear()
+
+	projectile_fired = false
+
+	attack_cooldown.start(ranged_cooldown)
+
+	animated_sprite.play("attack_3")
+	animated_sprite.set_frame_and_progress(0, 0.0)
+
+	print("Shadow Demon: Energy Blade!")
+
+
+func fire_energy_blade() -> void:
+	if projectile_fired:
+		return
+
+	if current_state != State.ATTACK:
+		return
+
+	if current_attack != AttackType.ENERGY_BLADE:
+		return
+
+	projectile_fired = true
+
+	var blade = SHADOW_ENERGY_BLADE.instantiate()
+
+	blade.setup(facing_direction, ranged_damage)
+
+	# Add to the level, not to the boss.
+	get_tree().current_scene.add_child(blade)
+
+	blade.global_position = projectile_spawn.global_position
+
+	print("Shadow Demon fired Energy Blade!")
+
+
+
 func _on_animation_frame_changed() -> void:
 	if current_state != State.ATTACK:
 		return
 
-	if current_attack == AttackType.NONE:
-		return
+	match current_attack:
 
-	var current_frame: int = animated_sprite.frame
+		AttackType.BASIC_SLASH, AttackType.HEAVY_SLASH:
+			var current_frame: int = animated_sprite.frame
 
-	melee_active = (
-		current_frame >= active_start_frame
-		and current_frame <= active_end_frame
-	)
+			melee_active = (
+				current_frame >= active_start_frame
+				and current_frame <= active_end_frame
+			)
+
+		AttackType.ENERGY_BLADE:
+			melee_active = false
+
+			if (
+				animated_sprite.frame >= projectile_fire_frame
+				and not projectile_fired
+			):
+				fire_energy_blade()
 
 
 
@@ -371,10 +471,11 @@ func _on_animation_finished() -> void:
 
 	current_attack = AttackType.NONE
 	current_attack_damage = 0
+	projectile_fired = false
 
-	# Restore default hitbox position.
-	melee_hitbox.position.x = (
-		melee_hitbox_offset * facing_direction
+	melee_hitbox.position = Vector2(
+		melee_hitbox_offset * facing_direction,
+		basic_hitbox_y
 	)
 
 	if is_instance_valid(player):
@@ -467,7 +568,8 @@ func take_damage(amount: int) -> void:
 
 func die() -> void:
 	current_state = State.DEAD
-
+	projectile_fired = false
+	
 	velocity = Vector2.ZERO
 	melee_active = false
 	current_attack = AttackType.NONE
