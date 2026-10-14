@@ -280,10 +280,10 @@ func change_boss_phase(new_phase: BossPhase) -> void:
 			visuals.modulate = Color.WHITE
 
 		BossPhase.PHASE_2:
-			visuals.modulate = Color(1.0, 0.8, 0.85)
+			visuals.modulate = Color(0.0, 0, 0.5)
 
 		BossPhase.PHASE_3:
-			visuals.modulate = Color(1.0, 0.55, 0.65)
+			visuals.modulate = Color(0.0, 0.0, 0.0)
 
 
 	match current_phase:

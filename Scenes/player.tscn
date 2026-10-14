@@ -674,7 +674,6 @@ frame = 11
 stream = ExtResource("3_6t5aa")
 
 [node name="PlayerLight" type="PointLight2D" parent="." unique_id=1470410393]
-visible = false
 position = Vector2(15, 27)
 energy = 1.5
 texture = SubResource("GradientTexture2D_4su2a")

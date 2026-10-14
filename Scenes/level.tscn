@@ -14,7 +14,6 @@
 [ext_resource type="PackedScene" uid="uid://e1cvky88fq2e" path="res://Scenes/Enemies/blood_monster.tscn" id="12_ha31o"]
 [ext_resource type="PackedScene" uid="uid://b16tqfkoxav17" path="res://Scenes/Enemies/demon.tscn" id="13_pa6b8"]
 [ext_resource type="PackedScene" uid="uid://cymqpxymbk8vq" path="res://Scenes/Camera/level_camera.tscn" id="14_crh0w"]
-[ext_resource type="PackedScene" uid="uid://v8l7tqjp8m44" path="res://Scenes/Enemies/Bosses/shadow_demon.tscn" id="15_c7le1"]
 
 [node name="level_1" type="Node2D" unique_id=11141250]
 script = ExtResource("1_754fn")
@@ -126,6 +125,3 @@ position = Vector2(731, 413)
 
 [node name="LevelCamera" parent="." unique_id=1078575189 instance=ExtResource("14_crh0w")]
 position = Vector2(1, 0)
-
-[node name="ShadowDemon" parent="." unique_id=858162757 instance=ExtResource("15_c7le1")]
-position = Vector2(1027, 550)

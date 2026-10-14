@@ -102,5 +102,5 @@ func complete_level() -> void:
 
 func _load_next_level() -> void:
 	get_tree().change_scene_to_file(
-        "res://Scenes/level.tscn"
+        "res://Scenes/Levels/boss_level.tscn"
 	)

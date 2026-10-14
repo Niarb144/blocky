@@ -20,6 +20,15 @@ position = Vector2(-43, 46)
 position = Vector2(-168, 228.00002)
 scale = Vector2(10, 7)
 
+[node name="LootBox" parent="." unique_id=2075987227 instance=ExtResource("5_4wh5o")]
+position = Vector2(-74, 563)
+
+[node name="LootBox2" parent="." unique_id=757054842 instance=ExtResource("5_4wh5o")]
+position = Vector2(1309, 560)
+
+[node name="LootBox3" parent="." unique_id=1751318680 instance=ExtResource("5_4wh5o")]
+position = Vector2(331, 562)
+
 [node name="Wall" type="Node" parent="." unique_id=1397145208]
 
 [node name="wall" parent="Wall" unique_id=908506835 instance=ExtResource("4_daq8m")]
@@ -28,9 +37,6 @@ position = Vector2(-142, -3)
 [node name="wall2" parent="Wall" unique_id=1723819550 instance=ExtResource("4_daq8m")]
 position = Vector2(1402.0001, 665)
 rotation = -3.1373127
-
-[node name="LootBox" parent="Wall" unique_id=2075987227 instance=ExtResource("5_4wh5o")]
-position = Vector2(-33, 542)
 
 [node name="ShadowDemon" parent="Wall" unique_id=858162757 instance=ExtResource("6_tgqw5")]
 position = Vector2(480, 524)
