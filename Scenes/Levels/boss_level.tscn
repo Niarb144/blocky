@@ -1,5 +1,6 @@
 [gd_scene format=3 uid="uid://u3ggqiej4hia"]
 
+[ext_resource type="Script" uid="uid://dskgd8ivdgxlt" path="res://Scripts/boss_level.gd" id="1_2u27r"]
 [ext_resource type="PackedScene" uid="uid://d1xiv6pgau1fl" path="res://Scenes/backgrounds/parallax_background.tscn" id="1_ag44t"]
 [ext_resource type="PackedScene" uid="uid://dm3ame74n0v0p" path="res://Scenes/Environment/floor.tscn" id="2_abuvu"]
 [ext_resource type="PackedScene" uid="uid://dkor4sx15paw2" path="res://Scenes/platform.tscn" id="3_2u27r"]
@@ -8,8 +9,10 @@
 [ext_resource type="PackedScene" uid="uid://v8l7tqjp8m44" path="res://Scenes/Enemies/Bosses/shadow_demon.tscn" id="6_tgqw5"]
 [ext_resource type="PackedScene" uid="uid://cymqpxymbk8vq" path="res://Scenes/Camera/level_camera.tscn" id="7_qb14d"]
 [ext_resource type="PackedScene" uid="uid://co3pmufuv2hic" path="res://Scenes/player.tscn" id="8_funn6"]
+[ext_resource type="PackedScene" uid="uid://bn8oa2v2xgd61" path="res://Scenes/UI/boss_health_bar.tscn" id="9_abuvu"]
 
 [node name="BossLevel" type="Node2D" unique_id=1148509087]
+script = ExtResource("1_2u27r")
 
 [node name="ParallaxBackground" parent="." unique_id=1498009889 instance=ExtResource("1_ag44t")]
 
@@ -38,10 +41,14 @@ position = Vector2(-142, -3)
 position = Vector2(1402.0001, 665)
 rotation = -3.1373127
 
-[node name="ShadowDemon" parent="Wall" unique_id=858162757 instance=ExtResource("6_tgqw5")]
+[node name="ShadowDemon" parent="." unique_id=858162757 instance=ExtResource("6_tgqw5")]
 position = Vector2(480, 524)
 
 [node name="LevelCamera" parent="." unique_id=1078575189 instance=ExtResource("7_qb14d")]
 
 [node name="Player" parent="." unique_id=378940393 instance=ExtResource("8_funn6")]
 position = Vector2(1300, 558.00006)
+
+[node name="BossUI" type="CanvasLayer" parent="." unique_id=278481059]
+
+[node name="BossHealthBar" parent="BossUI" unique_id=1381645426 instance=ExtResource("9_abuvu")]

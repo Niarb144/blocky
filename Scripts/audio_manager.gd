@@ -7,18 +7,19 @@ extends Node
 @onready var loot_box_break: AudioStreamPlayer = $LootboxBreak
 @onready var weapon_drop: AudioStreamPlayer = $WeaponDrop
 @onready var health_pickup: AudioStreamPlayer = $HealthPickup
+@onready var boss_music: AudioStreamPlayer = $BossMusic
 
 @onready var attack_slash: AudioStreamPlayer = $AttackSlash
 @onready var attack_heavy: AudioStreamPlayer = $AttackHeavy
 
-
 func play_game_audio() -> void:
+	stop_boss_audio()
+
 	if not music.playing:
 		music.play()
 
 	if not ambience.playing:
 		ambience.play()
-
 
 func stop_game_audio() -> void:
 	music.stop()
@@ -51,3 +52,17 @@ func play_attack_slash() -> void:
 
 func play_attack_heavy() -> void:
 	attack_heavy.play()
+	
+func play_boss_audio() -> void:
+	# Stop the regular cave music.
+	music.stop()
+	ambience.stop()
+
+	# Start the boss theme.
+	if not boss_music.playing:
+		boss_music.play()
+
+
+func stop_boss_audio() -> void:
+	if boss_music.playing:
+		boss_music.stop()

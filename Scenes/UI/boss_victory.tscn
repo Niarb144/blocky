@@ -1,0 +1,58 @@
+[gd_scene format=3 uid="uid://jg3psk14ynw6"]
+
+[ext_resource type="Script" uid="uid://bs8pbxl1wox4l" path="res://Scripts/boss_victory.gd" id="1_s5nbw"]
+
+[node name="BossVictory" type="Control" unique_id=1064020854]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_s5nbw")
+
+[node name="Background" type="ColorRect" parent="." unique_id=383328862]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.043137256, 0.03137255, 0.0627451, 1)
+
+[node name="CenterContainer" type="CenterContainer" parent="." unique_id=98924051]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="CenterContainer" unique_id=732277257]
+layout_mode = 2
+
+[node name="VictoryTitle" type="Label" parent="CenterContainer/VBoxContainer" unique_id=992243271]
+layout_mode = 2
+text = "CONGRAGULATIONS"
+
+[node name="VictoryMessage" type="Label" parent="CenterContainer/VBoxContainer" unique_id=1809945791]
+layout_mode = 2
+text = "Welldone, you just beat Hell"
+
+[node name="Description" type="Label" parent="CenterContainer/VBoxContainer" unique_id=1070379782]
+layout_mode = 2
+text = "Darkness has been defeated."
+
+[node name="MainMenuButton" type="Button" parent="CenterContainer/VBoxContainer" unique_id=2125721602]
+layout_mode = 2
+text = "Main Menu"
+
+[node name="FadeOverlay" type="ColorRect" parent="." unique_id=964632916]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+color = Color(0, 0, 0, 1)

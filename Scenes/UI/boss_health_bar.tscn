@@ -1,0 +1,46 @@
+[gd_scene format=3 uid="uid://bn8oa2v2xgd61"]
+
+[ext_resource type="Script" uid="uid://d2lj8ltvr3c8t" path="res://Scripts/boss_health_bar.gd" id="1_yxwhj"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_omrw3"]
+bg_color = Color(0.15907794, 0, 0.0007608058, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_yxwhj"]
+bg_color = Color(0.827451, 0.18431373, 0.03137255, 1)
+
+[node name="BossHealthBar" type="Control" unique_id=1381645426]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_yxwhj")
+
+[node name="MarginContainer" type="MarginContainer" parent="." unique_id=940537125]
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 110.0
+
+[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer" unique_id=1736279380]
+layout_mode = 2
+
+[node name="BossName" type="Label" parent="MarginContainer/VBoxContainer" unique_id=823640649]
+layout_mode = 2
+text = "THE SHADOW LORD"
+
+[node name="HealthBar" type="ProgressBar" parent="MarginContainer/VBoxContainer" unique_id=1250880148]
+custom_minimum_size = Vector2(0, 18)
+layout_mode = 2
+theme_override_styles/background = SubResource("StyleBoxFlat_omrw3")
+theme_override_styles/fill = SubResource("StyleBoxFlat_yxwhj")
+max_value = 400.0
+show_percentage = false
+
+[node name="HealthLabel" type="Label" parent="MarginContainer/VBoxContainer" unique_id=2040458697]
+layout_mode = 2
+text = "400/400"
+
+[node name="PhaseLabel" type="Label" parent="MarginContainer/VBoxContainer" unique_id=384151740]
+layout_mode = 2
+text = "PHASE 1 -- GUARDIAN KNIGHT"

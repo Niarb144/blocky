@@ -62,6 +62,11 @@ var current_phase: BossPhase = BossPhase.PHASE_1
 
 signal phase_changed(new_phase: BossPhase)
 
+signal health_changed(current_health: int, maximum_health: int)
+signal boss_defeated
+
+var death_completed: bool = false
+
 @export_group("Melee Attack")
 @export var melee_damage: int = 20
 @export var melee_range: float = 55.0
@@ -190,6 +195,7 @@ var current_hitbox_offset: float = 0.0
 
 func _ready() -> void:
 	health = max_health
+	health_changed.emit(health, max_health)
 
 	# Keep monitoring active for overlap detection.
 	melee_hitbox.monitoring = true
@@ -1060,6 +1066,8 @@ func _on_animation_frame_changed() -> void:
 
 func _on_animation_finished() -> void:
 	if current_state == State.DEAD:
+		if animated_sprite.animation == "death":
+			finish_boss_death()
 		return
 
 	# Dash Strike uses its own movement and recovery timers.
@@ -1157,13 +1165,13 @@ func play_animation(animation_name: String) -> void:
 	):
 		animated_sprite.play(animation_name)
 
-
-
 func take_damage(amount: int) -> void:
 	if current_state == State.DEAD:
 		return
 
 	health = maxi(health - amount, 0)
+
+	health_changed.emit(health, max_health)
 
 	print(
 		"Shadow Demon Health: ",
@@ -1176,9 +1184,7 @@ func take_damage(amount: int) -> void:
 		die()
 		return
 
-	# Check for a phase change after taking damage.
 	check_boss_phase()
-
 
 func die() -> void:
 	current_state = State.DEAD
@@ -1198,6 +1204,14 @@ func die() -> void:
 		animated_sprite.play("death")
 	else:
 		animated_sprite.stop()
+
+
+func finish_boss_death() -> void:
+	if death_completed:
+		return
+
+	death_completed = true
+	boss_defeated.emit()
 
 
 func _on_player_detected(body: Node2D) -> void:

@@ -9,6 +9,7 @@
 [ext_resource type="AudioStream" uid="uid://cimvyxywu80p2" path="res://Assets/Sound/Weapons/weapon_drop.wav" id="7_o370n"]
 [ext_resource type="AudioStream" uid="uid://0uuqdafa0ony" path="res://Assets/Sound/Items/card_fan.wav" id="8_f68rn"]
 [ext_resource type="AudioStream" uid="uid://dhugj8bp23x4t" path="res://Assets/Sound/Items/swipe.wav" id="10_8rv4l"]
+[ext_resource type="AudioStream" uid="uid://bcj2ha6oc85on" path="res://Assets/Sound/Music/669435__michaelp800__michael-stutz-pistris.wav" id="10_bvbow"]
 
 [node name="AudioManager" type="Node" unique_id=769436843]
 script = ExtResource("1_l520s")
@@ -39,3 +40,6 @@ pitch_scale = 2.0
 
 [node name="AttackHeavy" type="AudioStreamPlayer" parent="." unique_id=901017600]
 stream = ExtResource("10_8rv4l")
+
+[node name="BossMusic" type="AudioStreamPlayer" parent="." unique_id=1357184125]
+stream = ExtResource("10_bvbow")
