@@ -30,3 +30,8 @@ var health: int = MAX_HEALTH:
 func reset_for_new_game() -> void:
 	ammo = MAX_AMMO
 	health = MAX_HEALTH
+	
+	
+func reset_game() -> void:
+	ammo = MAX_AMMO
+	health = MAX_HEALTH

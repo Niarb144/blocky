@@ -1,0 +1,51 @@
+[gd_scene format=3 uid="uid://bbifm6nomm5a6"]
+
+[ext_resource type="Script" uid="uid://ilpsiv1viho0" path="res://Scripts/controls_menu.gd" id="1_j0xk7"]
+
+[node name="ControlsMenu" type="Control" unique_id=58793445]
+process_mode = 3
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_j0xk7")
+
+[node name="Background" type="ColorRect" parent="." unique_id=311377365]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.10980392, 0.10980392, 0.10980392, 0.8)
+
+[node name="CenterContainer" type="CenterContainer" parent="." unique_id=2109861355]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="PanelContainer" type="PanelContainer" parent="CenterContainer" unique_id=2067147056]
+layout_mode = 2
+
+[node name="MarginContainer" type="MarginContainer" parent="CenterContainer/PanelContainer" unique_id=1712488230]
+layout_mode = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="CenterContainer/PanelContainer/MarginContainer" unique_id=1945026089]
+layout_mode = 2
+
+[node name="Title" type="Label" parent="CenterContainer/PanelContainer/MarginContainer/VBoxContainer" unique_id=1821410864]
+layout_mode = 2
+text = "Controls"
+
+[node name="ControlsList" type="VBoxContainer" parent="CenterContainer/PanelContainer/MarginContainer/VBoxContainer" unique_id=1537391541]
+layout_mode = 2
+
+[node name="BackButton" type="Button" parent="CenterContainer/PanelContainer/MarginContainer/VBoxContainer" unique_id=1730451397]
+layout_mode = 2
+text = "Back
+"

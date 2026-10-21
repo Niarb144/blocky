@@ -10,6 +10,7 @@
 [ext_resource type="PackedScene" uid="uid://cymqpxymbk8vq" path="res://Scenes/Camera/level_camera.tscn" id="7_qb14d"]
 [ext_resource type="PackedScene" uid="uid://co3pmufuv2hic" path="res://Scenes/player.tscn" id="8_funn6"]
 [ext_resource type="PackedScene" uid="uid://bn8oa2v2xgd61" path="res://Scenes/UI/boss_health_bar.tscn" id="9_abuvu"]
+[ext_resource type="PackedScene" uid="uid://dr3uxaw58fdsc" path="res://Scenes/Menus/pause_menu.tscn" id="11_daq8m"]
 
 [node name="BossLevel" type="Node2D" unique_id=1148509087]
 script = ExtResource("1_2u27r")
@@ -52,3 +53,5 @@ position = Vector2(1300, 558.00006)
 [node name="BossUI" type="CanvasLayer" parent="." unique_id=278481059]
 
 [node name="BossHealthBar" parent="BossUI" unique_id=1381645426 instance=ExtResource("9_abuvu")]
+
+[node name="PauseMenu" parent="." unique_id=485495646 instance=ExtResource("11_daq8m")]

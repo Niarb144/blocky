@@ -1,0 +1,66 @@
+[gd_scene format=3 uid="uid://fmu6wr0e76q"]
+
+[ext_resource type="Texture2D" uid="uid://d1r472v4l1s0o" path="res://Assets/Menus/MainMenu.png" id="1_38aua"]
+[ext_resource type="Script" uid="uid://yutdssfiqbj4" path="res://Scripts/main_menu.gd" id="1_pha2q"]
+
+[node name="MainMenu" type="Control" unique_id=595798047]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_pha2q")
+
+[node name="Background" type="TextureRect" parent="." unique_id=1814368616]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("1_38aua")
+expand_mode = 1
+stretch_mode = 6
+
+[node name="DarkOverlay" type="ColorRect" parent="." unique_id=1911371230]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+color = Color(0.011764706, 0.011764706, 0.011764706, 0.56078434)
+
+[node name="MenuContainer" type="MarginContainer" parent="." unique_id=1018566052]
+layout_mode = 1
+anchors_preset = 2
+anchor_top = 1.0
+anchor_bottom = 1.0
+offset_top = -163.0
+offset_right = 93.0
+grow_vertical = 0
+
+[node name="VBoxContainer" type="VBoxContainer" parent="MenuContainer" unique_id=827915061]
+layout_mode = 2
+
+[node name="GameTitle" type="Label" parent="MenuContainer/VBoxContainer" unique_id=1117835766]
+layout_mode = 2
+text = "LURK"
+
+[node name="NewGameButton" type="Button" parent="MenuContainer/VBoxContainer" unique_id=498687974]
+layout_mode = 2
+text = "New Game"
+
+[node name="ContinueButton" type="Button" parent="MenuContainer/VBoxContainer" unique_id=1431168866]
+layout_mode = 2
+text = "Continue"
+
+[node name="ControlsButton" type="Button" parent="MenuContainer/VBoxContainer" unique_id=234683581]
+layout_mode = 2
+text = "Controls"
+
+[node name="QuitButton" type="Button" parent="MenuContainer/VBoxContainer" unique_id=440208918]
+layout_mode = 2
+text = "Quit"

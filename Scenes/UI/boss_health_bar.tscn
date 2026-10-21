@@ -18,16 +18,23 @@ grow_vertical = 2
 script = ExtResource("1_yxwhj")
 
 [node name="MarginContainer" type="MarginContainer" parent="." unique_id=940537125]
-layout_mode = 0
-offset_right = 40.0
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -115.5
+offset_right = 115.5
 offset_bottom = 110.0
+grow_horizontal = 2
 
 [node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer" unique_id=1736279380]
 layout_mode = 2
+alignment = 1
 
 [node name="BossName" type="Label" parent="MarginContainer/VBoxContainer" unique_id=823640649]
 layout_mode = 2
 text = "THE SHADOW LORD"
+horizontal_alignment = 1
 
 [node name="HealthBar" type="ProgressBar" parent="MarginContainer/VBoxContainer" unique_id=1250880148]
 custom_minimum_size = Vector2(0, 18)
@@ -35,12 +42,15 @@ layout_mode = 2
 theme_override_styles/background = SubResource("StyleBoxFlat_omrw3")
 theme_override_styles/fill = SubResource("StyleBoxFlat_yxwhj")
 max_value = 400.0
+rounded = true
 show_percentage = false
 
 [node name="HealthLabel" type="Label" parent="MarginContainer/VBoxContainer" unique_id=2040458697]
 layout_mode = 2
 text = "400/400"
+horizontal_alignment = 1
 
 [node name="PhaseLabel" type="Label" parent="MarginContainer/VBoxContainer" unique_id=384151740]
 layout_mode = 2
 text = "PHASE 1 -- GUARDIAN KNIGHT"
+horizontal_alignment = 1
