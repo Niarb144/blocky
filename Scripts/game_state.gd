@@ -1,3 +1,4 @@
+
 extends Node
 
 signal ammo_changed(current_ammo: int, max_ammo: int)
@@ -5,6 +6,11 @@ signal health_changed(current_health: int, max_health: int)
 
 const MAX_AMMO: int = 6
 const MAX_HEALTH: int = 100
+
+const STARTING_LEVEL: String = "res://Scenes/level.tscn"
+
+var current_level: String = STARTING_LEVEL
+var last_sanctuary_id: String = ""
 
 var ammo: int = MAX_AMMO:
 	set(value):
@@ -15,6 +21,7 @@ var ammo: int = MAX_AMMO:
 
 		ammo = new_amount
 		ammo_changed.emit(ammo, MAX_AMMO)
+
 
 var health: int = MAX_HEALTH:
 	set(value):
@@ -28,10 +35,13 @@ var health: int = MAX_HEALTH:
 
 
 func reset_for_new_game() -> void:
+	current_level = STARTING_LEVEL
+	last_sanctuary_id = ""
+
 	ammo = MAX_AMMO
 	health = MAX_HEALTH
-	
-	
-func reset_game() -> void:
-	ammo = MAX_AMMO
+
+
+func rest_at_sanctuary() -> void:
 	health = MAX_HEALTH
+	ammo = MAX_AMMO

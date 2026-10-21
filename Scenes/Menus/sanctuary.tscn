@@ -1,0 +1,35 @@
+[gd_scene format=3 uid="uid://bf7jnur6y6ilg"]
+
+[ext_resource type="Script" uid="uid://kwvcfhulbx4u" path="res://Scripts/sanctuary.gd" id="1_31wef"]
+[ext_resource type="Texture2D" uid="uid://co8c7l3eoxlw2" path="res://Assets/Items/sanctuary.png" id="1_mmpt5"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_dkgl6"]
+size = Vector2(120, 133)
+
+[node name="Sanctuary" type="Node2D" unique_id=1161900835 groups=["sanctuaries"]]
+script = ExtResource("1_31wef")
+
+[node name="Sprite2D" type="Sprite2D" parent="." unique_id=1749967841]
+position = Vector2(-8.000002, 41.999996)
+scale = Vector2(0.11004785, 0.11323763)
+texture = ExtResource("1_mmpt5")
+
+[node name="SpawnPoint" type="Marker2D" parent="." unique_id=1673162167]
+position = Vector2(-1, 98)
+
+[node name="InteractionArea" type="Area2D" parent="." unique_id=968947098]
+collision_layer = 0
+collision_mask = 2
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="InteractionArea" unique_id=1323206008]
+position = Vector2(-6, 41.5)
+shape = SubResource("RectangleShape2D_dkgl6")
+
+[node name="InteractionLabel" type="Label" parent="." unique_id=1234100417]
+offset_right = 40.0
+offset_bottom = 23.0
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="." unique_id=16326526]
+
+[connection signal="body_entered" from="InteractionArea" to="." method="_on_interaction_area_body_entered"]
+[connection signal="body_exited" from="InteractionArea" to="." method="_on_interaction_area_body_exited"]

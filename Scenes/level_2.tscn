@@ -15,11 +15,16 @@
 [ext_resource type="PackedScene" uid="uid://n0t1tl40chtx" path="res://Scenes/wall.tscn" id="13_vcilj"]
 [ext_resource type="PackedScene" uid="uid://dm3ame74n0v0p" path="res://Scenes/Environment/floor.tscn" id="14_bl0du"]
 [ext_resource type="PackedScene" uid="uid://dr3uxaw58fdsc" path="res://Scenes/Menus/pause_menu.tscn" id="15_q0ycs"]
+[ext_resource type="PackedScene" uid="uid://bf7jnur6y6ilg" path="res://Scenes/Menus/sanctuary.tscn" id="16_hj5x7"]
 
 [node name="level_2" type="Node2D" unique_id=417640951]
 script = ExtResource("1_cggpd")
 
 [node name="ParallaxBackground" parent="." unique_id=1498009889 instance=ExtResource("2_42uki")]
+
+[node name="sanctuary" parent="." unique_id=1519195896 instance=ExtResource("16_hj5x7")]
+position = Vector2(1311, 485)
+sanctuary_id = "sanctuary_02"
 
 [node name="Player" parent="." unique_id=378940393 instance=ExtResource("2_v36qu")]
 position = Vector2(14, 94)

@@ -79,7 +79,7 @@ func return_to_menu() -> void:
 	is_paused = false
 
 	get_tree().change_scene_to_file(
-		"res://Scenes/main_menu.tscn"
+		"res://Scenes/Menus/main_menu.tscn"
 	)
 
 
