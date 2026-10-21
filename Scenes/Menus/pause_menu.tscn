@@ -1,6 +1,7 @@
 [gd_scene format=3 uid="uid://dr3uxaw58fdsc"]
 
 [ext_resource type="Script" uid="uid://b0il61fjo8k11" path="res://Scripts/pause_menu.gd" id="1_as6yf"]
+[ext_resource type="PackedScene" uid="uid://bbifm6nomm5a6" path="res://Scenes/Menus/controls_menu.tscn" id="2_1j166"]
 
 [node name="PauseMenu" type="CanvasLayer" unique_id=485495646]
 process_mode = 3
@@ -54,3 +55,5 @@ text = "Main Menu"
 [node name="QuitButton" type="Button" parent="PausePanel/CenterContainer/VBoxContainer" unique_id=762713369]
 layout_mode = 2
 text = "Quit"
+
+[node name="ControlsMenu" parent="." unique_id=58793445 instance=ExtResource("2_1j166")]

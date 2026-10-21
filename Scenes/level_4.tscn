@@ -14,6 +14,7 @@
 [ext_resource type="PackedScene" uid="uid://dlso7w47fu3py" path="res://Scenes/exit.tscn" id="10_di0d6"]
 [ext_resource type="PackedScene" uid="uid://cii0llieji8t8" path="res://Scenes/loot_box.tscn" id="11_54c2w"]
 [ext_resource type="PackedScene" uid="uid://cymqpxymbk8vq" path="res://Scenes/Camera/level_camera.tscn" id="14_gxyip"]
+[ext_resource type="PackedScene" uid="uid://dr3uxaw58fdsc" path="res://Scenes/Menus/pause_menu.tscn" id="15_gxyip"]
 
 [node name="Level4" type="Node2D" unique_id=1644346311]
 script = ExtResource("1_54c2w")
@@ -141,3 +142,5 @@ position = Vector2(202, 242)
 position = Vector2(712, 568)
 
 [node name="LevelCamera" parent="." unique_id=1078575189 instance=ExtResource("14_gxyip")]
+
+[node name="PauseMenu" parent="." unique_id=485495646 instance=ExtResource("15_gxyip")]

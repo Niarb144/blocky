@@ -8,6 +8,10 @@ const FIRST_LEVEL: String = "res://Scenes/level.tscn"
 @onready var controls_button: Button = $MenuContainer/VBoxContainer/ControlsButton
 @onready var quit_button: Button = $MenuContainer/VBoxContainer/QuitButton
 
+@onready var menu_container: MarginContainer = $MenuContainer
+@onready var controls_menu: Control = $ControlsMenu
+
+
 
 func _ready() -> void:
 	get_tree().paused = false
@@ -15,6 +19,10 @@ func _ready() -> void:
 	new_game_button.pressed.connect(_on_new_game_pressed)
 	controls_button.pressed.connect(_on_controls_pressed)
 	quit_button.pressed.connect(_on_quit_pressed)
+	
+	controls_menu.hide()
+	controls_menu.closed.connect(_on_controls_closed)
+
 
 	continue_button.disabled = true
 
@@ -24,10 +32,16 @@ func _on_new_game_pressed() -> void:
 	get_tree().change_scene_to_file(FIRST_LEVEL)
 
 
+
 func _on_controls_pressed() -> void:
-	get_tree().change_scene_to_file(
-		"res://Scenes/Menus/controls_menu.tscn"
-	)
+	menu_container.hide()
+	controls_menu.open_menu()
+
+
+func _on_controls_closed() -> void:
+	menu_container.show()
+	controls_button.grab_focus()
+
 
 
 func _on_quit_pressed() -> void:

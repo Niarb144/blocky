@@ -2,6 +2,7 @@
 
 [ext_resource type="Texture2D" uid="uid://d1r472v4l1s0o" path="res://Assets/Menus/MainMenu.png" id="1_38aua"]
 [ext_resource type="Script" uid="uid://yutdssfiqbj4" path="res://Scripts/main_menu.gd" id="1_pha2q"]
+[ext_resource type="PackedScene" uid="uid://bbifm6nomm5a6" path="res://Scenes/Menus/controls_menu.tscn" id="3_penys"]
 
 [node name="MainMenu" type="Control" unique_id=595798047]
 layout_mode = 3
@@ -64,3 +65,6 @@ text = "Controls"
 [node name="QuitButton" type="Button" parent="MenuContainer/VBoxContainer" unique_id=440208918]
 layout_mode = 2
 text = "Quit"
+
+[node name="ControlsMenu" parent="." unique_id=58793445 instance=ExtResource("3_penys")]
+layout_mode = 1
