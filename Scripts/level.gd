@@ -23,7 +23,6 @@ func _ready() -> void:
 	)
 	
 
-
 func setup_camera_limits() -> void:
 	var bounds := Rect2()
 	var has_bounds: bool = false

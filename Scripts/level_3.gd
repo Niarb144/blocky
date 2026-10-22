@@ -9,18 +9,28 @@ var level_completing: bool = false
 @onready var level_camera: LevelCameraController = $LevelCamera
 
 
+
 func _ready() -> void:
 	AudioManager.play_game_audio()
-	
-	restore_saved_position()
-	
+
 	key.collected.connect(_on_key_collected)
 
 	setup_camera_limits()
 
+	if GameState.loading_from_save:
+		print("LEVEL: Loading saved checkpoint.")
+
+		restore_saved_position()
+
+		GameState.loading_from_save = false
+		return
+
+	print("LEVEL: Starting normally.")
+
 	await level_camera.play_level_preview(
 		key.global_position
 	)
+
 	
 
 
@@ -119,8 +129,14 @@ func restore_saved_position() -> void:
 		print("LEVEL: No sanctuary saved.")
 		return
 
-	var sanctuaries := get_tree().get_nodes_in_group(
-		"sanctuaries"
+	var sanctuaries := find_children(
+		"*",
+		"Node2D",
+		true,
+		false
+	).filter(
+		func(node: Node) -> bool:
+			return node.is_in_group("sanctuaries")
 	)
 
 	print("LEVEL: Sanctuaries found: ", sanctuaries.size())

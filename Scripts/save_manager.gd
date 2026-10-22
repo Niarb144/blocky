@@ -96,3 +96,34 @@ func has_save() -> bool:
 func delete_save() -> void:
 	if has_save():
 		DirAccess.remove_absolute(SAVE_PATH)
+
+
+func respawn_player() -> void:
+	print("SAVE MANAGER: Player respawning...")
+
+	if not load_game():
+		print("SAVE MANAGER: No checkpoint found.")
+
+		GameState.reset_for_new_game()
+		get_tree().paused = false
+
+		get_tree().change_scene_to_file(
+			GameState.current_level
+		)
+		return
+
+	# Spawn at the saved sanctuary.
+	GameState.loading_from_save = true
+
+	# Restore player resources.
+	GameState.health = GameState.MAX_HEALTH
+	GameState.ammo = GameState.MAX_AMMO
+
+	get_tree().paused = false
+
+	var error := get_tree().change_scene_to_file(
+		GameState.current_level
+	)
+
+	if error != OK:
+		push_error("SAVE MANAGER: Respawn failed!")

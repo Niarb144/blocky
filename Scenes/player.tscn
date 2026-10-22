@@ -2,6 +2,7 @@
 
 [ext_resource type="Script" uid="uid://bbtl2r2c2r8vv" path="res://Scripts/player.gd" id="1_v0iea"]
 [ext_resource type="Texture2D" uid="uid://0k4q8t2wdhy7" path="res://Assets/Player/SPRITE_SHEET.png" id="2_x3wgy"]
+[ext_resource type="Texture2D" uid="uid://bicfxrf5dji5j" path="res://Assets/Player/Ghostly Wisp Sprite Sheet.png" id="3_3smsa"]
 [ext_resource type="AudioStream" uid="uid://beuuk778oipq7" path="res://Assets/Sound/Footsteps/foley_footstep_concrete_4.wav" id="3_6t5aa"]
 [ext_resource type="AudioStream" uid="uid://3bxrlwngaoug" path="res://Assets/Sound/Environment/air_burst.wav" id="4_vgqql"]
 [ext_resource type="PackedScene" uid="uid://d3sgv5uogu1in" path="res://Scenes/hud.tscn" id="5_fkybt"]
@@ -193,6 +194,62 @@ region = Rect2(160, 128, 32, 32)
 [sub_resource type="AtlasTexture" id="AtlasTexture_57lvd"]
 atlas = ExtResource("2_x3wgy")
 region = Rect2(0, 160, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_h5cax"]
+atlas = ExtResource("3_3smsa")
+region = Rect2(0, 0, 256, 256)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_dj0x0"]
+atlas = ExtResource("3_3smsa")
+region = Rect2(256, 0, 256, 256)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_f1uaf"]
+atlas = ExtResource("3_3smsa")
+region = Rect2(512, 0, 256, 256)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_6hq81"]
+atlas = ExtResource("3_3smsa")
+region = Rect2(768, 0, 256, 256)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_ts2c8"]
+atlas = ExtResource("3_3smsa")
+region = Rect2(1024, 0, 256, 256)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_hcgbs"]
+atlas = ExtResource("3_3smsa")
+region = Rect2(1280, 0, 256, 256)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_mpfyg"]
+atlas = ExtResource("3_3smsa")
+region = Rect2(0, 256, 256, 256)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_un823"]
+atlas = ExtResource("3_3smsa")
+region = Rect2(256, 256, 256, 256)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_aclic"]
+atlas = ExtResource("3_3smsa")
+region = Rect2(512, 256, 256, 256)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_0y64g"]
+atlas = ExtResource("3_3smsa")
+region = Rect2(768, 256, 256, 256)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_ramv3"]
+atlas = ExtResource("3_3smsa")
+region = Rect2(1024, 256, 256, 256)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_hseb1"]
+atlas = ExtResource("3_3smsa")
+region = Rect2(1280, 256, 256, 256)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_vinow"]
+atlas = ExtResource("3_3smsa")
+region = Rect2(0, 512, 256, 256)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_awsf5"]
+atlas = ExtResource("3_3smsa")
+region = Rect2(256, 512, 256, 256)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_ie7r7"]
 atlas = ExtResource("2_x3wgy")
@@ -515,6 +572,53 @@ animations = [{
 }, {
 "frames": [{
 "duration": 1.0,
+"texture": SubResource("AtlasTexture_h5cax")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_dj0x0")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_f1uaf")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_6hq81")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_ts2c8")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_hcgbs")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_mpfyg")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_un823")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_aclic")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_0y64g")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_ramv3")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_hseb1")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_vinow")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_awsf5")
+}],
+"loop": 1,
+"name": &"new_idle",
+"speed": 12.0
+}, {
+"frames": [{
+"duration": 1.0,
 "texture": SubResource("AtlasTexture_ie7r7")
 }, {
 "duration": 1.0,
@@ -666,9 +770,8 @@ texture_filter = 1
 position = Vector2(15, 25)
 scale = Vector2(2, 2)
 sprite_frames = SubResource("SpriteFrames_4su2a")
-animation = &"shoot"
+animation = &"new_idle"
 autoplay = "idle"
-frame = 11
 
 [node name="FootstepPlayer" type="AudioStreamPlayer2D" parent="." unique_id=1931192078]
 stream = ExtResource("3_6t5aa")

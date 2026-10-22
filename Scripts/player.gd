@@ -766,6 +766,7 @@ func take_damage(amount: int, bypass_protection: bool = false) -> void:
 	animated_sprite.play("hurt")
 
 
+
 func die() -> void:
 	if is_dead:
 		return
@@ -774,13 +775,19 @@ func die() -> void:
 	is_hurt = false
 	is_dashing = false
 	is_invincible = false
+
 	cancel_attack()
+
 	velocity = Vector2.ZERO
+
 	footstep_player.stop()
 	dash_player.stop()
 
+	# Play the death animation.
 	animated_sprite.play("death")
+
+	# Wait until the death animation finishes.
 	await animated_sprite.animation_finished
 
-	# Restore health for the respawn.
-	GameState.health = GameState.MAX_HEALTH
+	# Return to the last saved sanctuary.
+	SaveManager.respawn_player()
