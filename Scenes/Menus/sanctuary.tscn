@@ -2,6 +2,7 @@
 
 [ext_resource type="Script" uid="uid://kwvcfhulbx4u" path="res://Scripts/sanctuary.gd" id="1_31wef"]
 [ext_resource type="Texture2D" uid="uid://co8c7l3eoxlw2" path="res://Assets/Items/sanctuary.png" id="1_mmpt5"]
+[ext_resource type="PackedScene" uid="uid://dv10pr8arn2j6" path="res://Scenes/Menus/sanctuary_upgrade_menu.tscn" id="3_34i5c"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_dkgl6"]
 size = Vector2(120, 133)
@@ -26,10 +27,39 @@ position = Vector2(-6, 41.5)
 shape = SubResource("RectangleShape2D_dkgl6")
 
 [node name="InteractionLabel" type="Label" parent="." unique_id=1234100417]
-offset_right = 40.0
-offset_bottom = 23.0
+offset_left = -69.0
+offset_top = -8.0
+offset_right = 71.0
+offset_bottom = 15.0
+text = "Press E to interact"
+
+[node name="InteractionMenu" type="Control" parent="." unique_id=1124088742]
+visible = false
+layout_mode = 3
+anchors_preset = 0
+offset_left = -19.0
+offset_top = -20.0
+offset_right = 21.0
+offset_bottom = 20.0
+
+[node name="VBoxContainer" type="VBoxContainer" parent="InteractionMenu" unique_id=180510902]
+layout_mode = 0
+offset_left = -26.0
+offset_top = -3.0
+offset_right = 64.0
+offset_bottom = 47.0
+
+[node name="RestOption" type="Label" parent="InteractionMenu/VBoxContainer" unique_id=1084871205]
+layout_mode = 2
+text = "Rest & Save"
+
+[node name="UpgradeOption" type="Label" parent="InteractionMenu/VBoxContainer" unique_id=1913284372]
+layout_mode = 2
+text = "Upgrade"
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="." unique_id=16326526]
+
+[node name="SanctuaryUpgradeMenu" parent="." unique_id=710872173 instance=ExtResource("3_34i5c")]
 
 [connection signal="body_entered" from="InteractionArea" to="." method="_on_interaction_area_body_entered"]
 [connection signal="body_exited" from="InteractionArea" to="." method="_on_interaction_area_body_exited"]

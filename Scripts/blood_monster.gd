@@ -40,6 +40,13 @@ var cooldown_remaining: float = 0.0
 var hurt_remaining: float = 0.0
 var attack_hit_checked: bool = false
 
+
+@export_group("Essence Reward")
+@export var essence_reward: int = 10
+
+var essence_awarded: bool = false
+
+
 var player: Node2D = null
 
 
@@ -248,7 +255,11 @@ func spawn_health_pickup(amount: int) -> void:
 
 	print("Blood monster dropped ", amount, " health.")
 
+
 func die() -> void:
+	if state == State.DEAD:
+		return
+
 	state = State.DEAD
 	velocity = Vector2.ZERO
 
@@ -256,10 +267,29 @@ func die() -> void:
 	set_deferred("collision_mask", 0)
 	attack_hitbox.set_deferred("monitoring", false)
 
+	# Award Essence exactly once.
+	award_essence()
+
+	# Preserve the existing health drop.
 	try_drop_health()
 
 	sprite.stop()
 	sprite.play("death")
+
+
+func award_essence() -> void:
+	if essence_awarded:
+		return
+
+	essence_awarded = true
+
+	GameState.add_essence(essence_reward)
+
+	print(
+		"Blood Monster defeated. +",
+		essence_reward,
+		" Essence"
+	)
 
 
 func _on_animation_finished() -> void:

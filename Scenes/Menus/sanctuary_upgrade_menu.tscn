@@ -1,0 +1,52 @@
+[gd_scene format=3 uid="uid://dv10pr8arn2j6"]
+
+[ext_resource type="Script" uid="uid://cauqkr6ucvo31" path="res://Scripts/sanctuary_upgrade_menu.gd" id="1_nn8b7"]
+
+[node name="SanctuaryUpgradeMenu" type="CanvasLayer" unique_id=710872173]
+process_mode = 3
+script = ExtResource("1_nn8b7")
+
+[node name="PanelContainer" type="PanelContainer" parent="." unique_id=615337344]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="PanelContainer" unique_id=727577804]
+layout_mode = 2
+
+[node name="TitleLabel" type="Label" parent="PanelContainer/VBoxContainer" unique_id=532101317]
+layout_mode = 2
+text = "Upgrade Player"
+horizontal_alignment = 1
+
+[node name="EssenceLabel" type="Label" parent="PanelContainer/VBoxContainer" unique_id=865870604]
+layout_mode = 2
+text = "Essence"
+horizontal_alignment = 1
+
+[node name="VitalityButton" type="Button" parent="PanelContainer/VBoxContainer" unique_id=1745770532]
+layout_mode = 2
+focus_mode = 0
+text = "Vitality"
+
+[node name="FerocityButton" type="Button" parent="PanelContainer/VBoxContainer" unique_id=435120523]
+layout_mode = 2
+focus_mode = 0
+text = "Ferocity"
+
+[node name="ConcentrationButton" type="Button" parent="PanelContainer/VBoxContainer" unique_id=1917971029]
+layout_mode = 2
+focus_mode = 0
+text = "Concentration"
+
+[node name="FluidityButton" type="Button" parent="PanelContainer/VBoxContainer" unique_id=282628190]
+layout_mode = 2
+focus_mode = 0
+text = "Fluidity"
+
+[node name="CloseButton" type="Button" parent="PanelContainer/VBoxContainer" unique_id=2032514174]
+layout_mode = 2
+focus_mode = 0
+text = "Close"

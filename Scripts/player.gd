@@ -41,7 +41,7 @@ var is_wall_grabbing: bool = false
 # Player health
 var max_health: int:
 	get:
-		return GameState.MAX_HEALTH
+		return GameState.get_max_health()
 
 var health: int:
 	get:
@@ -114,11 +114,30 @@ func _ready() -> void:
 	# These animations must emit animation_finished.
 	for animation_name in ["attack_1", "attack_2", "shoot", "hurt", "death"]:
 		animated_sprite.sprite_frames.set_animation_loop(animation_name, false)
+	
+	GameState.health_changed.connect(
+		_on_health_changed
+	)
+
+	GameState.max_health_changed.connect(
+		_on_max_health_changed
+	)
 
 	update_health_ui()
 
 	melee_hitbox.monitoring = true
 	update_combat_facing()
+
+func _on_health_changed(
+	_current_health: int,
+	_max_health: int
+) -> void:
+	update_health_ui()
+
+func _on_max_health_changed(
+	_new_max_health: int
+) -> void:
+	update_health_ui()
 	
 func update_health_ui() -> void:
 	health_label.text = "Health: %d/%d" % [health, max_health]
@@ -143,6 +162,11 @@ func _process(delta: float) -> void:
 
 	if Input.is_action_just_pressed("attack_ranged"):
 		ranged_attack()
+
+func get_melee_damage(base_damage: int) -> int:
+	return roundi(
+		base_damage * GameState.get_melee_multiplier()
+	)
 
 func melee_attack() -> void:
 	if is_dead or is_hurt or is_dashing:
@@ -251,7 +275,6 @@ func _on_animation_frame_changed() -> void:
 
 		return
 
-
 	# --------------------------------------------------------
 	# MELEE ATTACK
 	# --------------------------------------------------------
@@ -268,12 +291,15 @@ func _on_animation_frame_changed() -> void:
 			1, 2:
 				if animated_sprite.frame >= ATTACK_1_IMPACT_FRAME:
 					melee_hit_registered = true
-					check_melee_hits(ATTACK_1_DAMAGE)
+					check_melee_hits(get_melee_damage(ATTACK_1_DAMAGE)
+					)
 
 			3:
 				if animated_sprite.frame >= ATTACK_2_IMPACT_FRAME:
 					melee_hit_registered = true
-					check_melee_hits(ATTACK_2_DAMAGE)
+					check_melee_hits(
+						get_melee_damage(ATTACK_2_DAMAGE)
+					)
 
 
 	# --------------------------------------------------------
@@ -569,7 +595,9 @@ func start_dash() -> void:
 	dash_player.play()
 
 	dash_timer = DASH_DURATION
-	dash_cooldown_timer = DASH_COOLDOWN
+	dash_cooldown_timer = GameState.get_dash_cooldown(
+		DASH_COOLDOWN
+	)
 
 
 	# --------------------------------------------------------

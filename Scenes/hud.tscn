@@ -16,10 +16,17 @@ offset_bottom = -540.0
 grow_vertical = 0
 mouse_filter = 2
 
-[node name="AmmoLabel" type="Label" parent="MarginContainer" unique_id=1988418954]
+[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer" unique_id=1063092315]
+layout_mode = 2
+
+[node name="AmmoLabel" type="Label" parent="MarginContainer/VBoxContainer" unique_id=1988418954]
 layout_mode = 2
 theme_override_font_sizes/font_size = 24
 text = "6/6"
+
+[node name="EssenceLabel" type="Label" parent="MarginContainer/VBoxContainer" unique_id=1913619363]
+layout_mode = 2
+text = "0"
 
 [node name="HealthDisplay" type="VBoxContainer" parent="." unique_id=1304664558]
 offset_left = 48.0

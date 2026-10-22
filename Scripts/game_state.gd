@@ -3,37 +3,139 @@ extends Node
 
 signal ammo_changed(current_ammo: int, max_ammo: int)
 signal health_changed(current_health: int, max_health: int)
+signal essence_changed(amount: int)
+signal upgrade_purchased(stat: String, rank: int)
+signal max_health_changed(value: int)
 
 const MAX_AMMO: int = 6
 const MAX_HEALTH: int = 100
+const MAX_STAT_RANK: int = 5
 
 const STARTING_LEVEL: String = "res://Scenes/level.tscn"
 
+const UPGRADE_BASE_COSTS := {
+	"vitality": 50,
+	"ferocity": 60,
+	"concentration": 75,
+	"fluidity": 85
+}
+
+const UPGRADE_COST_INCREASE: int = 25
+
 var current_level: String = STARTING_LEVEL
 var last_sanctuary_id: String = ""
-
 var loading_from_save: bool = false
 
+# Progression
+var essence: int = 0:
+	set(value):
+		essence = maxi(value, 0)
+		essence_changed.emit(essence)
+
+var vitality: int = 0
+var ferocity: int = 0
+var concentration: int = 0
+var fluidity: int = 0
+
+# Resources
 var ammo: int = MAX_AMMO:
 	set(value):
-		var new_amount: int = clampi(value, 0, MAX_AMMO)
-
-		if ammo == new_amount:
-			return
-
-		ammo = new_amount
+		ammo = clampi(value, 0, MAX_AMMO)
 		ammo_changed.emit(ammo, MAX_AMMO)
-
 
 var health: int = MAX_HEALTH:
 	set(value):
-		var new_amount: int = clampi(value, 0, MAX_HEALTH)
+		health = clampi(value, 0, get_max_health())
+		health_changed.emit(health, get_max_health())
 
-		if health == new_amount:
-			return
 
-		health = new_amount
-		health_changed.emit(health, MAX_HEALTH)
+func get_max_health() -> int:
+	return MAX_HEALTH + vitality * 10
+
+
+func get_melee_multiplier() -> float:
+	return 1.0 + ferocity * 0.05
+
+
+func get_ranged_multiplier() -> float:
+	return 1.0 + concentration * 0.07
+
+
+func get_dash_cooldown(base_cooldown: float) -> float:
+	return maxf(
+		base_cooldown * (1.0 - fluidity * 0.03),
+		0.1
+	)
+
+
+func add_essence(amount: int) -> void:
+	if amount <= 0:
+		return
+
+	essence += amount
+
+
+func get_stat_rank(stat: String) -> int:
+	match stat:
+		"vitality":
+			return vitality
+		"ferocity":
+			return ferocity
+		"concentration":
+			return concentration
+		"fluidity":
+			return fluidity
+		_:
+			return -1
+
+
+func get_upgrade_cost(stat: String) -> int:
+	if not UPGRADE_BASE_COSTS.has(stat):
+		return -1
+
+	var rank: int = get_stat_rank(stat)
+
+	if rank >= MAX_STAT_RANK:
+		return -1
+
+	return (
+		int(UPGRADE_BASE_COSTS[stat])
+		+ rank * UPGRADE_COST_INCREASE
+	)
+
+
+func purchase_upgrade(stat: String) -> bool:
+	var cost: int = get_upgrade_cost(stat)
+
+	if cost < 0 or essence < cost:
+		return false
+
+	var old_max_health: int = get_max_health()
+
+	match stat:
+		"vitality":
+			vitality += 1
+		"ferocity":
+			ferocity += 1
+		"concentration":
+			concentration += 1
+		"fluidity":
+			fluidity += 1
+		_:
+			return false
+
+	essence -= cost
+
+	if stat == "vitality":
+		var increase: int = get_max_health() - old_max_health
+		health += increase
+		max_health_changed.emit(get_max_health())
+
+	upgrade_purchased.emit(stat, get_stat_rank(stat))
+
+	print("Purchased ", stat, " upgrade.")
+
+	return true
 
 
 func reset_for_new_game() -> void:
@@ -41,10 +143,18 @@ func reset_for_new_game() -> void:
 	last_sanctuary_id = ""
 	loading_from_save = false
 
+	vitality = 0
+	ferocity = 0
+	concentration = 0
+	fluidity = 0
+	essence = 0
+
 	ammo = MAX_AMMO
-	health = MAX_HEALTH
+	health = get_max_health()
+
+	max_health_changed.emit(get_max_health())
 
 
 func rest_at_sanctuary() -> void:
-	health = MAX_HEALTH
+	health = get_max_health()
 	ammo = MAX_AMMO
