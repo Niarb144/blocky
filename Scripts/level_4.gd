@@ -11,6 +11,9 @@ var level_completing: bool = false
 
 func _ready() -> void:
 	AudioManager.play_game_audio()
+	
+	restore_saved_position()
+	
 	key.collected.connect(_on_key_collected)
 
 	setup_camera_limits()
@@ -18,6 +21,7 @@ func _ready() -> void:
 	await level_camera.play_level_preview(
 		key.global_position
 	)
+	
 
 
 func setup_camera_limits() -> void:
@@ -104,3 +108,39 @@ func _load_next_level() -> void:
 	get_tree().change_scene_to_file(
         "res://Scenes/Levels/boss_level.tscn"
 	)
+
+
+
+func restore_saved_position() -> void:
+	print("LEVEL: Attempting to restore saved position.")
+	print("LEVEL: Sanctuary ID: ", GameState.last_sanctuary_id)
+
+	if GameState.last_sanctuary_id.is_empty():
+		print("LEVEL: No sanctuary saved.")
+		return
+
+	var sanctuaries := get_tree().get_nodes_in_group(
+		"sanctuaries"
+	)
+
+	print("LEVEL: Sanctuaries found: ", sanctuaries.size())
+
+	for sanctuary in sanctuaries:
+		print("LEVEL: Checking sanctuary: ", sanctuary.sanctuary_id)
+
+		if sanctuary.sanctuary_id == GameState.last_sanctuary_id:
+			var spawn_point: Marker2D = sanctuary.get_node(
+				"SpawnPoint"
+			)
+
+			player.global_position = spawn_point.global_position
+			player.velocity = Vector2.ZERO
+
+			print(
+				"LEVEL: Player restored to: ",
+				player.global_position
+			)
+
+			return
+
+	push_warning("LEVEL: Saved sanctuary not found!")

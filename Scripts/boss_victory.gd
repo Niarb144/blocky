@@ -2,7 +2,7 @@
 extends Control
 
 @export_file("*.tscn") var main_menu_scene: String = (
-	"res://Scenes/main_menu.tscn"
+	"res://Scenes/Menus/main_menu.tscn"
 )
 
 @onready var fade_overlay: ColorRect = $FadeOverlay

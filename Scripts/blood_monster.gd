@@ -16,7 +16,7 @@ const HEALTH_PICKUP = preload("res://Scenes/health_pickup.tscn")
 @export var patrol_distance: float = 120.0
 @export var detection_range: float = 220.0
 
-@export var attack_range: float = 38.0
+@export var attack_range: float = 40.0
 @export var attack_height: float = 30.0
 @export var attack_cooldown: float = 0.8
 @export var attack_hit_frame: int = 4
@@ -290,7 +290,6 @@ func award_essence() -> void:
 		essence_reward,
 		" Essence"
 	)
-
 
 func _on_animation_finished() -> void:
 	if state == State.DEAD and sprite.animation == &"death":

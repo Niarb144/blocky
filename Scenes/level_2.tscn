@@ -10,6 +10,7 @@
 [ext_resource type="PackedScene" uid="uid://bsorrher1qut0" path="res://Scenes/vertical_platform.tscn" id="7_uhnj4"]
 [ext_resource type="PackedScene" uid="uid://dlso7w47fu3py" path="res://Scenes/exit.tscn" id="8_uhnj4"]
 [ext_resource type="PackedScene" uid="uid://cii0llieji8t8" path="res://Scenes/loot_box.tscn" id="11_t7v2y"]
+[ext_resource type="PackedScene" uid="uid://b16tqfkoxav17" path="res://Scenes/Enemies/demon.tscn" id="11_yvrk7"]
 [ext_resource type="PackedScene" uid="uid://e1cvky88fq2e" path="res://Scenes/Enemies/blood_monster.tscn" id="12_ait6c"]
 [ext_resource type="PackedScene" uid="uid://cymqpxymbk8vq" path="res://Scenes/Camera/level_camera.tscn" id="13_bl0du"]
 [ext_resource type="PackedScene" uid="uid://n0t1tl40chtx" path="res://Scenes/wall.tscn" id="13_vcilj"]
@@ -94,6 +95,11 @@ position = Vector2(193, 316)
 [node name="BloodMonster4" parent="Enemies" unique_id=884785815 instance=ExtResource("12_ait6c")]
 position = Vector2(64, 571)
 attack_damage = 20
+
+[node name="Demon" parent="Enemies" unique_id=457790117 instance=ExtResource("11_yvrk7")]
+position = Vector2(209.00002, 576)
+detection_range = 300.0
+attack_range = 42.0
 
 [node name="Floor" parent="." unique_id=814889798 instance=ExtResource("14_bl0du")]
 position = Vector2(26, 71)

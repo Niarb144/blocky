@@ -11,14 +11,14 @@ const HEALTH_PICKUP = preload("res://Scenes/health_pickup.tscn")
 @export var max_health: int = 100
 @export var attack_damage: int = 25
 
-@export var patrol_speed: float = 60.0
+@export var patrol_speed: float = 50.0
 @export var chase_speed: float = 150.0
 @export var patrol_distance: float = 200.0
 @export var detection_range: float = 280.0
 
 @export var attack_range: float = 40.0
 @export var attack_height: float = 30.0
-@export var attack_cooldown: float = 0.3
+@export var attack_cooldown: float = 0.2
 @export var attack_hit_frame: int = 6
 
 @export var hurt_duration: float = 0.1
@@ -39,6 +39,11 @@ var facing: float = 1.0
 var cooldown_remaining: float = 0.0
 var hurt_remaining: float = 0.0
 var attack_hit_checked: bool = false
+
+@export_group("Essence Reward")
+@export var essence_reward: int = 10
+
+var essence_awarded: bool = false
 
 var player: Node2D = null
 
@@ -227,9 +232,7 @@ func try_drop_health() -> void:
 func roll_health_amount() -> int:
 	var roll: float = randf()
 
-	if roll < 0.50:
-		return 25
-	elif roll < 0.80:
+	if roll < 0.80:
 		return 50
 	elif roll < 0.95:
 		return 75
@@ -246,7 +249,7 @@ func spawn_health_pickup(amount: int) -> void:
 
 	pickup.global_position = global_position + health_drop_offset
 
-	print("Blood monster dropped ", amount, " health.")
+	print("Demon dropped ", amount, " health.")
 
 func die() -> void:
 	state = State.DEAD
@@ -255,12 +258,28 @@ func die() -> void:
 	set_deferred("collision_layer", 0)
 	set_deferred("collision_mask", 0)
 	attack_hitbox.set_deferred("monitoring", false)
+	
+	# Award Essence exactly once.
+	award_essence()
 
 	try_drop_health()
 
 	sprite.stop()
 	sprite.play("death")
 
+func award_essence() -> void:
+	if essence_awarded:
+		return
+
+	essence_awarded = true
+
+	GameState.add_essence(essence_reward)
+
+	print(
+		"Demon defeated. +",
+		essence_reward,
+		" Essence"
+	)
 
 func _on_animation_finished() -> void:
 	if state == State.DEAD and sprite.animation == &"death":

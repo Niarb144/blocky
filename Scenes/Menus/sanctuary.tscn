@@ -27,10 +27,10 @@ position = Vector2(-6, 41.5)
 shape = SubResource("RectangleShape2D_dkgl6")
 
 [node name="InteractionLabel" type="Label" parent="." unique_id=1234100417]
-offset_left = -69.0
-offset_top = -8.0
-offset_right = 71.0
-offset_bottom = 15.0
+offset_left = -74.0
+offset_top = -28.0
+offset_right = 66.0
+offset_bottom = -5.0
 text = "Press E to interact"
 
 [node name="InteractionMenu" type="Control" parent="." unique_id=1124088742]
