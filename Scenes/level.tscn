@@ -10,6 +10,7 @@
 [ext_resource type="PackedScene" uid="uid://n0t1tl40chtx" path="res://Scenes/wall.tscn" id="5_wqkje"]
 [ext_resource type="PackedScene" uid="uid://ct65nio4604bm" path="res://Scenes/key.tscn" id="6_0f350"]
 [ext_resource type="PackedScene" uid="uid://dlso7w47fu3py" path="res://Scenes/exit.tscn" id="7_8c0lf"]
+[ext_resource type="PackedScene" uid="uid://tgud2hohabgu" path="res://Scenes/Enemies/ranged_enemy.tscn" id="7_nngtn"]
 [ext_resource type="PackedScene" uid="uid://dm3ame74n0v0p" path="res://Scenes/Environment/floor.tscn" id="8_crh0w"]
 [ext_resource type="PackedScene" uid="uid://cii0llieji8t8" path="res://Scenes/loot_box.tscn" id="10_oqgf2"]
 [ext_resource type="PackedScene" uid="uid://e1cvky88fq2e" path="res://Scenes/Enemies/blood_monster.tscn" id="12_ha31o"]
@@ -128,6 +129,18 @@ position = Vector2(622, 58)
 
 [node name="Demon" parent="Enemies" unique_id=457790117 instance=ExtResource("13_pa6b8")]
 position = Vector2(731, 413)
+
+[node name="RangedEnemy" parent="Enemies" unique_id=1968279562 instance=ExtResource("7_nngtn")]
+position = Vector2(231, 528)
+scale = Vector2(1.5, 1.5)
+player_aim_offset = Vector2(0, 25)
+max_ammo_drops = 6
+
+[node name="RangedEnemy2" parent="Enemies" unique_id=226042973 instance=ExtResource("7_nngtn")]
+position = Vector2(58, 473)
+scale = Vector2(1.5, 1.5)
+player_aim_offset = Vector2(0, 25)
+max_ammo_drops = 6
 
 [node name="LevelCamera" parent="." unique_id=1078575189 instance=ExtResource("14_crh0w")]
 position = Vector2(1, 0)
