@@ -1,6 +1,7 @@
 [gd_scene format=3 uid="uid://cymqpxymbk8vq"]
 
 [ext_resource type="Script" uid="uid://ch0m2vps6m15w" path="res://Scripts/camera_vision.gd" id="1_t3oty"]
+[ext_resource type="Script" uid="uid://730mn5sjk4b6" path="res://Scripts/screen_shake.gd" id="2_4kdfr"]
 
 [node name="LevelCamera" type="Camera2D" unique_id=1078575189]
 zoom = Vector2(1.5, 1.5)
@@ -20,3 +21,6 @@ grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
 color = Color(0.0627451, 0.17254902, 0.39607844, 1)
+
+[node name="ScreenShake" type="Node" parent="." unique_id=1583610331]
+script = ExtResource("2_4kdfr")

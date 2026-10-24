@@ -46,6 +46,14 @@ var attack_hit_checked: bool = false
 
 var essence_awarded: bool = false
 
+const BLOOD_HIT_PARTICLES = preload(
+	"res://Scenes/VisualEffects/blood_hit_particles.tscn"
+)
+
+@export_group("Hit Feedback")
+@export var blood_hit_offset: Vector2 = Vector2(0, -8)
+@export var hit_shake_strength: float = 2.0
+@export var hit_shake_duration: float = 0.12
 
 var player: Node2D = null
 
@@ -202,18 +210,19 @@ func check_attack_hit() -> void:
 			body.take_damage(attack_damage)
 			break
 
-
 func take_damage(amount: int) -> void:
 	if state == State.DEAD or amount <= 0:
 		return
 
 	health = maxi(health - amount, 0)
 
+	# Runs for normal hits and killing blows.
+	play_hit_feedback()
+
 	if health == 0:
 		die()
 		return
 
-	# Taking damage interrupts an unfinished attack.
 	state = State.HURT
 	velocity.x = 0.0
 	hurt_remaining = hurt_duration
@@ -221,6 +230,32 @@ func take_damage(amount: int) -> void:
 
 	sprite.stop()
 	sprite.play("hurt")
+	
+func play_hit_feedback() -> void:
+	spawn_blood_particles.call_deferred(
+		global_position + blood_hit_offset
+	)
+
+	get_tree().call_group(
+		"screen_shake",
+		"shake",
+		hit_shake_strength,
+		hit_shake_duration
+	)
+
+
+func spawn_blood_particles(hit_position: Vector2) -> void:
+	var scene: Node2D = get_tree().current_scene as Node2D
+
+	if not is_instance_valid(scene):
+		return
+
+	var particles: CPUParticles2D = (
+		BLOOD_HIT_PARTICLES.instantiate() as CPUParticles2D
+	)
+
+	particles.position = scene.to_local(hit_position)
+	scene.add_child(particles)
 
 func try_drop_health() -> void:
 	if randf() > health_drop_chance:
