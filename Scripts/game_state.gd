@@ -1,4 +1,3 @@
-
 extends Node
 
 signal ammo_changed(current_ammo: int, max_ammo: int)
@@ -47,6 +46,67 @@ var health: int = MAX_HEALTH:
 	set(value):
 		health = clampi(value, 0, get_max_health())
 		health_changed.emit(health, get_max_health())
+
+
+# ============================================
+# WORLD PROGRESSION
+# ============================================
+
+var collected_keys: Dictionary = {}
+
+# Sanctuaries the player has discovered.
+# sanctuary_id -> level scene path
+var discovered_sanctuaries: Dictionary = {}
+
+# Temporary scene-entry information.
+var pending_spawn_id: String = ""
+
+# Prevent multiple simultaneous scene transitions.
+var is_transitioning: bool = false
+
+
+func collect_key(key_id: String) -> void:
+	if key_id.is_empty():
+		return
+
+	if collected_keys.get(key_id, false):
+		return
+
+	collected_keys[key_id] = true
+
+	print("GAMESTATE: Collected key: ", key_id)
+
+
+func has_key(key_id: String) -> bool:
+	return collected_keys.get(key_id, false)
+
+
+func discover_sanctuary(
+	sanctuary_id: String,
+	level_path: String
+) -> void:
+	if sanctuary_id.is_empty():
+		return
+
+	if not ResourceLoader.exists(level_path):
+		return
+
+	discovered_sanctuaries[sanctuary_id] = level_path
+
+	print("GAMESTATE: Discovered ", sanctuary_id)
+
+
+func has_discovered_sanctuary(
+	sanctuary_id: String
+) -> bool:
+	return discovered_sanctuaries.has(sanctuary_id)
+
+
+func reset_level_progress() -> void:
+	collected_keys.clear()
+	discovered_sanctuaries.clear()
+	pending_spawn_id = ""
+	is_transitioning = false
 
 
 func get_max_health() -> int:
@@ -153,7 +213,8 @@ func reset_for_new_game() -> void:
 	health = get_max_health()
 
 	max_health_changed.emit(get_max_health())
-
+	
+	reset_level_progress()
 
 func rest_at_sanctuary() -> void:
 	health = get_max_health()

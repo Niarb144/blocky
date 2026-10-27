@@ -33,8 +33,17 @@ position = Vector2(818, 501)
 [node name="Player" parent="." unique_id=378940393 instance=ExtResource("3_wqkje")]
 position = Vector2(30, 531)
 
-[node name="Exit" parent="." unique_id=1250166314 instance=ExtResource("7_8c0lf")]
+[node name="Exits" type="Node2D" parent="." unique_id=915114804]
+
+[node name="ExitForward" parent="Exits" unique_id=1250166314 instance=ExtResource("7_8c0lf")]
 position = Vector2(1101, 563)
+destination_level = "uid://cqedh1l12m4xb"
+required_key_id = "catacomb_key"
+
+[node name="ExitBackward" parent="Exits" unique_id=1637528820 instance=ExtResource("7_8c0lf")]
+position = Vector2(48, 451)
+destination_level = "uid://l8g82b7pjvfy"
+required_key_id = "abyssal_key"
 
 [node name="Environment" type="Node" parent="." unique_id=1934851109]
 
@@ -102,8 +111,16 @@ position = Vector2(-14, 0)
 [node name="wall2" parent="Wall" unique_id=1012958784 instance=ExtResource("5_wqkje")]
 position = Vector2(1140, -3)
 
-[node name="Key" parent="." unique_id=98689350 instance=ExtResource("6_0f350")]
+[node name="Keys" type="Node2D" parent="." unique_id=1483075902]
+
+[node name="Key" parent="Keys" unique_id=98689350 instance=ExtResource("6_0f350")]
 position = Vector2(1095, 56)
+float_height = 6.0
+
+[node name="BossKey" parent="Keys" unique_id=993921855 instance=ExtResource("6_0f350")]
+position = Vector2(776, 58.000004)
+key_id = "abyssal_key"
+float_height = 6.0
 
 [node name="LootBox" parent="." unique_id=2075987227 instance=ExtResource("10_oqgf2")]
 position = Vector2(708, 548)
@@ -146,3 +163,4 @@ max_ammo_drops = 6
 position = Vector2(1, 0)
 
 [node name="PauseMenu" parent="." unique_id=485495646 instance=ExtResource("15_c7le1")]
+visible = false
