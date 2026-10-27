@@ -165,7 +165,6 @@ position = Vector2(712, 568)
 [node name="LevelCamera" parent="." unique_id=1078575189 instance=ExtResource("14_gxyip")]
 
 [node name="PauseMenu" parent="." unique_id=485495646 instance=ExtResource("15_gxyip")]
-visible = false
 
 [node name="EntryPoints" type="Node2D" parent="." unique_id=100638385]
 

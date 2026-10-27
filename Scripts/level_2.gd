@@ -5,7 +5,7 @@ var level_completing: bool = false
 
 @onready var player: CharacterBody2D = $Player
 @onready var level_camera: LevelCameraController = $LevelCamera
-@onready var keys_root: Node2D = $Keys
+@onready var keys_root: Node2D = get_node_or_null("Keys")
 
 
 func _ready() -> void:
@@ -66,7 +66,14 @@ func restore_entry_position() -> void:
 	print("LEVEL: Entered through ", spawn_id)
 	
 
+
 func preview_uncollected_key() -> void:
+	# This level does not contain a Keys container.
+	if keys_root == null:
+		print("LEVEL: No keys in this level.")
+		return
+
+	# Search for an uncollected key.
 	for key_node in keys_root.get_children():
 		if not is_instance_valid(key_node):
 			continue
@@ -77,16 +84,21 @@ func preview_uncollected_key() -> void:
 		if not key_node is Area2D:
 			continue
 
-		if not key_node.get("key_id") is String:
+		var key_id: Variant = key_node.get("key_id")
+
+		if not key_id is String:
 			continue
 
-		if GameState.has_key(key_node.key_id):
+		if GameState.has_key(key_id):
 			continue
 
+		# Preview the first uncollected key.
 		await level_camera.play_level_preview(
 			key_node.global_position
 		)
 		return
+
+	print("LEVEL: No uncollected keys to preview.")
 
 
 func setup_camera_limits() -> void:

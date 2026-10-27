@@ -6,7 +6,6 @@
 [ext_resource type="PackedScene" uid="uid://b0t4haiu51rei" path="res://Scenes/ground.tscn" id="3_cggpd"]
 [ext_resource type="PackedScene" uid="uid://dkor4sx15paw2" path="res://Scenes/platform.tscn" id="4_055b2"]
 [ext_resource type="PackedScene" uid="uid://c44tluv7u3xer" path="res://Scenes/horizontal_platform.tscn" id="5_v36qu"]
-[ext_resource type="PackedScene" uid="uid://ct65nio4604bm" path="res://Scenes/key.tscn" id="7_2mgoq"]
 [ext_resource type="PackedScene" uid="uid://bsorrher1qut0" path="res://Scenes/vertical_platform.tscn" id="7_uhnj4"]
 [ext_resource type="PackedScene" uid="uid://dlso7w47fu3py" path="res://Scenes/exit.tscn" id="8_uhnj4"]
 [ext_resource type="PackedScene" uid="uid://cii0llieji8t8" path="res://Scenes/loot_box.tscn" id="11_t7v2y"]
@@ -104,12 +103,6 @@ attack_range = 42.0
 [node name="Floor" parent="." unique_id=814889798 instance=ExtResource("14_bl0du")]
 position = Vector2(26, 71)
 
-[node name="Keys" type="Node2D" parent="." unique_id=640096727]
-
-[node name="Key" parent="Keys" unique_id=98689350 instance=ExtResource("7_2mgoq")]
-position = Vector2(992, 60)
-key_id = "abyssal_key"
-
 [node name="Exits" type="Node2D" parent="." unique_id=1182720163]
 
 [node name="ExitForward" parent="Exits" unique_id=1250166314 instance=ExtResource("8_uhnj4")]
@@ -135,4 +128,3 @@ position = Vector2(56, 457)
 [node name="LevelCamera" parent="." unique_id=1078575189 instance=ExtResource("13_bl0du")]
 
 [node name="PauseMenu" parent="." unique_id=485495646 instance=ExtResource("15_q0ycs")]
-visible = false
