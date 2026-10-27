@@ -221,34 +221,37 @@ func rest_at_sanctuary() -> void:
 	ammo =+1
 
 
+
 func fast_travel(sanctuary_id: String) -> void:
 	if is_transitioning:
 		return
 
 	if not has_discovered_sanctuary(sanctuary_id):
-		push_warning("Sanctuary not discovered.")
+		push_warning("Sanctuary has not been discovered.")
 		return
 
-	var level_path: String = str(
+	var destination: String = str(
 		discovered_sanctuaries[sanctuary_id]
 	)
 
-	if not ResourceLoader.exists(level_path):
-		push_error("Fast travel destination missing.")
+	if not ResourceLoader.exists(destination):
+		push_error("Fast travel scene does not exist.")
 		return
 
 	is_transitioning = true
 
+	# Normal travel, not checkpoint loading.
 	loading_from_save = false
+
 	pending_spawn_id = "sanctuary:" + sanctuary_id
 
 	get_tree().paused = false
 
 	var error := get_tree().change_scene_to_file(
-		level_path
+		destination
 	)
 
 	if error != OK:
 		is_transitioning = false
 		pending_spawn_id = ""
-		push_error("Fast travel failed.")
+		push_error("Failed to fast travel.")

@@ -33,11 +33,11 @@ layout_mode = 2
 text = "Fast Travel
 "
 
-[node name="DestinationList" type="ItemList" parent="PanelContainer/VBoxContainer" unique_id=2081407924]
+[node name="DestinationList" type="VBoxContainer" parent="PanelContainer/VBoxContainer" unique_id=78883422]
 layout_mode = 2
 
-[node name="TravelButton" type="Button" parent="PanelContainer/VBoxContainer" unique_id=1558621090]
+[node name="InstructionsLabel" type="Label" parent="PanelContainer/VBoxContainer" unique_id=2127524828]
 layout_mode = 2
-
-[node name="BackButton" type="Button" parent="PanelContainer/VBoxContainer" unique_id=325767764]
-layout_mode = 2
+text = "Use arrows to scroll and E to travel
+Esc: back
+"
