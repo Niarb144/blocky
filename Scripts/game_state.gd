@@ -218,4 +218,37 @@ func reset_for_new_game() -> void:
 
 func rest_at_sanctuary() -> void:
 	health = get_max_health()
-	ammo = MAX_AMMO
+	ammo =+1
+
+
+func fast_travel(sanctuary_id: String) -> void:
+	if is_transitioning:
+		return
+
+	if not has_discovered_sanctuary(sanctuary_id):
+		push_warning("Sanctuary not discovered.")
+		return
+
+	var level_path: String = str(
+		discovered_sanctuaries[sanctuary_id]
+	)
+
+	if not ResourceLoader.exists(level_path):
+		push_error("Fast travel destination missing.")
+		return
+
+	is_transitioning = true
+
+	loading_from_save = false
+	pending_spawn_id = "sanctuary:" + sanctuary_id
+
+	get_tree().paused = false
+
+	var error := get_tree().change_scene_to_file(
+		level_path
+	)
+
+	if error != OK:
+		is_transitioning = false
+		pending_spawn_id = ""
+		push_error("Fast travel failed.")

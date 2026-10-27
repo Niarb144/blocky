@@ -7,10 +7,10 @@
 [ext_resource type="PackedScene" uid="uid://n0t1tl40chtx" path="res://Scenes/wall.tscn" id="4_di0d6"]
 [ext_resource type="PackedScene" uid="uid://c44tluv7u3xer" path="res://Scenes/horizontal_platform.tscn" id="5_54c2w"]
 [ext_resource type="PackedScene" uid="uid://bsorrher1qut0" path="res://Scenes/vertical_platform.tscn" id="6_3v663"]
-[ext_resource type="PackedScene" uid="uid://bf7jnur6y6ilg" path="res://Scenes/Menus/sanctuary.tscn" id="7_b8ytw"]
 [ext_resource type="PackedScene" uid="uid://ct65nio4604bm" path="res://Scenes/key.tscn" id="7_w8kbg"]
 [ext_resource type="PackedScene" uid="uid://co3pmufuv2hic" path="res://Scenes/player.tscn" id="8_gxyip"]
 [ext_resource type="PackedScene" uid="uid://e1cvky88fq2e" path="res://Scenes/Enemies/blood_monster.tscn" id="9_3ntyy"]
+[ext_resource type="PackedScene" uid="uid://tgud2hohabgu" path="res://Scenes/Enemies/ranged_enemy.tscn" id="9_b8ytw"]
 [ext_resource type="PackedScene" uid="uid://dm3ame74n0v0p" path="res://Scenes/Environment/floor.tscn" id="9_w8kbg"]
 [ext_resource type="PackedScene" uid="uid://dlso7w47fu3py" path="res://Scenes/exit.tscn" id="10_di0d6"]
 [ext_resource type="PackedScene" uid="uid://cii0llieji8t8" path="res://Scenes/loot_box.tscn" id="11_54c2w"]
@@ -21,9 +21,6 @@
 script = ExtResource("1_54c2w")
 
 [node name="ParallaxBackground" parent="." unique_id=1498009889 instance=ExtResource("1_5a8oa")]
-
-[node name="Sanctuary" parent="." unique_id=1161900835 instance=ExtResource("7_b8ytw")]
-position = Vector2(1445, 421)
 
 [node name="Wall" type="Node" parent="." unique_id=1862009662]
 
@@ -130,20 +127,37 @@ patrol_distance = 150.0
 detection_range = 180.0
 hurt_duration = 0.1
 
+[node name="RangedEnemy" parent="Enemies" unique_id=1968279562 instance=ExtResource("9_b8ytw")]
+position = Vector2(1365, 518)
+scale = Vector2(1.5, 1.5)
+
 [node name="Floor" parent="." unique_id=814889798 instance=ExtResource("9_w8kbg")]
 position = Vector2(83, 83)
 
 [node name="Key" parent="." unique_id=98689350 instance=ExtResource("7_w8kbg")]
 position = Vector2(1124, 510)
+key_id = "abyssal_key"
 
 [node name="Player" parent="." unique_id=378940393 instance=ExtResource("8_gxyip")]
-position = Vector2(43, 487)
+position = Vector2(80, 507)
 
-[node name="Exit" parent="." unique_id=1250166314 instance=ExtResource("10_di0d6")]
+[node name="Exits" type="Node2D" parent="." unique_id=1527553560]
+
+[node name="BossEntrance" parent="Exits" unique_id=1250166314 instance=ExtResource("10_di0d6")]
 position = Vector2(724, 96)
+destination_level = "uid://u3ggqiej4hia"
+required_key_id = "abyssal_key"
+
+[node name="ExitBackward" parent="Exits" unique_id=428397167 instance=ExtResource("10_di0d6")]
+position = Vector2(40, 511)
+destination_level = "uid://cqedh1l12m4xb"
+destination_spawn_id = "EntryFromNext"
 
 [node name="LootBox" parent="." unique_id=2075987227 instance=ExtResource("11_54c2w")]
 position = Vector2(202, 242)
+
+[node name="LootBox3" parent="." unique_id=166983130 instance=ExtResource("11_54c2w")]
+position = Vector2(1411, 495)
 
 [node name="LootBox2" parent="." unique_id=807110069 instance=ExtResource("11_54c2w")]
 position = Vector2(712, 568)
@@ -151,3 +165,12 @@ position = Vector2(712, 568)
 [node name="LevelCamera" parent="." unique_id=1078575189 instance=ExtResource("14_gxyip")]
 
 [node name="PauseMenu" parent="." unique_id=485495646 instance=ExtResource("15_gxyip")]
+visible = false
+
+[node name="EntryPoints" type="Node2D" parent="." unique_id=100638385]
+
+[node name="EntryFromPrevious" type="Marker2D" parent="EntryPoints" unique_id=728193715]
+position = Vector2(94, 529)
+
+[node name="EntryFromNext" type="Marker2D" parent="EntryPoints" unique_id=37307741]
+position = Vector2(678, 115)

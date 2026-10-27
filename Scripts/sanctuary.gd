@@ -205,7 +205,13 @@ func activate_sanctuary() -> void:
 	# Store the checkpoint level and sanctuary ID.
 	GameState.current_level = level.scene_file_path
 	GameState.last_sanctuary_id = sanctuary_id
-
+	
+	# Unlock this sanctuary for fast travel.
+	GameState.discover_sanctuary(
+		sanctuary_id,
+		level.scene_file_path
+	)
+	
 	# Restore health and ammunition.
 	GameState.rest_at_sanctuary()
 

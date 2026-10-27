@@ -21,16 +21,34 @@ script = ExtResource("1_n4vm5")
 [node name="ParallaxBackground" parent="." unique_id=1498009889 instance=ExtResource("2_fxnjf")]
 
 [node name="Player" parent="." unique_id=378940393 instance=ExtResource("5_j77fg")]
-position = Vector2(1, 349)
+position = Vector2(51.999996, 351)
 
 [node name="Killzone" parent="." unique_id=659923190 instance=ExtResource("6_ki8bc")]
 position = Vector2(45, 266)
 
-[node name="Key" parent="." unique_id=98689350 instance=ExtResource("7_nbwsh")]
-position = Vector2(502, 129)
+[node name="Keys" type="Node2D" parent="." unique_id=2020637057]
 
-[node name="Exit" parent="." unique_id=1250166314 instance=ExtResource("8_kgmqw")]
+[node name="Key" parent="Keys" unique_id=98689350 instance=ExtResource("7_nbwsh")]
+position = Vector2(502, 129)
+key_id = "depths_key"
+
+[node name="Exits" type="Node2D" parent="." unique_id=2023189499]
+
+[node name="ExitForward" parent="Exits" unique_id=1250166314 instance=ExtResource("8_kgmqw")]
 position = Vector2(1109, 148)
+destination_level = "uid://ccok8ielebepk"
+
+[node name="ExitBackward" parent="Exits" unique_id=745001140 instance=ExtResource("8_kgmqw")]
+position = Vector2(12, 358)
+destination_level = "uid://d2yqcbr0awqct"
+
+[node name="EntryPoints" type="Node2D" parent="." unique_id=319102978]
+
+[node name="EntryFromPrevious" type="Marker2D" parent="EntryPoints" unique_id=1985091069]
+position = Vector2(67, 372)
+
+[node name="EntryFromNext" type="Marker2D" parent="EntryPoints" unique_id=1434927473]
+position = Vector2(1061, 158)
 
 [node name="Platforms" type="Node" parent="." unique_id=1580338734]
 
@@ -72,3 +90,4 @@ position = Vector2(-60, 51)
 [node name="LevelCamera" parent="." unique_id=1078575189 instance=ExtResource("12_n4vm5")]
 
 [node name="PauseMenu" parent="." unique_id=485495646 instance=ExtResource("14_fxnjf")]
+visible = false

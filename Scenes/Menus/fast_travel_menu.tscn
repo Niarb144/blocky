@@ -1,0 +1,43 @@
+[gd_scene format=3 uid="uid://b3146ec1koaf"]
+
+[ext_resource type="Script" uid="uid://dxhaekwmey4o2" path="res://Scripts/fast_travel_menu.gd" id="1_twt5t"]
+
+[node name="FastTravelMenu" type="Control" unique_id=1826293021]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_twt5t")
+
+[node name="PanelContainer" type="PanelContainer" parent="." unique_id=9631042]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -42.0
+offset_top = -38.5
+offset_right = 42.0
+offset_bottom = 38.5
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="PanelContainer" unique_id=928664766]
+layout_mode = 2
+
+[node name="TitleLabel" type="Label" parent="PanelContainer/VBoxContainer" unique_id=910194953]
+layout_mode = 2
+text = "Fast Travel
+"
+
+[node name="DestinationList" type="ItemList" parent="PanelContainer/VBoxContainer" unique_id=2081407924]
+layout_mode = 2
+
+[node name="TravelButton" type="Button" parent="PanelContainer/VBoxContainer" unique_id=1558621090]
+layout_mode = 2
+
+[node name="BackButton" type="Button" parent="PanelContainer/VBoxContainer" unique_id=325767764]
+layout_mode = 2

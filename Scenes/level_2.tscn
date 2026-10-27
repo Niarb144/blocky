@@ -28,7 +28,7 @@ position = Vector2(1311, 485)
 sanctuary_id = "sanctuary_02"
 
 [node name="Player" parent="." unique_id=378940393 instance=ExtResource("2_v36qu")]
-position = Vector2(14, 94)
+position = Vector2(87, 114)
 
 [node name="Platform" type="Node" parent="." unique_id=1101752635]
 
@@ -104,11 +104,30 @@ attack_range = 42.0
 [node name="Floor" parent="." unique_id=814889798 instance=ExtResource("14_bl0du")]
 position = Vector2(26, 71)
 
-[node name="Key" parent="." unique_id=98689350 instance=ExtResource("7_2mgoq")]
-position = Vector2(992, 60)
+[node name="Keys" type="Node2D" parent="." unique_id=640096727]
 
-[node name="Exit" parent="." unique_id=1250166314 instance=ExtResource("8_uhnj4")]
+[node name="Key" parent="Keys" unique_id=98689350 instance=ExtResource("7_2mgoq")]
+position = Vector2(992, 60)
+key_id = "abyssal_key"
+
+[node name="Exits" type="Node2D" parent="." unique_id=1182720163]
+
+[node name="ExitForward" parent="Exits" unique_id=1250166314 instance=ExtResource("8_uhnj4")]
 position = Vector2(37, 310)
+destination_level = "uid://u3ggqiej4hia"
+
+[node name="ExitBackward" parent="Exits" unique_id=1295816183 instance=ExtResource("8_uhnj4")]
+position = Vector2(49, 117)
+destination_level = "uid://d2yqcbr0awqct"
+destination_spawn_id = "EntryFromNext"
+
+[node name="EntryPoints" type="Node2D" parent="." unique_id=991666743]
+
+[node name="EntryFromPrevious" type="Marker2D" parent="EntryPoints" unique_id=697544061]
+position = Vector2(100, 132)
+
+[node name="EntryFromNext" type="Marker2D" parent="EntryPoints" unique_id=1449992798]
+position = Vector2(98, 320)
 
 [node name="LootBox" parent="." unique_id=2075987227 instance=ExtResource("11_t7v2y")]
 position = Vector2(56, 457)
@@ -116,3 +135,4 @@ position = Vector2(56, 457)
 [node name="LevelCamera" parent="." unique_id=1078575189 instance=ExtResource("13_bl0du")]
 
 [node name="PauseMenu" parent="." unique_id=485495646 instance=ExtResource("15_q0ycs")]
+visible = false
