@@ -26,6 +26,9 @@ visible = false
 
 [node name="ParallaxBackground" parent="." unique_id=1498009889 instance=ExtResource("2_754fn")]
 
+[node name="Sanctuary" parent="." unique_id=1161900835 instance=ExtResource("4_2klc5")]
+position = Vector2(818, 501)
+
 [node name="Player" parent="." unique_id=378940393 instance=ExtResource("3_wqkje")]
 position = Vector2(30, 531)
 
@@ -48,9 +51,6 @@ position = Vector2(113, 457)
 
 [node name="EntryFromPrevious" type="Marker2D" parent="EntryPoints" unique_id=1197622153]
 position = Vector2(1058, 567)
-
-[node name="Sanctuary" parent="." unique_id=1161900835 instance=ExtResource("4_2klc5")]
-position = Vector2(818, 501)
 
 [node name="Environment" type="Node" parent="." unique_id=1934851109]
 
@@ -133,33 +133,44 @@ position = Vector2(708, 548)
 position = Vector2(503, 580)
 attack_cooldown = 0.4
 hurt_duration = 0.15
+enemy_id = "blood_monster_01"
 
 [node name="BloodMonster2" parent="Enemies" unique_id=1551111832 instance=ExtResource("12_ha31o")]
 position = Vector2(626, 418)
+enemy_id = "blood_monster_02"
 
 [node name="BloodMonster3" parent="Enemies" unique_id=1620346080 instance=ExtResource("12_ha31o")]
 position = Vector2(364, 244)
+enemy_id = "blood_monster_03"
 
 [node name="BloodMonster4" parent="Enemies" unique_id=1867232326 instance=ExtResource("12_ha31o")]
 position = Vector2(875, 56)
+enemy_id = "blood_monster_04"
 
 [node name="BloodMonster5" parent="Enemies" unique_id=1334108039 instance=ExtResource("12_ha31o")]
 position = Vector2(622, 58)
+enemy_id = "blood_monster_05"
 
 [node name="Demon" parent="Enemies" unique_id=457790117 instance=ExtResource("13_pa6b8")]
 position = Vector2(731, 413)
+enemy_id = "demon_01"
+essence_reward = 15
+hit_shake_strength = 2.5
+hit_shake_duration = 0.16
 
 [node name="RangedEnemy" parent="Enemies" unique_id=1968279562 instance=ExtResource("7_nngtn")]
 position = Vector2(231, 528)
 scale = Vector2(1.5, 1.5)
 player_aim_offset = Vector2(0, 25)
 max_ammo_drops = 6
+enemy_id = "ranged_enemy_01"
 
 [node name="RangedEnemy2" parent="Enemies" unique_id=226042973 instance=ExtResource("7_nngtn")]
 position = Vector2(58, 473)
 scale = Vector2(1.5, 1.5)
 player_aim_offset = Vector2(0, 25)
 max_ammo_drops = 6
+enemy_id = "ranged_enemy_02"
 
 [node name="LevelCamera" parent="." unique_id=1078575189 instance=ExtResource("14_crh0w")]
 position = Vector2(1, 0)

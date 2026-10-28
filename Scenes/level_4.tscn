@@ -109,12 +109,15 @@ position = Vector2(1123, 384)
 
 [node name="BloodMonster" parent="Enemies" unique_id=519510292 instance=ExtResource("9_3ntyy")]
 position = Vector2(245, 424)
+enemy_id = "blood_monster_01"
 
 [node name="BloodMonster2" parent="Enemies" unique_id=889119725 instance=ExtResource("9_3ntyy")]
 position = Vector2(808, 592)
+enemy_id = "blood_monster_02"
 
 [node name="BloodMonster3" parent="Enemies" unique_id=187738534 instance=ExtResource("9_3ntyy")]
 position = Vector2(376, 263)
+enemy_id = "blood_monster_03"
 
 [node name="BloodMonster4" parent="Enemies" unique_id=1586124484 instance=ExtResource("9_3ntyy")]
 position = Vector2(57.000004, 260)
@@ -126,15 +129,20 @@ chase_speed = 80.0
 patrol_distance = 150.0
 detection_range = 180.0
 hurt_duration = 0.1
+enemy_id = "blood_monster_04"
+essence_reward = 14
 
 [node name="RangedEnemy" parent="Enemies" unique_id=1968279562 instance=ExtResource("9_b8ytw")]
 position = Vector2(1365, 518)
 scale = Vector2(1.5, 1.5)
+enemy_id = "ranged_enemy_01"
 
 [node name="Floor" parent="." unique_id=814889798 instance=ExtResource("9_w8kbg")]
 position = Vector2(83, 83)
 
-[node name="Key" parent="." unique_id=98689350 instance=ExtResource("7_w8kbg")]
+[node name="Keys" type="Node2D" parent="." unique_id=197289983]
+
+[node name="Key" parent="Keys" unique_id=98689350 instance=ExtResource("7_w8kbg")]
 position = Vector2(1124, 510)
 key_id = "abyssal_key"
 

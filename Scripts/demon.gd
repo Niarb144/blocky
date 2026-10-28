@@ -30,6 +30,8 @@ const HEALTH_PICKUP = preload("res://Scenes/health_pickup.tscn")
 @onready var attack_hitbox: Area2D = $CombatPivot/AttackHitbox
 @onready var ground_check: RayCast2D = $GroundCheck
 @onready var sight_check: RayCast2D = $SightCheck
+@export_group("Persistence")
+@export var enemy_id: String = ""
 
 var state: State = State.PATROL
 var health: int = 0
@@ -58,6 +60,9 @@ var player: Node2D = null
 
 
 func _ready() -> void:
+	if restore_enemy_state():
+		return
+
 	health = max_health
 	spawn_x = global_position.x
 
@@ -104,6 +109,46 @@ func _physics_process(delta: float) -> void:
 
 	move_and_slide()
 
+func restore_enemy_state() -> bool:
+	if enemy_id.is_empty():
+		push_warning(
+			"Enemy persistence ID missing: " + name
+		)
+		return false
+
+	var level := get_tree().current_scene
+
+	if level == null:
+		return false
+
+	if GameState.is_enemy_defeated(
+		level.scene_file_path,
+		enemy_id
+	):
+		print("ENEMY: Already defeated: ", enemy_id)
+
+		# Stop interaction immediately.
+		process_mode = Node.PROCESS_MODE_DISABLED
+
+		# Remove this enemy instance.
+		queue_free()
+		return true
+
+	return false
+
+func record_enemy_defeat() -> void:
+	if enemy_id.is_empty():
+		return
+
+	var level := get_tree().current_scene
+
+	if level == null:
+		return
+
+	GameState.register_enemy_defeat(
+		level.scene_file_path,
+		enemy_id
+	)
 
 func can_detect_player() -> bool:
 	if not is_instance_valid(player):
@@ -289,16 +334,24 @@ func spawn_health_pickup(amount: int) -> void:
 	print("Demon dropped ", amount, " health.")
 
 func die() -> void:
+	if state == State.DEAD:
+		return
+
 	state = State.DEAD
+		
+	# Record death before unloading the level.
+	record_enemy_defeat()
+		
 	velocity = Vector2.ZERO
 
 	set_deferred("collision_layer", 0)
 	set_deferred("collision_mask", 0)
 	attack_hitbox.set_deferred("monitoring", false)
-	
+
 	# Award Essence exactly once.
 	award_essence()
 
+	# Preserve the existing health drop.
 	try_drop_health()
 
 	sprite.stop()

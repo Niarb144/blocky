@@ -251,7 +251,9 @@ func respawn_player() -> void:
 			push_error("Failed to restart game.")
 
 		return
-
+	#Load Enemy
+	GameState.reset_enemy_progress()
+	
 	# ----------------------------------------------
 	# RESTORE PLAYER RESOURCES
 	# ----------------------------------------------

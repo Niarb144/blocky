@@ -215,6 +215,7 @@ func reset_for_new_game() -> void:
 	max_health_changed.emit(get_max_health())
 	
 	reset_level_progress()
+	reset_enemy_progress()
 
 func rest_at_sanctuary() -> void:
 	health = get_max_health()
@@ -255,3 +256,64 @@ func fast_travel(sanctuary_id: String) -> void:
 		is_transitioning = false
 		pending_spawn_id = ""
 		push_error("Failed to fast travel.")
+
+# ==================================================
+# ENEMY PERSISTENCE
+# ==================================================
+
+# Tracks defeated enemies during the current run.
+# This data is NOT written into SaveManager.
+#
+# Example:
+# {
+#     "res://Scenes/level.tscn": {
+#         "blood_monster_01": true,
+#         "blood_monster_02": true
+#     }
+# }
+
+var defeated_enemies: Dictionary = {}
+
+
+# Record an enemy as defeated.
+func register_enemy_defeat(
+	level_path: String,
+	enemy_id: String
+) -> void:
+
+	if level_path.is_empty() or enemy_id.is_empty():
+		return
+
+	if not defeated_enemies.has(level_path):
+		defeated_enemies[level_path] = {}
+
+	defeated_enemies[level_path][enemy_id] = true
+
+	print(
+		"GAMESTATE: Enemy defeated: ",
+		enemy_id,
+		" in ",
+		level_path
+	)
+
+
+# Check whether an enemy was defeated.
+func is_enemy_defeated(
+	level_path: String,
+	enemy_id: String
+) -> bool:
+
+	if not defeated_enemies.has(level_path):
+		return false
+
+	return defeated_enemies[level_path].get(
+		enemy_id,
+		false
+	)
+
+
+# Restore regular enemies after player death.
+func reset_enemy_progress() -> void:
+	defeated_enemies.clear()
+
+	print("GAMESTATE: Enemy population reset.")

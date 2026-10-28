@@ -4,8 +4,7 @@ var level_completing: bool = false
 
 @onready var player: CharacterBody2D = $Player
 @onready var level_camera: LevelCameraController = $LevelCamera
-@onready var keys_root: Node2D = $Keys
-
+@onready var keys_root: Node2D = get_node_or_null("Keys")
 
 func _ready() -> void:
 	AudioManager.play_game_audio()
