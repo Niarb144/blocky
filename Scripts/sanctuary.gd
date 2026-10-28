@@ -1,4 +1,3 @@
-
 extends Node2D
 
 # ==================================================
@@ -9,26 +8,24 @@ extends Node2D
 # Each sanctuary in the game should have its own ID.
 @export var sanctuary_id: String = "sanctuary_01"
 
-
 # ==================================================
 # PLAYER INTERACTION STATE
 # ==================================================
 
-# Whether the player is inside the interaction area.
 var player_nearby: bool = false
 
-# Reference to the player currently interacting.
 var player: CharacterBody2D = null
 
-# Whether the upgrade menu is currently open.
+# Whether a sanctuary submenu is currently open.
 var upgrade_menu_open: bool = false
+var fast_travel_menu_open: bool = false
 
-# Current selection:
 # 0 = Rest & Save
 # 1 = Upgrade
+# 2 = Fast Travel
 var selected_option: int = 0
 
-const OPTION_COUNT: int = 2
+const OPTION_COUNT: int = 3
 
 
 # ==================================================
@@ -45,9 +42,17 @@ const OPTION_COUNT: int = 2
 @onready var rest_option: Label = $InteractionMenu/VBoxContainer/RestOption
 @onready var upgrade_option: Label = $InteractionMenu/VBoxContainer/UpgradeOption
 
+@onready var fast_travel_option: Label = (
+	$InteractionMenu/VBoxContainer/FastTravelOption
+)
+
+@onready var fast_travel_menu = (
+	$FastTravelMenu
+)
+
+
 # Existing reusable upgrade menu scene.
 @onready var upgrade_menu = $SanctuaryUpgradeMenu
-
 
 # ==================================================
 # INITIALIZATION
@@ -63,32 +68,32 @@ func _ready() -> void:
 		_on_upgrade_menu_closed
 	)
 
+	fast_travel_menu.menu_closed.connect(
+		_on_fast_travel_menu_closed
+	)
 
 # ==================================================
 # INPUT HANDLING
 # ==================================================
 
 func _unhandled_input(event: InputEvent) -> void:
-	# Ignore input when the player is not nearby
-	# or the upgrade menu is already open.
-	if not player_nearby or upgrade_menu_open:
+	if not player_nearby:
 		return
 
-	# Only respond to new key presses.
+	if upgrade_menu_open or fast_travel_menu_open:
+		return
+
 	if not event.is_pressed() or event.is_echo():
 		return
 
-	# Navigate upward.
 	if event.is_action("ui_up"):
 		change_selection(-1)
 		get_viewport().set_input_as_handled()
 
-	# Navigate downward.
 	elif event.is_action("ui_down"):
 		change_selection(1)
 		get_viewport().set_input_as_handled()
 
-	# Confirm the currently selected option.
 	elif event.is_action("interact"):
 		confirm_selection()
 		get_viewport().set_input_as_handled()
@@ -114,27 +119,30 @@ func change_selection(direction: int) -> void:
 # ==================================================
 
 func update_options() -> void:
-	# Add an arrow to the selected option.
-	if selected_option == 0:
-		rest_option.text = "> Rest & Save"
-		upgrade_option.text = "  Upgrade"
-	else:
-		rest_option.text = "  Rest & Save"
-		upgrade_option.text = "> Upgrade"
+	var options: Array[Label] = [
+		rest_option,
+		upgrade_option,
+		fast_travel_option
+	]
 
-	# Highlight the selected option.
-	rest_option.modulate = (
-		Color(0.5, 0.8, 1.0)
-		if selected_option == 0
-		else Color.WHITE
-	)
+	var names: Array[String] = [
+		"Rest & Save",
+		"Upgrade",
+		"Fast Travel"
+	]
 
-	upgrade_option.modulate = (
-		Color(0.5, 0.8, 1.0)
-		if selected_option == 1
-		else Color.WHITE
-	)
+	for i in range(options.size()):
+		var selected: bool = (i == selected_option)
 
+		options[i].text = (
+			"> " if selected else "  "
+		) + names[i]
+
+		options[i].modulate = (
+			Color(0.5, 0.8, 1.0)
+			if selected
+			else Color.WHITE
+		)
 
 # ==================================================
 # CONFIRM SELECTED ACTION
@@ -147,6 +155,9 @@ func confirm_selection() -> void:
 
 		1:
 			open_upgrade_menu()
+			
+		2: 
+			open_fast_travel_menu()
 
 
 # ==================================================
@@ -191,6 +202,48 @@ func _on_upgrade_menu_closed() -> void:
 
 
 # ==================================================
+# OPEN FAST TRAVEL MENU
+# ==================================================
+
+func open_fast_travel_menu() -> void:
+	if fast_travel_menu_open:
+		return
+
+	# Rest and save progress before fast travel.
+	activate_sanctuary()
+
+	fast_travel_menu_open = true
+
+	# Hide sanctuary interaction UI.
+	interaction_menu.hide()
+	interaction_label.hide()
+
+	# Disable player movement and combat.
+	if is_instance_valid(player):
+		player.velocity = Vector2.ZERO
+		player.controls_enabled = false
+
+	# Open the destination menu.
+	fast_travel_menu.open_menu(sanctuary_id)
+
+
+# ==================================================
+# FAST TRAVEL MENU CLOSED
+# ==================================================
+
+func _on_fast_travel_menu_closed() -> void:
+	fast_travel_menu_open = false
+
+	if is_instance_valid(player):
+		player.controls_enabled = true
+
+	if player_nearby:
+		interaction_menu.show()
+		interaction_label.show()
+		update_options()
+
+
+# ==================================================
 # REST AND SAVE
 # ==================================================
 
@@ -205,7 +258,13 @@ func activate_sanctuary() -> void:
 	# Store the checkpoint level and sanctuary ID.
 	GameState.current_level = level.scene_file_path
 	GameState.last_sanctuary_id = sanctuary_id
-
+	
+	# Unlock this sanctuary for fast travel.
+	GameState.discover_sanctuary(
+		sanctuary_id,
+		level.scene_file_path
+	)
+	
 	# Restore health and ammunition.
 	GameState.rest_at_sanctuary()
 
@@ -252,9 +311,11 @@ func _on_interaction_area_body_exited(
 
 	player_nearby = false
 
-	# Hide interaction elements.
 	interaction_label.hide()
 	interaction_menu.hide()
 
-	# Clear the player reference.
+	# Keep the reference while a submenu is open.
+	if upgrade_menu_open or fast_travel_menu_open:
+		return
+
 	player = null

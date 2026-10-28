@@ -1,27 +1,90 @@
-
 extends Node2D
 
-var has_key: bool = false
 var level_completing: bool = false
 
-@onready var key = $Key
 @onready var player: CharacterBody2D = $Player
 @onready var level_camera: LevelCameraController = $LevelCamera
-
+@onready var keys_root: Node2D = get_node_or_null("Keys")
 
 func _ready() -> void:
 	AudioManager.play_game_audio()
-	
-	restore_saved_position()
-	
-	key.collected.connect(_on_key_collected)
 
 	setup_camera_limits()
 
-	await level_camera.play_level_preview(
-		key.global_position
+	# Restore sanctuary checkpoint.
+	if GameState.loading_from_save:
+		GameState.loading_from_save = false
+		GameState.pending_spawn_id = ""
+
+		restore_saved_position()
+		GameState.is_transitioning = false
+		return
+
+	# Entering through another level or fast travel.
+	if not GameState.pending_spawn_id.is_empty():
+		restore_entry_position()
+
+		GameState.is_transitioning = false
+		return
+
+	GameState.is_transitioning = false
+
+	# Normal new-game start.
+	await preview_uncollected_key()
+
+
+func restore_entry_position() -> void:
+	var spawn_id: String = GameState.pending_spawn_id
+
+	GameState.pending_spawn_id = ""
+
+	if spawn_id.begins_with("sanctuary:"):
+		var sanctuary_id := spawn_id.trim_prefix(
+			"sanctuary:"
+		)
+
+		if place_at_sanctuary(sanctuary_id):
+			print("LEVEL: Arrived by fast travel.")
+		return
+
+	var spawn_marker: Marker2D = get_node_or_null(
+		"EntryPoints/" + spawn_id
 	)
+
+	if spawn_marker == null:
+		push_error(
+			"LEVEL: Entry marker missing: ",
+			spawn_id
+		)
+		return
+
+	player.global_position = spawn_marker.global_position
+	player.velocity = Vector2.ZERO
+
+	print("LEVEL: Entered through ", spawn_id)
 	
+
+func preview_uncollected_key() -> void:
+	for key_node in keys_root.get_children():
+		if not is_instance_valid(key_node):
+			continue
+
+		if key_node.is_queued_for_deletion():
+			continue
+
+		if not key_node is Area2D:
+			continue
+
+		if not key_node.get("key_id") is String:
+			continue
+
+		if GameState.has_key(key_node.key_id):
+			continue
+
+		await level_camera.play_level_preview(
+			key_node.global_position
+		)
+		return
 
 
 func setup_camera_limits() -> void:
@@ -86,61 +149,46 @@ func setup_camera_limits() -> void:
 	level_camera.limit_bottom = ceili(bounds.end.y)
 
 
-func _on_key_collected() -> void:
-	has_key = true
-	print("LEVEL: Key collected!")
-
-
-func complete_level() -> void:
-	if level_completing:
-		return
-
-	level_completing = true
-
-	AudioManager.play_exit()
-
-	print("LEVEL COMPLETE!")
-
-	call_deferred("_load_next_level")
-
-
-func _load_next_level() -> void:
-	get_tree().change_scene_to_file(
-        "res://Scenes/Levels/boss_level.tscn"
-	)
-
-
 
 func restore_saved_position() -> void:
-	print("LEVEL: Attempting to restore saved position.")
-	print("LEVEL: Sanctuary ID: ", GameState.last_sanctuary_id)
-
 	if GameState.last_sanctuary_id.is_empty():
-		print("LEVEL: No sanctuary saved.")
 		return
+
+	if not place_at_sanctuary(
+		GameState.last_sanctuary_id
+	):
+		push_warning(
+			"LEVEL: Saved sanctuary not found."
+		)
+
+
+func place_at_sanctuary(
+	sanctuary_id: String
+) -> bool:
 
 	var sanctuaries := get_tree().get_nodes_in_group(
 		"sanctuaries"
 	)
 
-	print("LEVEL: Sanctuaries found: ", sanctuaries.size())
-
 	for sanctuary in sanctuaries:
-		print("LEVEL: Checking sanctuary: ", sanctuary.sanctuary_id)
+		if not is_ancestor_of(sanctuary):
+			continue
 
-		if sanctuary.sanctuary_id == GameState.last_sanctuary_id:
-			var spawn_point: Marker2D = sanctuary.get_node(
-				"SpawnPoint"
-			)
+		if sanctuary.sanctuary_id != sanctuary_id:
+			continue
 
-			player.global_position = spawn_point.global_position
-			player.velocity = Vector2.ZERO
+		var marker: Marker2D = sanctuary.get_node_or_null(
+			"SpawnPoint"
+		)
 
-			print(
-				"LEVEL: Player restored to: ",
-				player.global_position
-			)
+		if marker == null:
+			push_error("SANCTUARY: SpawnPoint missing.")
+			return false
 
-			return
+		player.global_position = marker.global_position
+		player.velocity = Vector2.ZERO
 
-	push_warning("LEVEL: Saved sanctuary not found!")
+		print("LEVEL: Spawned at ", sanctuary_id)
+		return true
+
+	return false

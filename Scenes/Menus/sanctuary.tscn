@@ -3,6 +3,7 @@
 [ext_resource type="Script" uid="uid://kwvcfhulbx4u" path="res://Scripts/sanctuary.gd" id="1_31wef"]
 [ext_resource type="Texture2D" uid="uid://co8c7l3eoxlw2" path="res://Assets/Items/sanctuary.png" id="1_mmpt5"]
 [ext_resource type="PackedScene" uid="uid://dv10pr8arn2j6" path="res://Scenes/Menus/sanctuary_upgrade_menu.tscn" id="3_34i5c"]
+[ext_resource type="PackedScene" uid="uid://b3146ec1koaf" path="res://Scenes/Menus/fast_travel_menu.tscn" id="4_yd5rg"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_dkgl6"]
 size = Vector2(120, 133)
@@ -27,10 +28,10 @@ position = Vector2(-6, 41.5)
 shape = SubResource("RectangleShape2D_dkgl6")
 
 [node name="InteractionLabel" type="Label" parent="." unique_id=1234100417]
-offset_left = -74.0
-offset_top = -28.0
-offset_right = 66.0
-offset_bottom = -5.0
+offset_left = -73.0
+offset_top = -51.0
+offset_right = 67.0
+offset_bottom = -28.0
 text = "Press E to interact"
 
 [node name="InteractionMenu" type="Control" parent="." unique_id=1124088742]
@@ -57,9 +58,16 @@ text = "Rest & Save"
 layout_mode = 2
 text = "Upgrade"
 
+[node name="FastTravelOption" type="Label" parent="InteractionMenu/VBoxContainer" unique_id=1091792250]
+layout_mode = 2
+text = "Fast Travel
+"
+
 [node name="AnimationPlayer" type="AnimationPlayer" parent="." unique_id=16326526]
 
 [node name="SanctuaryUpgradeMenu" parent="." unique_id=710872173 instance=ExtResource("3_34i5c")]
+
+[node name="FastTravelMenu" parent="." unique_id=1826293021 instance=ExtResource("4_yd5rg")]
 
 [connection signal="body_entered" from="InteractionArea" to="." method="_on_interaction_area_body_entered"]
 [connection signal="body_exited" from="InteractionArea" to="." method="_on_interaction_area_body_exited"]

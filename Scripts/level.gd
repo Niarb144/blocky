@@ -1,9 +1,6 @@
 extends Node2D
 
-var has_key: bool = false
 var level_completing: bool = false
-
-@onready var key = $Key
 
 @onready var player: CharacterBody2D = $Player
 @onready var level_camera: LevelCameraController = $LevelCamera

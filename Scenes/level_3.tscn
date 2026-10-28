@@ -21,16 +21,31 @@ script = ExtResource("1_n4vm5")
 [node name="ParallaxBackground" parent="." unique_id=1498009889 instance=ExtResource("2_fxnjf")]
 
 [node name="Player" parent="." unique_id=378940393 instance=ExtResource("5_j77fg")]
-position = Vector2(1, 349)
+position = Vector2(51.999996, 351)
 
-[node name="Killzone" parent="." unique_id=659923190 instance=ExtResource("6_ki8bc")]
-position = Vector2(45, 266)
+[node name="Keys" type="Node2D" parent="." unique_id=2020637057]
 
-[node name="Key" parent="." unique_id=98689350 instance=ExtResource("7_nbwsh")]
+[node name="Key" parent="Keys" unique_id=98689350 instance=ExtResource("7_nbwsh")]
 position = Vector2(502, 129)
+key_id = "depths_key"
 
-[node name="Exit" parent="." unique_id=1250166314 instance=ExtResource("8_kgmqw")]
+[node name="Exits" type="Node2D" parent="." unique_id=2023189499]
+
+[node name="ExitForward" parent="Exits" unique_id=1250166314 instance=ExtResource("8_kgmqw")]
 position = Vector2(1109, 148)
+destination_level = "uid://ccok8ielebepk"
+
+[node name="ExitBackward" parent="Exits" unique_id=745001140 instance=ExtResource("8_kgmqw")]
+position = Vector2(12, 358)
+destination_level = "uid://d2yqcbr0awqct"
+
+[node name="EntryPoints" type="Node2D" parent="." unique_id=319102978]
+
+[node name="EntryFromPrevious" type="Marker2D" parent="EntryPoints" unique_id=1985091069]
+position = Vector2(67, 372)
+
+[node name="EntryFromNext" type="Marker2D" parent="EntryPoints" unique_id=1434927473]
+position = Vector2(1061, 158)
 
 [node name="Platforms" type="Node" parent="." unique_id=1580338734]
 
@@ -50,6 +65,9 @@ position = Vector2(658, 196)
 [node name="VerticalPlatform" parent="Platforms" unique_id=431834089 instance=ExtResource("12_yykrm")]
 position = Vector2(434, 217)
 
+[node name="Killzone" parent="." unique_id=659923190 instance=ExtResource("6_ki8bc")]
+position = Vector2(45, 266)
+
 [node name="Wall" type="Node" parent="." unique_id=550001810]
 
 [node name="wall" parent="Wall" unique_id=908506835 instance=ExtResource("9_s80er")]
@@ -60,11 +78,15 @@ position = Vector2(1176.0001, 544)
 rotation = 3.1377895
 scale = Vector2(1.1200001, 1.0799998)
 
-[node name="BloodMonster" parent="." unique_id=519510292 instance=ExtResource("11_jtv8s")]
-position = Vector2(300, 375)
+[node name="Enemies" type="Node" parent="." unique_id=1974121863]
 
-[node name="BloodMonster2" parent="." unique_id=1261297648 instance=ExtResource("11_jtv8s")]
+[node name="BloodMonster2" parent="Enemies" unique_id=1261297648 instance=ExtResource("11_jtv8s")]
 position = Vector2(1058, 157)
+enemy_id = "blood_monster_02"
+
+[node name="BloodMonster" parent="Enemies" unique_id=519510292 instance=ExtResource("11_jtv8s")]
+position = Vector2(300, 375)
+enemy_id = "blood_monster_01"
 
 [node name="Floor" parent="." unique_id=814889798 instance=ExtResource("11_c81s1")]
 position = Vector2(-60, 51)
