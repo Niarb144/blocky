@@ -17,6 +17,8 @@
 [ext_resource type="PackedScene" uid="uid://b16tqfkoxav17" path="res://Scenes/Enemies/demon.tscn" id="13_pa6b8"]
 [ext_resource type="PackedScene" uid="uid://cymqpxymbk8vq" path="res://Scenes/Camera/level_camera.tscn" id="14_crh0w"]
 [ext_resource type="PackedScene" uid="uid://dr3uxaw58fdsc" path="res://Scenes/Menus/pause_menu.tscn" id="15_c7le1"]
+[ext_resource type="PackedScene" uid="uid://kskg1h8tkhu5" path="res://Scenes/Traps/arrow_trap.tscn" id="16_vofx3"]
+[ext_resource type="PackedScene" uid="uid://df7ygb5fsbydx" path="res://Scenes/Traps/fire_trap.tscn" id="19_00k4y"]
 
 [node name="level_1" type="Node2D" unique_id=11141250]
 script = ExtResource("1_754fn")
@@ -30,7 +32,7 @@ visible = false
 position = Vector2(818, 501)
 
 [node name="Player" parent="." unique_id=378940393 instance=ExtResource("3_wqkje")]
-position = Vector2(30, 531)
+position = Vector2(44, 168.99998)
 
 [node name="Exits" type="Node2D" parent="." unique_id=915114804]
 
@@ -172,7 +174,20 @@ player_aim_offset = Vector2(0, 25)
 max_ammo_drops = 6
 enemy_id = "ranged_enemy_02"
 
+[node name="ArrowTrap" parent="Enemies" unique_id=884872353 instance=ExtResource("16_vofx3")]
+position = Vector2(402, 567)
+rotation = 3.1415927
+
+[node name="ArrowTrap2" parent="Enemies" unique_id=838706813 instance=ExtResource("16_vofx3")]
+position = Vector2(1021, 574)
+rotation = 1.5707964
+firing_direction = 2
+
 [node name="LevelCamera" parent="." unique_id=1078575189 instance=ExtResource("14_crh0w")]
 position = Vector2(1, 0)
 
 [node name="PauseMenu" parent="." unique_id=485495646 instance=ExtResource("15_c7le1")]
+visible = false
+
+[node name="FireTrap" parent="." unique_id=1559824784 instance=ExtResource("19_00k4y")]
+position = Vector2(460, 600)
