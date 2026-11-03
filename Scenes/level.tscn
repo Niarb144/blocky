@@ -38,8 +38,7 @@ position = Vector2(44, 168.99998)
 
 [node name="ExitForward" parent="Exits" unique_id=1250166314 instance=ExtResource("7_8c0lf")]
 position = Vector2(1101, 563)
-destination_level = "uid://cqedh1l12m4xb"
-required_key_id = "catacomb_key"
+destination_level = "uid://d2yiup6n3wh6"
 
 [node name="ExitBackward" parent="Exits" unique_id=1637528820 instance=ExtResource("7_8c0lf")]
 position = Vector2(48, 451)
@@ -187,7 +186,6 @@ firing_direction = 2
 position = Vector2(1, 0)
 
 [node name="PauseMenu" parent="." unique_id=485495646 instance=ExtResource("15_c7le1")]
-visible = false
 
 [node name="FireTrap" parent="." unique_id=1559824784 instance=ExtResource("19_00k4y")]
 position = Vector2(460, 600)
