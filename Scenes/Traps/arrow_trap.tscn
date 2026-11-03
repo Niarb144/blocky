@@ -1,0 +1,88 @@
+[gd_scene format=3 uid="uid://kskg1h8tkhu5"]
+
+[ext_resource type="Script" uid="uid://dwpa7obnysfpa" path="res://Scripts/arrow_trap.gd" id="1_bobt7"]
+[ext_resource type="PackedScene" uid="uid://dy5bjrrh8pg3w" path="res://Scenes/Projectiles/trap_arrow.tscn" id="2_c1nae"]
+[ext_resource type="Texture2D" uid="uid://cames5801iyv" path="res://Assets/Items/Shooter_Arrow_Trap.png" id="2_gdjkb"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_c1nae"]
+atlas = ExtResource("2_gdjkb")
+region = Rect2(0, 0, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_hbqxw"]
+atlas = ExtResource("2_gdjkb")
+region = Rect2(16, 0, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_j7t4a"]
+atlas = ExtResource("2_gdjkb")
+region = Rect2(32, 0, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_8mtjs"]
+atlas = ExtResource("2_gdjkb")
+region = Rect2(48, 0, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_ymelc"]
+atlas = ExtResource("2_gdjkb")
+region = Rect2(64, 0, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_f85af"]
+atlas = ExtResource("2_gdjkb")
+region = Rect2(80, 0, 16, 16)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_4su2a"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_c1nae")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_hbqxw")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_j7t4a")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_8mtjs")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_ymelc")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_f85af")
+}],
+"loop": 0,
+"name": &"shoot",
+"speed": 8.0
+}]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_4su2a"]
+size = Vector2(141, 413)
+
+[node name="ArrowTrap" type="Node2D" unique_id=884872353]
+script = ExtResource("1_bobt7")
+arrow_scene = ExtResource("2_c1nae")
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=142366942]
+rotation = 1.5707964
+scale = Vector2(3, 3)
+sprite_frames = SubResource("SpriteFrames_4su2a")
+animation = &"shoot"
+frame = 5
+frame_progress = 1.0
+
+[node name="DetectionArea" type="Area2D" parent="." unique_id=892083458]
+collision_layer = 0
+collision_mask = 2
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="DetectionArea" unique_id=472336343]
+position = Vector2(-193, -2.2737368e-13)
+rotation = 1.5707964
+shape = SubResource("RectangleShape2D_4su2a")
+
+[node name="SpawnPoint" type="Marker2D" parent="." unique_id=1175005344]
+position = Vector2(0, -2)
+
+[node name="WarningTimer" type="Timer" parent="." unique_id=1431108254]
+
+[node name="FireTimer" type="Timer" parent="." unique_id=1857388043]
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="." unique_id=634496962]

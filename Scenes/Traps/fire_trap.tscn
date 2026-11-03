@@ -1,0 +1,85 @@
+[gd_scene format=3 uid="uid://df7ygb5fsbydx"]
+
+[ext_resource type="Script" uid="uid://c26qxxa5rt1p0" path="res://Scripts/fire_trap.gd" id="1_cdbap"]
+[ext_resource type="Texture2D" uid="uid://dfnml3neb10oh" path="res://Assets/Items/Moving Platfrom_G.png" id="2_ebbi2"]
+[ext_resource type="Texture2D" uid="uid://b7qnlrpnlsf07" path="res://Assets/Items/Fire.png" id="3_84bnn"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_4su2a"]
+size = Vector2(32.5, 5.5)
+
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_cdbap"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_qkro5"]
+atlas = ExtResource("3_84bnn")
+region = Rect2(0, 0, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_bbd8i"]
+atlas = ExtResource("3_84bnn")
+region = Rect2(16, 0, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_somyd"]
+atlas = ExtResource("3_84bnn")
+region = Rect2(32, 0, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_vwp1e"]
+atlas = ExtResource("3_84bnn")
+region = Rect2(48, 0, 16, 16)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_4su2a"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_qkro5")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_bbd8i")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_somyd")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_vwp1e")
+}],
+"loop": 1,
+"name": &"fire",
+"speed": 6.0
+}]
+
+[node name="FireTrap" type="Node2D" unique_id=1559824784]
+script = ExtResource("1_cdbap")
+
+[node name="FloorSprite" type="Sprite2D" parent="." unique_id=1079925422]
+texture_filter = 1
+scale = Vector2(1.015625, 1)
+texture = ExtResource("2_ebbi2")
+
+[node name="PressureArea" type="Area2D" parent="." unique_id=224856364]
+collision_layer = 0
+collision_mask = 2
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="PressureArea" unique_id=763459681]
+position = Vector2(0.25, -4.75)
+shape = SubResource("RectangleShape2D_4su2a")
+
+[node name="FireArea" type="Area2D" parent="." unique_id=2116262553]
+collision_layer = 0
+collision_mask = 2
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="FireArea" unique_id=1867113300]
+position = Vector2(0, -20)
+shape = SubResource("CapsuleShape2D_cdbap")
+
+[node name="FlameSprite" type="AnimatedSprite2D" parent="." unique_id=95945161]
+visible = false
+position = Vector2(0.49999905, -20.75)
+scale = Vector2(2.1874998, 1.78125)
+sprite_frames = SubResource("SpriteFrames_4su2a")
+animation = &"fire"
+
+[node name="ActivationTimer" type="Timer" parent="." unique_id=710790078]
+
+[node name="FireTimer" type="Timer" parent="." unique_id=1862886854]
+
+[node name="DamageTimer" type="Timer" parent="." unique_id=1268364155]
+
+[node name="CooldownTimer" type="Timer" parent="." unique_id=248769732]
