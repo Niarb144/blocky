@@ -37,7 +37,8 @@ destination_level = "uid://ccok8ielebepk"
 
 [node name="ExitBackward" parent="Exits" unique_id=745001140 instance=ExtResource("8_kgmqw")]
 position = Vector2(12, 358)
-destination_level = "uid://d2yqcbr0awqct"
+destination_level = "uid://d2yiup6n3wh6"
+destination_spawn_id = "EntryFromNext"
 
 [node name="EntryPoints" type="Node2D" parent="." unique_id=319102978]
 

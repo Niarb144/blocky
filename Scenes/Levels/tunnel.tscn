@@ -1,0 +1,92 @@
+[gd_scene format=3 uid="uid://d2yiup6n3wh6"]
+
+[ext_resource type="Script" uid="uid://kroldg6fxan8" path="res://Scripts/tunnel.gd" id="1_ccknw"]
+[ext_resource type="PackedScene" uid="uid://d1xiv6pgau1fl" path="res://Scenes/backgrounds/parallax_background.tscn" id="1_wmc0x"]
+[ext_resource type="PackedScene" uid="uid://co3pmufuv2hic" path="res://Scenes/player.tscn" id="2_3tf6v"]
+[ext_resource type="PackedScene" uid="uid://b0t4haiu51rei" path="res://Scenes/ground.tscn" id="3_s8i36"]
+[ext_resource type="PackedScene" uid="uid://n0t1tl40chtx" path="res://Scenes/wall.tscn" id="4_ccknw"]
+[ext_resource type="PackedScene" uid="uid://cymqpxymbk8vq" path="res://Scenes/Camera/level_camera.tscn" id="5_35rkv"]
+[ext_resource type="PackedScene" uid="uid://kskg1h8tkhu5" path="res://Scenes/Traps/arrow_trap.tscn" id="6_0lgm4"]
+[ext_resource type="PackedScene" uid="uid://df7ygb5fsbydx" path="res://Scenes/Traps/fire_trap.tscn" id="7_tarn4"]
+[ext_resource type="PackedScene" uid="uid://dlso7w47fu3py" path="res://Scenes/exit.tscn" id="8_s8i36"]
+[ext_resource type="PackedScene" uid="uid://dm3ame74n0v0p" path="res://Scenes/Environment/floor.tscn" id="10_35rkv"]
+[ext_resource type="PackedScene" uid="uid://dr3uxaw58fdsc" path="res://Scenes/Menus/pause_menu.tscn" id="11_0lgm4"]
+
+[node name="Tunnel" type="Node2D" unique_id=469278539]
+script = ExtResource("1_ccknw")
+
+[node name="ParallaxBackground" parent="." unique_id=1498009889 instance=ExtResource("1_wmc0x")]
+
+[node name="Player" parent="." unique_id=378940393 instance=ExtResource("2_3tf6v")]
+position = Vector2(-436, 618.00006)
+
+[node name="Ground" type="Node" parent="." unique_id=2036409705]
+
+[node name="Ground" parent="Ground" unique_id=837453774 instance=ExtResource("3_s8i36")]
+position = Vector2(-547.00006, 652)
+scale = Vector2(10, 3)
+
+[node name="Ground2" parent="Ground" unique_id=178998077 instance=ExtResource("3_s8i36")]
+position = Vector2(-568, 297)
+scale = Vector2(10, 3)
+
+[node name="Wall" type="Node" parent="." unique_id=1951392277]
+
+[node name="wall" parent="Wall" unique_id=908506835 instance=ExtResource("4_ccknw")]
+position = Vector2(-576, 12)
+
+[node name="wall2" parent="Wall" unique_id=82184776 instance=ExtResource("4_ccknw")]
+position = Vector2(1511, 20)
+
+[node name="LevelCamera" parent="." unique_id=1078575189 instance=ExtResource("5_35rkv")]
+position = Vector2(1, 0)
+
+[node name="Traps" type="Node" parent="." unique_id=1352599552]
+
+[node name="ArrowTrap" parent="Traps" unique_id=884872353 instance=ExtResource("6_0lgm4")]
+position = Vector2(-205, 497)
+rotation = 4.712389
+firing_direction = 3
+
+[node name="ArrowTrap2" parent="Traps" unique_id=1395168966 instance=ExtResource("6_0lgm4")]
+position = Vector2(143, 464)
+rotation = 4.712389
+firing_direction = 3
+
+[node name="ArrowTrap3" parent="Traps" unique_id=634398886 instance=ExtResource("6_0lgm4")]
+position = Vector2(596, 453)
+rotation = 4.712389
+firing_direction = 3
+
+[node name="FireTrap" parent="Traps" unique_id=1559824784 instance=ExtResource("7_tarn4")]
+position = Vector2(332, 657)
+activation_delay = 1.2
+
+[node name="FireTrap2" parent="Traps" unique_id=1252321700 instance=ExtResource("7_tarn4")]
+position = Vector2(-32, 656)
+activation_delay = 1.2
+
+[node name="Exits" type="Node2D" parent="." unique_id=741193450]
+
+[node name="ExitForward" parent="Exits" unique_id=1250166314 instance=ExtResource("8_s8i36")]
+position = Vector2(1488, 617)
+destination_level = "uid://cqedh1l12m4xb"
+required_key_id = "catacomb_key"
+
+[node name="ExitBackward" parent="Exits" unique_id=831086446 instance=ExtResource("8_s8i36")]
+position = Vector2(-541, 621)
+destination_level = "uid://d2yqcbr0awqct"
+
+[node name="EntryPoints" type="Node2D" parent="." unique_id=1915854832]
+
+[node name="EntryFromNext" type="Marker2D" parent="EntryPoints" unique_id=1875989048]
+position = Vector2(1438, 634)
+
+[node name="EntryFromPrevious" type="Marker2D" parent="EntryPoints" unique_id=1240054293]
+position = Vector2(-484, 637)
+
+[node name="Floor" parent="." unique_id=814889798 instance=ExtResource("10_35rkv")]
+position = Vector2(-460, 94)
+scale = Vector2(1.4, 1)
+
+[node name="PauseMenu" parent="." unique_id=485495646 instance=ExtResource("11_0lgm4")]
