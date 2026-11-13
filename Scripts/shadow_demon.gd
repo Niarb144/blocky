@@ -20,6 +20,8 @@ enum BossPhase {
 	PHASE_3
 }
 
+var boss_active: bool = false
+
 @export_group("Movement")
 @export var move_speed: float = 90.0
 @export var gravity: float = 1200.0
@@ -221,9 +223,30 @@ func _ready() -> void:
 
 	change_state(State.IDLE)
 
+func activate_boss(player_target: CharacterBody2D) -> void:
+	if current_state == State.DEAD:
+		return
+
+	player = player_target
+	boss_active = true
+
+	change_state(State.CHASE)
+
+	print("SHADOW DEMON ACTIVATED!")
 
 func _physics_process(delta: float) -> void:
 	if current_state == State.DEAD:
+		return
+		
+	if not boss_active:
+		velocity.x = 0.0
+
+		if not is_on_floor():
+			velocity.y += gravity * delta
+		else:
+			velocity.y = 0.0
+
+		move_and_slide()
 		return
 
 	if not is_on_floor():
@@ -1215,6 +1238,9 @@ func finish_boss_death() -> void:
 
 
 func _on_player_detected(body: Node2D) -> void:
+	if not boss_active:
+		return
+
 	if current_state == State.DEAD:
 		return
 

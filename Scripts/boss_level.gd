@@ -23,20 +23,35 @@ func _ready() -> void:
 	# Start dedicated boss music.
 	AudioManager.play_boss_audio()
 
-	# Connect the boss UI and defeat event.
+	# Connect boss UI and defeat event.
 	boss_health_bar.setup_boss(boss)
 	boss.boss_defeated.connect(_on_boss_defeated)
 
-	# Calculate the arena's camera boundaries.
+	# Calculate arena camera boundaries.
 	setup_camera_limits()
 
-	# Preview the boss instead of a key.
-	await level_camera.play_level_preview(
+	# Prevent the player from moving during the introduction.
+	player.controls_enabled = false
+
+	# Play the boss introduction.
+	await level_camera.play_boss_intro(
 		boss.global_position
 	)
 
 	if not is_inside_tree() or level_completing:
 		return
+
+	# Begin tracking both characters.
+	level_camera.start_boss_camera(
+		player,
+		boss
+	)
+
+	# Activate the boss and begin combat.
+	boss.activate_boss(player)
+
+	# Give control back to the player.
+	player.controls_enabled = true
 
 	print("SHADOW DEMON BATTLE STARTED!")
 

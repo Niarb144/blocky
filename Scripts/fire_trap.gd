@@ -9,9 +9,9 @@ enum TrapState {
 }
 
 @export_group("Activation")
-@export var activation_delay: float = 2.0
-@export var fire_duration: float = 1.5
-@export var cooldown_duration: float = 2.0
+@export var activation_delay: float = 0.85
+@export var fire_duration: float = 2.5
+@export var cooldown_duration: float = 1.0
 
 @export_group("Damage")
 @export var fire_damage: int = 20
