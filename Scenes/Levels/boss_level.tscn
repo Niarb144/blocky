@@ -49,6 +49,7 @@ position = Vector2(480, 524)
 
 [node name="Player" parent="." unique_id=378940393 instance=ExtResource("8_funn6")]
 position = Vector2(1300, 558.00006)
+scale = Vector2(1.2, 1.2)
 
 [node name="BossUI" type="CanvasLayer" parent="." unique_id=278481059]
 

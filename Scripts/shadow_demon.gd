@@ -23,12 +23,12 @@ enum BossPhase {
 var boss_active: bool = false
 
 @export_group("Movement")
-@export var move_speed: float = 90.0
+@export var move_speed: float = 110.0
 @export var gravity: float = 1200.0
 @export var stopping_distance: float = 35.0
 
 @export_group("Health")
-@export var max_health: int = 400
+@export var max_health: int = 1000
 
 @export_group("Detection")
 @export var ground_check_distance: float = 20.0
@@ -36,28 +36,28 @@ var boss_active: bool = false
 
 
 @export_group("Boss Phases")
-@export_range(0.0, 1.0) var phase_2_threshold: float = 0.60
-@export_range(0.0, 1.0) var phase_3_threshold: float = 0.30
+@export_range(0.0, 1.0) var phase_2_threshold: float = 0.50
+@export_range(0.0, 1.0) var phase_3_threshold: float = 0.20
 
 @export_group("Phase Movement")
 @export var phase_1_speed_multiplier: float = 1.0
-@export var phase_2_speed_multiplier: float = 1.2
-@export var phase_3_speed_multiplier: float = 1.7
+@export var phase_2_speed_multiplier: float = 1.5
+@export var phase_3_speed_multiplier: float = 2.0
 
 @export_group("Phase Dash Speed")
 @export var phase_1_dash_multiplier: float = 1.0
-@export var phase_2_dash_multiplier: float = 1.1
-@export var phase_3_dash_multiplier: float = 1.4
+@export var phase_2_dash_multiplier: float = 1.4
+@export var phase_3_dash_multiplier: float = 1.8
 
 @export_group("Phase Damage")
 @export var phase_1_damage_multiplier: float = 1.0
-@export var phase_2_damage_multiplier: float = 1.0
+@export var phase_2_damage_multiplier: float = 1.2
 @export var phase_3_damage_multiplier: float = 0.7
 
 @export_group("Phase Attack Frequency")
 @export var phase_1_cooldown_multiplier: float = 1.0
-@export var phase_2_cooldown_multiplier: float = 0.9
-@export var phase_3_cooldown_multiplier: float = 0.7
+@export var phase_2_cooldown_multiplier: float = 0.8
+@export var phase_3_cooldown_multiplier: float = 0.5
 
 
 var current_phase: BossPhase = BossPhase.PHASE_1
@@ -121,19 +121,18 @@ var projectile_fired: bool = false
 
 @export_group("Dash Strike")
 @export var dash_damage: int = 25
-@export var dash_speed: float = 430.0
-@export var dash_duration: float = 0.66
+@export var dash_speed: float = 500.0
+@export var dash_duration: float = 0.76
 @export var dash_windup: float = 0.35
-@export var dash_recovery: float = 0.65
-@export var dash_cooldown: float = 3.5
+@export var dash_recovery: float = 0.55
+@export var dash_cooldown: float = 2.5
 
-@export var dash_min_range: float = 100.0
-@export var dash_max_range: float = 260.0
+@export var dash_min_range: float = 200.0
+@export var dash_max_range: float = 360.0
 
 @export_group("Dash Hitbox")
 @export var dash_hitbox_offset: Vector2 = Vector2(38.0, 35.0)
 @export var dash_hitbox_size: Vector2 = Vector2(75.0, 55.0)
-
 
 enum DashPhase {
 	NONE,
@@ -193,7 +192,13 @@ var active_end_frame: int = 0
 var current_attack_range: float = 0.0
 var current_hitbox_offset: float = 0.0
 
-
+const BLOOD_HIT_PARTICLES = preload(
+	"res://Scenes/VisualEffects/blood_hit_particles.tscn"
+)
+@export_group("Hit Feedback")
+@export var blood_hit_offset: Vector2 = Vector2(0, -8)
+@export var hit_shake_strength: float = 2.0
+@export var hit_shake_duration: float = 0.12
 
 func _ready() -> void:
 	health = max_health
@@ -1195,6 +1200,10 @@ func take_damage(amount: int) -> void:
 	health = maxi(health - amount, 0)
 
 	health_changed.emit(health, max_health)
+	
+	play_animation("hurt")
+	
+	play_hit_feedback()
 
 	print(
 		"Shadow Demon Health: ",
@@ -1208,6 +1217,32 @@ func take_damage(amount: int) -> void:
 		return
 
 	check_boss_phase()
+	
+func play_hit_feedback() -> void:
+	spawn_blood_particles.call_deferred(
+		global_position + blood_hit_offset
+	)
+
+	get_tree().call_group(
+		"screen_shake",
+		"shake",
+		hit_shake_strength,
+		hit_shake_duration
+	)
+
+
+func spawn_blood_particles(hit_position: Vector2) -> void:
+	var scene: Node2D = get_tree().current_scene as Node2D
+
+	if not is_instance_valid(scene):
+		return
+
+	var particles: CPUParticles2D = (
+		BLOOD_HIT_PARTICLES.instantiate() as CPUParticles2D
+	)
+
+	particles.position = scene.to_local(hit_position)
+	scene.add_child(particles)
 
 func die() -> void:
 	current_state = State.DEAD
