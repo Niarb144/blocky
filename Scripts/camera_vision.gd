@@ -1,4 +1,3 @@
-
 class_name LevelCameraController
 extends Camera2D
 
@@ -6,7 +5,9 @@ enum CameraState {
 	PREVIEW,
 	FOLLOW,
 	VISION,
-	RETURNING
+	RETURNING,
+	BOSS_INTRO,
+	BOSS_FIGHT
 }
 
 var camera_state: CameraState = CameraState.FOLLOW
@@ -35,8 +36,22 @@ var camera_state: CameraState = CameraState.FOLLOW
 @onready var player: CharacterBody2D = $"../Player"
 @onready var overlay: ColorRect = $VisionOverlay/ColorRect
 
-var active_tween: Tween
 
+var boss_player: Node2D
+var boss_target: Node2D
+
+@export_group("Boss Camera")
+@export var boss_camera_speed: float = 4.0
+@export var boss_min_zoom: float = 0.65
+@export var boss_max_zoom: float = 1.0
+@export var boss_zoom_padding: float = 1.5
+@export var boss_camera_margin: Vector2 = Vector2(180.0, 120.0)
+
+@export_group("Boss Introduction")
+@export var boss_intro_duration: float = 2.0
+@export var boss_intro_focus_duration: float = 1.5
+
+var active_tween: Tween
 
 func _ready() -> void:
 	make_current()
@@ -79,6 +94,13 @@ func _physics_process(delta: float) -> void:
 
 		CameraState.RETURNING:
 			update_return(delta)
+		
+		CameraState.BOSS_INTRO:
+			# The intro sequence controls camera movement
+			pass
+
+		CameraState.BOSS_FIGHT:
+			update_boss_camera(delta)
 
 
 # -----------------------------------
@@ -306,6 +328,112 @@ func animate_overlay(target_alpha: float) -> void:
 		"modulate:a",
 		target_alpha,
 		fade_duration
+	)
+
+# -----------------------------------
+# BOSS LEVEL CAMERA
+# -----------------------------------
+
+# -----------------------------------
+# BOSS INTRODUCTION
+# -----------------------------------
+
+func play_boss_intro(boss_position: Vector2) -> void:
+	camera_state = CameraState.BOSS_INTRO
+
+	# Begin from the player's current position.
+	global_position = player.global_position
+
+	var intro_tween := create_tween()
+
+	intro_tween.tween_property(
+		self,
+		"global_position",
+		boss_position,
+		boss_intro_duration
+	).set_trans(Tween.TRANS_SINE).set_ease(
+		Tween.EASE_IN_OUT
+	)
+
+	await intro_tween.finished
+
+	if not is_inside_tree():
+		return
+
+	await get_tree().create_timer(
+		boss_intro_focus_duration
+	).timeout
+
+
+# -----------------------------------
+# BOSS FIGHT CAMERA
+# -----------------------------------
+
+func start_boss_camera(
+	player_target: Node2D,
+	boss: Node2D
+) -> void:
+	boss_player = player_target
+	boss_target = boss
+
+	camera_state = CameraState.BOSS_FIGHT
+
+
+func update_boss_camera(delta: float) -> void:
+	if not is_instance_valid(boss_player):
+		return
+
+	if not is_instance_valid(boss_target):
+		return
+
+	# Find the midpoint between both characters.
+	var midpoint: Vector2 = (
+		boss_player.global_position
+		+ boss_target.global_position
+	) / 2.0
+
+	# Calculate horizontal and vertical separation.
+	var distance: Vector2 = (
+		boss_player.global_position
+		- boss_target.global_position
+	).abs()
+
+	# Add margins so neither character is too close to the edge.
+	var required_width: float = (
+		distance.x + boss_camera_margin.x * 2.0
+	) * boss_zoom_padding
+
+	var required_height: float = (
+		distance.y + boss_camera_margin.y * 2.0
+	) * boss_zoom_padding
+
+	var viewport_size: Vector2 = get_viewport_rect().size
+
+	# Work out the zoom required to fit both characters.
+	var zoom_x: float = viewport_size.x / required_width
+	var zoom_y: float = viewport_size.y / required_height
+
+	var target_zoom_value: float = clampf(
+		minf(zoom_x, zoom_y),
+		boss_min_zoom,
+		boss_max_zoom
+	)
+
+	var target_zoom := Vector2.ONE * target_zoom_value
+
+	# Smooth movement and zoom.
+	var weight: float = 1.0 - exp(
+		-boss_camera_speed * delta
+	)
+
+	global_position = global_position.lerp(
+		midpoint,
+		weight
+	)
+
+	zoom = zoom.lerp(
+		target_zoom,
+		weight
 	)
 
 
