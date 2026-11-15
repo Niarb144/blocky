@@ -6,15 +6,13 @@ extends Node
 # ==================================================
 
 const SAVE_PATH: String = "user://savegame.json"
-const SAVE_VERSION: int = 2
+const SAVE_VERSION: int = 3
 
 
 # ==================================================
 # SAVE GAME
 # ==================================================
 
-# Saves the current checkpoint, player resources,
-# Essence balance, and permanent upgrade ranks.
 func save_game() -> bool:
 
 	var save_data: Dictionary = {
@@ -23,6 +21,11 @@ func save_game() -> bool:
 		# Checkpoint information
 		"level": GameState.current_level,
 		"sanctuary_id": GameState.last_sanctuary_id,
+
+		# All discovered sanctuaries
+		"discovered_sanctuaries": (
+			GameState.discovered_sanctuaries.duplicate(true)
+		),
 
 		# Player resources
 		"health": GameState.health,
@@ -64,7 +67,11 @@ func save_game() -> bool:
 		return false
 
 	print("Game saved successfully!")
-	print("Essence saved: ", GameState.essence)
+	print("Checkpoint: ", GameState.last_sanctuary_id)
+	print(
+		"Discovered sanctuaries: ",
+		GameState.discovered_sanctuaries.keys()
+	)
 
 	return true
 
@@ -73,8 +80,6 @@ func save_game() -> bool:
 # LOAD GAME
 # ==================================================
 
-# Reads saved data and restores the player progression.
-# Supports existing version 1 saves.
 func load_game() -> bool:
 
 	if not has_save():
@@ -104,16 +109,27 @@ func load_game() -> bool:
 
 	var data: Dictionary = json.data
 
-	# Allow previous saves without upgrade data.
-	var version: int = int(data.get("version", -1))
+	# ----------------------------------------------
+	# VALIDATE SAVE VERSION
+	# ----------------------------------------------
 
-	if version != 1 and version != SAVE_VERSION:
+	var version: int = int(
+		data.get("version", -1)
+	)
+
+	if version < 1 or version > SAVE_VERSION:
 		push_error("Unsupported save version.")
 		return false
 
-	# Validate the saved level before changing GameState.
+	# ----------------------------------------------
+	# VALIDATE SAVED LEVEL
+	# ----------------------------------------------
+
 	var level_path: String = str(
-		data.get("level", GameState.STARTING_LEVEL)
+		data.get(
+			"level",
+			GameState.STARTING_LEVEL
+		)
 	)
 
 	if not ResourceLoader.exists(level_path):
@@ -131,11 +147,51 @@ func load_game() -> bool:
 	)
 
 	# ----------------------------------------------
-	# RESTORE PERMANENT UPGRADES
+	# RESTORE DISCOVERED SANCTUARIES
 	# ----------------------------------------------
 
-	# Restore these BEFORE health because Vitality
-	# changes the maximum health available.
+	GameState.discovered_sanctuaries.clear()
+
+	var saved_sanctuaries: Variant = (
+		data.get("discovered_sanctuaries", {})
+	)
+
+	if saved_sanctuaries is Dictionary:
+
+		for sanctuary_id in saved_sanctuaries:
+
+			var saved_level: String = str(
+				saved_sanctuaries[sanctuary_id]
+			)
+
+			if str(sanctuary_id).is_empty():
+				continue
+
+			if not ResourceLoader.exists(saved_level):
+				continue
+
+			GameState.discovered_sanctuaries[
+				str(sanctuary_id)
+			] = saved_level
+
+	# Backward compatibility:
+	# Older saves only contain the active checkpoint.
+	# Restore it as a discovered sanctuary.
+
+	if (
+		not GameState.last_sanctuary_id.is_empty()
+		and not GameState.discovered_sanctuaries.has(
+			GameState.last_sanctuary_id
+		)
+	):
+
+		GameState.discovered_sanctuaries[
+			GameState.last_sanctuary_id
+		] = level_path
+
+	# ----------------------------------------------
+	# RESTORE PERMANENT UPGRADES
+	# ----------------------------------------------
 
 	GameState.vitality = clampi(
 		int(data.get("vitality", 0)),
@@ -161,8 +217,6 @@ func load_game() -> bool:
 		GameState.MAX_STAT_RANK
 	)
 
-	# Notify any active health UI that maximum
-	# health may have changed after loading.
 	GameState.max_health_changed.emit(
 		GameState.get_max_health()
 	)
@@ -181,16 +235,32 @@ func load_game() -> bool:
 	# ----------------------------------------------
 
 	GameState.health = int(
-		data.get("health", GameState.get_max_health())
+		data.get(
+			"health",
+			GameState.get_max_health()
+		)
 	)
 
 	GameState.ammo = int(
-		data.get("ammo", GameState.MAX_AMMO)
+		data.get(
+			"ammo",
+			GameState.MAX_AMMO
+		)
 	)
+
+	# ----------------------------------------------
+	# LOAD SUMMARY
+	# ----------------------------------------------
 
 	print("Save data loaded successfully!")
 	print("Current level: ", GameState.current_level)
-	print("Sanctuary: ", GameState.last_sanctuary_id)
+	print("Checkpoint: ", GameState.last_sanctuary_id)
+
+	print(
+		"Discovered sanctuaries: ",
+		GameState.discovered_sanctuaries.keys()
+	)
+
 	print("Essence: ", GameState.essence)
 	print("Vitality: ", GameState.vitality)
 	print("Ferocity: ", GameState.ferocity)
@@ -213,7 +283,9 @@ func has_save() -> bool:
 # ==================================================
 
 func delete_save() -> void:
+
 	if has_save():
+
 		var error: Error = DirAccess.remove_absolute(
 			SAVE_PATH
 		)
@@ -228,17 +300,16 @@ func delete_save() -> void:
 # RESPAWN PLAYER
 # ==================================================
 
-# Called after the player death animation finishes.
-# Loads the saved checkpoint and restores resources.
 func respawn_player() -> void:
 
 	print("SAVE MANAGER: Player respawning...")
 
-	# Attempt to load the most recent save.
 	if not load_game():
+
 		print("SAVE MANAGER: No valid checkpoint found.")
 
 		GameState.reset_for_new_game()
+
 		get_tree().paused = false
 
 		var restart_error: Error = (
@@ -251,22 +322,15 @@ func respawn_player() -> void:
 			push_error("Failed to restart game.")
 
 		return
-	#Load Enemy
+
+	# Reset defeated enemies after death.
 	GameState.reset_enemy_progress()
-	
-	# ----------------------------------------------
-	# RESTORE PLAYER RESOURCES
-	# ----------------------------------------------
 
-	# Health must use the upgraded maximum.
+	# Restore player resources.
 	GameState.health = GameState.get_max_health()
-
 	GameState.ammo = GameState.MAX_AMMO
 
-	# ----------------------------------------------
-	# RESPAWN AT SAVED SANCTUARY
-	# ----------------------------------------------
-
+	# Respawn at the saved sanctuary.
 	GameState.loading_from_save = true
 
 	get_tree().paused = false
@@ -276,10 +340,16 @@ func respawn_player() -> void:
 	)
 
 	if error != OK:
+
 		GameState.loading_from_save = false
+
 		push_error("SAVE MANAGER: Respawn failed!")
 		return
 
-	print("Respawning at: ", GameState.last_sanctuary_id)
+	print(
+		"Respawning at: ",
+		GameState.last_sanctuary_id
+	)
+
 	print("Health restored: ", GameState.health)
 	print("Essence retained: ", GameState.essence)

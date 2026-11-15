@@ -22,6 +22,7 @@ var current_sanctuary_id: String = ""
 # ==================================================
 
 func _ready() -> void:
+	process_mode = Node.PROCESS_MODE_ALWAYS
 	hide()
 
 

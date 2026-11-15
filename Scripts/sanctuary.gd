@@ -1,69 +1,74 @@
+
 extends Node2D
 
 # ==================================================
 # SANCTUARY SETTINGS
 # ==================================================
 
-# Unique identifier for this sanctuary.
-# Each sanctuary in the game should have its own ID.
 @export var sanctuary_id: String = "sanctuary_01"
 
 # ==================================================
-# PLAYER INTERACTION STATE
+# PLAYER INTERACTION
 # ==================================================
 
 var player_nearby: bool = false
-
 var player: CharacterBody2D = null
 
-# Whether a sanctuary submenu is currently open.
+var sanctuary_menu_open: bool = false
 var upgrade_menu_open: bool = false
 var fast_travel_menu_open: bool = false
 
 # 0 = Rest & Save
 # 1 = Upgrade
 # 2 = Fast Travel
+
 var selected_option: int = 0
 
 const OPTION_COUNT: int = 3
-
 
 # ==================================================
 # SCENE REFERENCES
 # ==================================================
 
-# Existing interaction label.
 @onready var interaction_label: Label = $InteractionLabel
 
-# Small menu displayed above the sanctuary.
-@onready var interaction_menu: Control = $InteractionMenu
+@onready var interaction_menu: Control = $SanctuaryUI/InteractionMenu
 
-# Two available sanctuary options.
-@onready var rest_option: Label = $InteractionMenu/VBoxContainer/RestOption
-@onready var upgrade_option: Label = $InteractionMenu/VBoxContainer/UpgradeOption
+@onready var rest_option: Label = (
+	$SanctuaryUI/InteractionMenu/PanelContainer/VBoxContainer/RestOption
+)
+
+@onready var upgrade_option: Label = (
+	$SanctuaryUI/InteractionMenu/PanelContainer/VBoxContainer/UpgradeOption
+)
 
 @onready var fast_travel_option: Label = (
-	$InteractionMenu/VBoxContainer/FastTravelOption
+	$SanctuaryUI/InteractionMenu/PanelContainer/VBoxContainer/FastTravelOption
 )
 
-@onready var fast_travel_menu = (
-	$FastTravelMenu
-)
-
-
-# Existing reusable upgrade menu scene.
 @onready var upgrade_menu = $SanctuaryUpgradeMenu
+
+@onready var fast_travel_menu = $FastTravelMenu
+
+# Optional visual indicator.
+@onready var activation_indicator: CanvasItem = (
+	get_node_or_null("ActivationIndicator") as CanvasItem
+)
+
 
 # ==================================================
 # INITIALIZATION
 # ==================================================
 
 func _ready() -> void:
-	# Hide the interaction elements when the level loads.
+
+	# Allow sanctuary menus to work while gameplay is paused.
+	process_mode = Node.PROCESS_MODE_ALWAYS
+
 	interaction_label.hide()
 	interaction_menu.hide()
 
-	# Listen for the upgrade menu closing.
+	# Connect submenu closing signals.
 	upgrade_menu.menu_closed.connect(
 		_on_upgrade_menu_closed
 	)
@@ -72,39 +77,126 @@ func _ready() -> void:
 		_on_fast_travel_menu_closed
 	)
 
+	# Restore activation appearance.
+	update_activation_indicator()
+
+	# Configure the main menu.
+	update_options()
+
+
 # ==================================================
 # INPUT HANDLING
 # ==================================================
 
 func _unhandled_input(event: InputEvent) -> void:
+
 	if not player_nearby:
 		return
 
+	# Ignore main menu input while a submenu is open.
 	if upgrade_menu_open or fast_travel_menu_open:
 		return
 
 	if not event.is_pressed() or event.is_echo():
 		return
 
-	if event.is_action("ui_up"):
-		change_selection(-1)
-		get_viewport().set_input_as_handled()
+	# Sanctuary menu is currently open.
+	if sanctuary_menu_open:
 
-	elif event.is_action("ui_down"):
-		change_selection(1)
-		get_viewport().set_input_as_handled()
+		if event.is_action("ui_up"):
+			change_selection(-1)
+			get_viewport().set_input_as_handled()
 
-	elif event.is_action("interact"):
-		confirm_selection()
+		elif event.is_action("ui_down"):
+			change_selection(1)
+			get_viewport().set_input_as_handled()
+
+		elif event.is_action("interact"):
+			confirm_selection()
+			get_viewport().set_input_as_handled()
+
+		elif event.is_action("ui_cancel"):
+			close_sanctuary_menu()
+			get_viewport().set_input_as_handled()
+
+		return
+
+	# Open sanctuary when player presses E.
+	if event.is_action("interact"):
 		get_viewport().set_input_as_handled()
+		open_sanctuary()
 
 
 # ==================================================
-# OPTION NAVIGATION
+# OPEN SANCTUARY
+# ==================================================
+
+func open_sanctuary() -> void:
+
+	if sanctuary_menu_open:
+		return
+
+	# Activate sanctuary if this is the first visit.
+	if not GameState.has_discovered_sanctuary(
+		sanctuary_id
+	):
+		activate_sanctuary()
+
+	selected_option = 0
+
+	sanctuary_menu_open = true
+
+	# Stop player movement.
+	if is_instance_valid(player):
+		player.velocity = Vector2.ZERO
+
+	# Hide interaction prompt.
+	interaction_label.hide()
+
+	# Display sanctuary menu.
+	update_options()
+	interaction_menu.show()
+
+	# Pause the entire game.
+	get_tree().paused = true
+
+	print("SANCTUARY: Menu opened - ", sanctuary_id)
+
+
+# ==================================================
+# CLOSE SANCTUARY
+# ==================================================
+
+func close_sanctuary_menu() -> void:
+
+	if not sanctuary_menu_open:
+		return
+
+	sanctuary_menu_open = false
+
+	interaction_menu.hide()
+
+	# Resume gameplay.
+	get_tree().paused = false
+
+	# Restore interaction prompt.
+	if player_nearby:
+		interaction_label.show()
+
+		if GameState.has_discovered_sanctuary(
+			sanctuary_id
+		):
+			interaction_label.text = "Press E to Interact"
+
+	print("SANCTUARY: Menu closed.")
+
+
+# ==================================================
+# MENU NAVIGATION
 # ==================================================
 
 func change_selection(direction: int) -> void:
-	# Cycle between Rest & Save and Upgrade.
+
 	selected_option = wrapi(
 		selected_option + direction,
 		0,
@@ -114,11 +206,8 @@ func change_selection(direction: int) -> void:
 	update_options()
 
 
-# ==================================================
-# UPDATE INTERACTION DISPLAY
-# ==================================================
-
 func update_options() -> void:
+
 	var options: Array[Label] = [
 		rest_option,
 		upgrade_option,
@@ -126,13 +215,16 @@ func update_options() -> void:
 	]
 
 	var names: Array[String] = [
-		"Rest & Save",
-		"Upgrade",
-		"Fast Travel"
+		"REST & SAVE",
+		"UPGRADE",
+		"FAST TRAVEL"
 	]
 
 	for i in range(options.size()):
-		var selected: bool = (i == selected_option)
+
+		var selected: bool = (
+			i == selected_option
+		)
 
 		options[i].text = (
 			"> " if selected else "  "
@@ -144,135 +236,166 @@ func update_options() -> void:
 			else Color.WHITE
 		)
 
+
 # ==================================================
-# CONFIRM SELECTED ACTION
+# CONFIRM SELECTION
 # ==================================================
 
 func confirm_selection() -> void:
+
 	match selected_option:
+
 		0:
-			activate_sanctuary()
+			rest_and_save()
 
 		1:
 			open_upgrade_menu()
-			
-		2: 
+
+		2:
 			open_fast_travel_menu()
 
 
 # ==================================================
-# OPEN UPGRADE MENU
+# SANCTUARY ACTIVATION
 # ==================================================
 
-func open_upgrade_menu() -> void:
-	if upgrade_menu_open:
+func register_sanctuary() -> bool:
+
+	var level := get_tree().current_scene
+
+	if level == null:
+		push_warning(
+			"SANCTUARY: Current level not found."
+		)
+		return false
+
+	GameState.current_level = level.scene_file_path
+
+	GameState.last_sanctuary_id = sanctuary_id
+
+	GameState.discover_sanctuary(
+		sanctuary_id,
+		level.scene_file_path
+	)
+
+	update_activation_indicator()
+
+	return true
+
+
+func activate_sanctuary() -> void:
+
+	if not register_sanctuary():
 		return
 
-	# Activate this sanctuary as the current checkpoint.
-	activate_sanctuary()
-
-	upgrade_menu_open = true
-
-	interaction_menu.hide()
-	interaction_label.hide()
-
-	if is_instance_valid(player):
-		player.velocity = Vector2.ZERO
-		player.controls_enabled = false
-
-	upgrade_menu.open_menu()
-
-
-# ==================================================
-# UPGRADE MENU CLOSED
-# ==================================================
-
-func _on_upgrade_menu_closed() -> void:
-	upgrade_menu_open = false
-
-	# Restore player controls.
-	if is_instance_valid(player):
-		player.controls_enabled = true
-
-	# Restore the interaction choices if nearby.
-	if player_nearby:
-		interaction_menu.show()
-		interaction_label.show()
-		update_options()
-
-
-# ==================================================
-# OPEN FAST TRAVEL MENU
-# ==================================================
-
-func open_fast_travel_menu() -> void:
-	if fast_travel_menu_open:
-		return
-
-	# Rest and save progress before fast travel.
-	activate_sanctuary()
-
-	fast_travel_menu_open = true
-
-	# Hide sanctuary interaction UI.
-	interaction_menu.hide()
-	interaction_label.hide()
-
-	# Disable player movement and combat.
-	if is_instance_valid(player):
-		player.velocity = Vector2.ZERO
-		player.controls_enabled = false
-
-	# Open the destination menu.
-	fast_travel_menu.open_menu(sanctuary_id)
-
-
-# ==================================================
-# FAST TRAVEL MENU CLOSED
-# ==================================================
-
-func _on_fast_travel_menu_closed() -> void:
-	fast_travel_menu_open = false
-
-	if is_instance_valid(player):
-		player.controls_enabled = true
-
-	if player_nearby:
-		interaction_menu.show()
-		interaction_label.show()
-		update_options()
+	if SaveManager.save_game():
+		print(
+			"SANCTUARY: Activated - ",
+			sanctuary_id
+		)
+	else:
+		push_warning(
+			"SANCTUARY: Activation save failed."
+		)
 
 
 # ==================================================
 # REST AND SAVE
 # ==================================================
 
-func activate_sanctuary() -> void:
-	# Get the current level.
-	var level := get_tree().current_scene
+func rest_and_save() -> void:
 
-	if level == null:
-		push_warning("Sanctuary: Current level not found.")
+	if not register_sanctuary():
 		return
 
-	# Store the checkpoint level and sanctuary ID.
-	GameState.current_level = level.scene_file_path
-	GameState.last_sanctuary_id = sanctuary_id
-	
-	# Unlock this sanctuary for fast travel.
-	GameState.discover_sanctuary(
-		sanctuary_id,
-		level.scene_file_path
-	)
-	
 	# Restore health and ammunition.
 	GameState.rest_at_sanctuary()
 
-	# Save the game.
+	# Save updated resources and checkpoint.
 	if SaveManager.save_game():
-		print("Sanctuary activated: ", sanctuary_id)
+
+		print(
+			"SANCTUARY: Rest and save successful."
+		)
+
 	else:
-		push_warning("Sanctuary save failed.")
+
+		push_warning(
+			"SANCTUARY: Rest save failed."
+		)
+
+	# Keep the sanctuary menu open.
+	update_options()
+
+
+# ==================================================
+# UPGRADE MENU
+# ==================================================
+
+func open_upgrade_menu() -> void:
+
+	if upgrade_menu_open:
+		return
+
+	upgrade_menu_open = true
+	sanctuary_menu_open = false
+
+	interaction_menu.hide()
+
+	upgrade_menu.open_menu()
+
+
+func _on_upgrade_menu_closed() -> void:
+
+	upgrade_menu_open = false
+	sanctuary_menu_open = true
+
+	if player_nearby:
+		update_options()
+		interaction_menu.show()
+
+
+# ==================================================
+# FAST TRAVEL MENU
+# ==================================================
+
+func open_fast_travel_menu() -> void:
+
+	if fast_travel_menu_open:
+		return
+
+	fast_travel_menu_open = true
+	sanctuary_menu_open = false
+
+	interaction_menu.hide()
+
+	fast_travel_menu.open_menu(sanctuary_id)
+
+
+func _on_fast_travel_menu_closed() -> void:
+
+	fast_travel_menu_open = false
+	sanctuary_menu_open = true
+
+	if player_nearby:
+		update_options()
+		interaction_menu.show()
+
+
+# ==================================================
+# ACTIVATION VISUAL INDICATOR
+# ==================================================
+
+func update_activation_indicator() -> void:
+
+	if not is_instance_valid(activation_indicator):
+		return
+
+	activation_indicator.visible = (
+		GameState.has_discovered_sanctuary(
+			sanctuary_id
+		)
+	)
 
 
 # ==================================================
@@ -282,21 +405,28 @@ func activate_sanctuary() -> void:
 func _on_interaction_area_body_entered(
 	body: Node2D
 ) -> void:
-	# Only allow the player to interact.
+
 	if not body.is_in_group("player"):
 		return
 
 	player = body as CharacterBody2D
 	player_nearby = true
 
-	# Default to the Rest & Save option.
-	selected_option = 0
+	if GameState.has_discovered_sanctuary(
+		sanctuary_id
+	):
 
-	# Display interaction elements.
+		interaction_label.text = (
+			"Press E to Interact"
+		)
+
+	else:
+
+		interaction_label.text = (
+			"Press E to Activate"
+		)
+
 	interaction_label.show()
-	interaction_menu.show()
-
-	update_options()
 
 
 # ==================================================
@@ -306,15 +436,19 @@ func _on_interaction_area_body_entered(
 func _on_interaction_area_body_exited(
 	body: Node2D
 ) -> void:
+
 	if not body.is_in_group("player"):
 		return
 
 	player_nearby = false
 
 	interaction_label.hide()
-	interaction_menu.hide()
 
-	# Keep the reference while a submenu is open.
+	# Do not destroy the player reference while
+	# a sanctuary submenu is still open.
+	if sanctuary_menu_open:
+		return
+
 	if upgrade_menu_open or fast_travel_menu_open:
 		return
 

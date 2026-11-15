@@ -92,14 +92,11 @@ func open_menu() -> void:
 	update_selection()
 
 	show()
-	get_tree().paused = true
 
 
 func close_menu() -> void:
 	hide()
-	get_tree().paused = false
 	menu_closed.emit()
-
 
 
 func update_selection() -> void:

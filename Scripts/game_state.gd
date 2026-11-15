@@ -219,7 +219,7 @@ func reset_for_new_game() -> void:
 
 func rest_at_sanctuary() -> void:
 	health = get_max_health()
-	ammo =+1
+	ammo = MAX_AMMO
 
 
 
