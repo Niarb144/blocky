@@ -76,6 +76,9 @@ func collect_key(key_id: String) -> void:
 
 	print("GAMESTATE: Collected key: ", key_id)
 
+	# Immediately save the collected key.
+	SaveManager.save_game()
+
 
 func has_key(key_id: String) -> bool:
 	return collected_keys.get(key_id, false)

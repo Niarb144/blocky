@@ -6,7 +6,7 @@ extends Node
 # ==================================================
 
 const SAVE_PATH: String = "user://savegame.json"
-const SAVE_VERSION: int = 3
+const SAVE_VERSION: int = 4
 
 
 # ==================================================
@@ -25,6 +25,11 @@ func save_game() -> bool:
 		# All discovered sanctuaries
 		"discovered_sanctuaries": (
 			GameState.discovered_sanctuaries.duplicate(true)
+		),
+		
+		#All collected keys
+		"collected_keys": (
+			GameState.collected_keys.duplicate(true)
 		),
 
 		# Player resources
@@ -188,6 +193,33 @@ func load_game() -> bool:
 		GameState.discovered_sanctuaries[
 			GameState.last_sanctuary_id
 		] = level_path
+
+	# ----------------------------------------------
+	# RESTORE COLLECTED KEYS
+	# ----------------------------------------------
+
+	GameState.collected_keys.clear()
+
+	var saved_keys: Variant = (
+		data.get("collected_keys", {})
+	)
+
+	if saved_keys is Dictionary:
+
+		for key_id in saved_keys:
+
+			if str(key_id).is_empty():
+				continue
+
+			if bool(saved_keys[key_id]):
+				GameState.collected_keys[
+					str(key_id)
+				] = true
+
+	print(
+		"Collected keys restored: ",
+		GameState.collected_keys.keys()
+	)
 
 	# ----------------------------------------------
 	# RESTORE PERMANENT UPGRADES
