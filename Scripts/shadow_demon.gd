@@ -28,7 +28,7 @@ var boss_active: bool = false
 @export var stopping_distance: float = 35.0
 
 @export_group("Health")
-@export var max_health: int = 1000
+@export var max_health: int = 2000
 
 @export_group("Detection")
 @export var ground_check_distance: float = 20.0
@@ -36,23 +36,23 @@ var boss_active: bool = false
 
 
 @export_group("Boss Phases")
-@export_range(0.0, 1.0) var phase_2_threshold: float = 0.50
-@export_range(0.0, 1.0) var phase_3_threshold: float = 0.20
+@export_range(0.0, 1.0) var phase_2_threshold: float = 0.60
+@export_range(0.0, 1.0) var phase_3_threshold: float = 0.30
 
 @export_group("Phase Movement")
 @export var phase_1_speed_multiplier: float = 1.0
 @export var phase_2_speed_multiplier: float = 1.5
-@export var phase_3_speed_multiplier: float = 2.0
+@export var phase_3_speed_multiplier: float = 2.4
 
 @export_group("Phase Dash Speed")
 @export var phase_1_dash_multiplier: float = 1.0
-@export var phase_2_dash_multiplier: float = 1.4
-@export var phase_3_dash_multiplier: float = 1.8
+@export var phase_2_dash_multiplier: float = 1.6
+@export var phase_3_dash_multiplier: float = 2.0
 
 @export_group("Phase Damage")
 @export var phase_1_damage_multiplier: float = 1.0
 @export var phase_2_damage_multiplier: float = 1.2
-@export var phase_3_damage_multiplier: float = 0.7
+@export var phase_3_damage_multiplier: float = 0.9
 
 @export_group("Phase Attack Frequency")
 @export var phase_1_cooldown_multiplier: float = 1.0
