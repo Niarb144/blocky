@@ -1,0 +1,19 @@
+[remap]
+
+importer="mp3"
+type="AudioStreamMP3"
+uid="uid://c1ev0073t8i7s"
+path="res://.godot/imported/ElevenLabs_2026-11-23T13_47_46_Jane - Professional Audiobook Reader_pvc_s50_sim75_v4.mp3-6cb82e5c0c97c54cfeaebe178badd6e0.mp3str"
+
+[deps]
+
+source_file="res://Assets/Sound/Intro Speech/ElevenLabs_2026-11-23T13_47_46_Jane - Professional Audiobook Reader_pvc_s50_sim75_v4.mp3"
+dest_files=["res://.godot/imported/ElevenLabs_2026-11-23T13_47_46_Jane - Professional Audiobook Reader_pvc_s50_sim75_v4.mp3-6cb82e5c0c97c54cfeaebe178badd6e0.mp3str"]
+
+[params]
+
+loop=false
+loop_offset=0
+bpm=0
+beat_count=0
+bar_beats=4
